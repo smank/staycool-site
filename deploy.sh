@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-# Cartridge marketing site — Cloudflare Pages deploy.
+# Stay Cool and Stay Cool — Cloudflare Pages deploy.
+#
+# Site structure:
+#   /                — Stay Cool label home (Stay Cool and Stay Cool LLC)
+#   /cartridge/      — Cartridge product page
+#   /littlefreaks/   — Little Freaks product page (when ready)
 #
 # First-time setup:
 #   1) wrangler login            (browser opens, authorise once)
@@ -8,12 +13,12 @@
 # Subsequent deploys: just ./deploy.sh
 #
 # After the first successful deploy:
-#   - Cloudflare → Workers & Pages → cartridge-site → Custom domains
-#       → add  cartridge.smank.io  (DNS is already in your Cloudflare zone —
-#         smank.io is yours, so a CNAME for `cartridge` gets auto-created)
+#   - Cloudflare → Workers & Pages → staycool-site → Custom domains
+#       → add  staycoolandstaycool.com  (DNS auto-creates in your Cloudflare zone)
+#       → also add  www.staycoolandstaycool.com  as a 301 redirect target
 #   - Cloudflare → Zero Trust → Access → Applications → Add an application
-#       → Self-hosted → host = cartridge.smank.io → Policy:
-#         "Include: Emails ending in your-domain.com" or "Emails: tester1@…, tester2@…"
+#       → Self-hosted → host = staycoolandstaycool.com → Policy:
+#         "Include: Emails" with allowlist of tester emails
 #         → Identity provider: One-time PIN
 #       Result: testers visit the URL, get a 6-digit email PIN, then see the site.
 #
@@ -22,7 +27,7 @@
 
 set -euo pipefail
 
-PROJECT_NAME="cartridge-site"
+PROJECT_NAME="staycool-site"
 
 if ! command -v wrangler >/dev/null 2>&1; then
   echo "wrangler not installed. Run: npm install -g wrangler"
@@ -47,7 +52,7 @@ wrangler pages deploy . \
   --commit-dirty=true
 
 echo
-echo "Deploy complete. The default Pages URL is:"
+echo "Deploy complete. Default Pages URL:"
 echo "  https://${PROJECT_NAME}.pages.dev"
 echo
 echo "Custom domain + Access gate are dashboard tasks — see comments at top of this script."

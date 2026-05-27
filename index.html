@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartridge — 8-bit Chiptune Synth Plugin (VST3 · AU · CLAP · Standalone)</title>
-  <meta name="description" content="Cartridge is a 2A03 + expansion-chip chiptune synth plugin with a polyphonic Modern engine, per-channel step sequencer, and chiptune-instrument import. macOS · VST3 · AU · CLAP.">
-  <meta property="og:title" content="Cartridge — 8-bit Chiptune Synth Plugin">
-  <meta property="og:description" content="Authentic 2A03 chiptune synthesis with a modern, polyphonic engine and per-channel step sequencer.">
-  <meta property="og:image" content="screenshots/hero.png">
+  <title>Stay Cool and Stay Cool — audio plugins</title>
+  <meta name="description" content="Audio plugins by Stay Cool and Stay Cool LLC. Cartridge, Little Freaks, and other irreverent tools for producers.">
+  <meta property="og:title" content="Stay Cool and Stay Cool">
+  <meta property="og:description" content="An audio-plugin label by Sam Mank.">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="bingbot" content="noindex, nofollow">
@@ -15,180 +14,50 @@
 </head>
 <body>
 
-<header class="topbar">
-  <div class="brand">
-    <span class="cart-logo">●</span>
-    <span class="brand-name">CARTRIDGE</span>
-    <span class="brand-tag">v2.0 BETA</span>
-  </div>
+<header class="label-bar">
+  <a class="wordmark" href="/">STAY COOL <span class="ampersand">&amp;</span> STAY COOL</a>
   <nav>
-    <a href="#features">Features</a>
-    <a href="#screenshots">Screenshots</a>
-    <a href="#buy">Buy</a>
-    <a href="https://github.com/smank/cartridge" target="_blank" rel="noopener">Source</a>
+    <a href="/cartridge/">Cartridge</a>
+    <a href="#products">Products</a>
+    <a href="#about">About</a>
+    <a href="mailto:stuart.mank@gmail.com">Contact</a>
   </nav>
 </header>
 
-<section class="hero">
-  <div class="hero-inner">
-    <h1>The <span class="accent">2A03</span> chiptune chip in your DAW.</h1>
-    <p class="lede">Bandlimited chiptune synthesis of the iconic 8-bit sound chip. Expansion-chip support. A per-channel step sequencer. Polyphonic Modern engine. Chiptune-instrument import. Built for producers who want authentic retro timbre without leaving their DAW.</p>
-    <div class="cta-row">
-      <a class="cta primary" href="#buy">Buy — $29 intro</a>
-      <a class="cta ghost" href="https://github.com/smank/cartridge" target="_blank" rel="noopener">Get the source</a>
-    </div>
-    <div class="meta-row">
-      <span>macOS · VST3 · AU · CLAP · Standalone</span>
-      <span class="dot">·</span>
-      <span>Signed &amp; notarised</span>
-      <span class="dot">·</span>
-      <span>Universal binary</span>
-    </div>
-  </div>
-  <div class="hero-art">
-    <div class="screenshot-frame">
-      <div class="screenshot-placeholder">
-        <span>screenshots/hero.png</span>
-        <small>drop the main UI screenshot here</small>
+<main class="label-home">
+  <section class="hero">
+    <h1>Audio plugins<br>that mean it.</h1>
+    <p class="tagline">A small label making irreverent, character-driven plugins for producers who'd rather have personality than presets.</p>
+  </section>
+
+  <section id="products" class="products">
+    <h2>Products</h2>
+    <div class="product-grid">
+      <a class="product-card" href="/cartridge/">
+        <div class="product-thumb">CARTRIDGE</div>
+        <h3>Cartridge</h3>
+        <p>2A03 chiptune synth. Expansion-chip support, step sequencer per channel, VGM import. Beta, $29 intro.</p>
+        <span class="product-status">Available now →</span>
+      </a>
+      <div class="product-card coming-soon">
+        <div class="product-thumb">LITTLE FREAKS</div>
+        <h3>Little Freaks</h3>
+        <p>A suite of FX. Each one's a little freak.</p>
+        <span class="product-status">In progress</span>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="features" class="features">
-  <h2>What's in the cartridge</h2>
-  <div class="grid">
-    <article class="card">
-      <div class="card-icon">▣</div>
-      <h3>Two engines</h3>
-      <p><strong>Classic</strong>: hardware-accurate 2A03 — 2 Pulse, Triangle, Noise, DPCM, plus optional VRC6 expansion (2 Pulse + Sawtooth). <strong>Modern</strong>: polyphonic with dual oscillators, ADSR, unison, portamento, MPE.</p>
-    </article>
+  <section id="about" class="about">
+    <h2>About</h2>
+    <p>Stay Cool and Stay Cool is an audio-plugin label run by Sam Mank. The name's repetition is the joke — the plugins aren't. Each one's a different small bet at making music more fun to make.</p>
+  </section>
+</main>
 
-    <article class="card">
-      <div class="card-icon">▦</div>
-      <h3>Step sequencer per channel</h3>
-      <p>16 steps × 3 lanes (volume, pitch, duty) on every channel. Tracker-style instrument macros without leaving your DAW. Tempo-synced, loop-capable, recorded into your project.</p>
-    </article>
-
-    <article class="card">
-      <div class="card-icon">↻</div>
-      <h3>VGM/VGZ import</h3>
-      <p>Drop a <code>.vgm</code> or <code>.vgz</code> file in. Cartridge parses the 2A03 register stream, detects note boundaries, and turns each instrument into a preset with volume/pitch/duty envelopes intact.</p>
-    </article>
-
-    <article class="card">
-      <div class="card-icon">≋</div>
-      <h3>Modern effects chain</h3>
-      <p>BitCrush → Filter (LP/BP/HP) → Chorus → Delay (tempo-syncable) → Reverb. Always visible. Always one knob away. Disabled effects fade so you see what's doing the work.</p>
-    </article>
-
-    <article class="card">
-      <div class="card-icon">⌥</div>
-      <h3>Smart MIDI routing</h3>
-      <p>Four routing modes: <strong>Split</strong> (one MIDI channel per voice), <strong>Auto</strong> (round-robin with stealing), <strong>Mono</strong>, <strong>Layer</strong>. Plays nicely with controllers, sequencers, and DAW MIDI lanes.</p>
-    </article>
-
-    <article class="card">
-      <div class="card-icon">⏏</div>
-      <h3>36 factory presets</h3>
-      <p>Curated patches from arcade leads to lo-fi pads, plus the freedom to save and share your own. Step sequence data travels with the preset, including anything imported from VGM.</p>
-    </article>
-  </div>
-</section>
-
-<section id="screenshots" class="screenshots">
-  <h2>The interface</h2>
-  <div class="screenshot-grid">
-    <figure>
-      <div class="screenshot-placeholder">
-        <span>screenshots/main.png</span>
-        <small>full UI in Classic mode</small>
-      </div>
-      <figcaption>Classic engine — 8 channel strips, FX always open, step sequencer, modulation bar.</figcaption>
-    </figure>
-    <figure>
-      <div class="screenshot-placeholder">
-        <span>screenshots/modern.png</span>
-        <small>Modern engine</small>
-      </div>
-      <figcaption>Modern engine — polyphonic dual-oscillator synth with ADSR + unison.</figcaption>
-    </figure>
-    <figure>
-      <div class="screenshot-placeholder">
-        <span>screenshots/sequencer.png</span>
-        <small>step sequencer</small>
-      </div>
-      <figcaption>16-step sequencer with volume/pitch/duty lanes per channel.</figcaption>
-    </figure>
-    <figure>
-      <div class="screenshot-placeholder">
-        <span>screenshots/fx.png</span>
-        <small>FX rack</small>
-      </div>
-      <figcaption>Always-open effects rack — every section visible at a glance.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<section id="buy" class="buy">
-  <div class="buy-card">
-    <div class="price-row">
-      <span class="price">$29</span>
-      <span class="price-meta">USD · intro pricing</span>
-    </div>
-    <ul class="includes">
-      <li>VST3, AU, CLAP &amp; macOS standalone — signed &amp; notarised</li>
-      <li>Universal binary (Apple Silicon + Intel)</li>
-      <li>All 2.x updates free for life</li>
-      <li>Email support</li>
-      <li>No DRM, no activation server</li>
-    </ul>
-    <a class="cta primary big" href="#" data-gumroad-link>Buy — Gumroad checkout</a>
-    <p class="fineprint">Beta build. Some rough edges expected. Feedback shapes 2.0.</p>
-  </div>
-
-  <div class="buy-card source-card">
-    <h3>Or compile from source</h3>
-    <p>Cartridge is dual-licensed. The source is on GitHub under <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPLv3</a>. Clone, build, modify — under AGPL terms. Buying the binary just saves you the build dance and supports the project.</p>
-    <a class="cta ghost" href="https://github.com/smank/cartridge" target="_blank" rel="noopener">github.com/smank/cartridge</a>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-inner">
-    <div>
-      <span class="brand-name small">CARTRIDGE</span>
-      <span class="brand-tag small">© 2026 Sam Mank</span>
-    </div>
-    <div class="footer-links">
-      <a href="https://github.com/smank/cartridge" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://github.com/smank/cartridge/blob/main/LICENSE" target="_blank" rel="noopener">AGPLv3</a>
-      <a href="https://github.com/smank/cartridge/blob/main/COMMERCIAL_LICENSE.md" target="_blank" rel="noopener">Commercial Licence</a>
-      <a href="mailto:stuart.mank@gmail.com">Contact</a>
-    </div>
-  </div>
+<footer class="label-footer">
+  <span>© 2026 Stay Cool and Stay Cool LLC</span>
+  <a href="mailto:stuart.mank@gmail.com">stuart.mank@gmail.com</a>
 </footer>
-
-<script>
-  // Auto-swap placeholders for real screenshots when the file exists.
-  // No HTML edits needed — drop the PNG in docs/screenshots/ and it shows up.
-  document.querySelectorAll('.screenshot-placeholder').forEach(ph => {
-    const labelSpan = ph.querySelector('span');
-    if (!labelSpan) return;
-    const src = labelSpan.textContent.trim();
-    const img = new Image();
-    img.onload = () => {
-      img.className = 'screenshot-img';
-      img.alt = ph.querySelector('small')?.textContent || src;
-      Object.assign(img.style, {
-        width: '100%', height: '100%', objectFit: 'cover',
-        borderRadius: 'inherit', display: 'block'
-      });
-      ph.replaceWith(img);
-    };
-    img.src = src;
-  });
-</script>
 
 </body>
 </html>
