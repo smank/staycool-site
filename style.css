@@ -1,0 +1,578 @@
+/* Cartridge marketing site
+   Palette mirrors the plugin's design system (Theme.h):
+   background  #141414, surface #222, surfaceHi #2E2E2E
+   primary     #B82030 (cartridge red), hot #D43040, accent #D04828
+   text        #D8D4D0 / #909090 / #606060
+*/
+
+:root {
+  --bg:        #141414;
+  --surface:   #222222;
+  --surface-2: #2e2e2e;
+  --surface-3: #383838;
+  --outline:   #505050;
+  --outline-dim: #404040;
+  --primary:   #b82030;
+  --primary-dim: #801828;
+  --hot:       #d43040;
+  --hot-bright: #e84050;
+  --vrc6:      #d04828;
+  --text-1:    #d8d4d0;
+  --text-2:    #909090;
+  --text-3:    #606060;
+  --mono:      "JetBrains Mono", "Menlo", ui-monospace, monospace;
+  --sans:      -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: var(--sans);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--text-1); text-decoration: none; }
+a:hover { color: var(--hot-bright); }
+
+code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--surface);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  color: var(--vrc6);
+}
+
+/* ───────────── Top bar ───────────── */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+  border-bottom: 2px solid var(--primary);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.cart-logo {
+  color: var(--hot);
+  font-size: 1.4rem;
+  text-shadow: 0 0 10px var(--hot-bright), 0 0 18px rgba(232,64,80,0.5);
+  animation: breathe 3.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.7; text-shadow: 0 0 10px var(--hot-bright), 0 0 18px rgba(232,64,80,0.3); }
+  50%      { opacity: 1.0; text-shadow: 0 0 14px var(--hot-bright), 0 0 26px rgba(232,64,80,0.6); }
+}
+
+.brand-name {
+  font-family: var(--mono);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: 1rem;
+  color: var(--text-1);
+}
+
+.brand-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--vrc6);
+  border: 1px solid var(--vrc6);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+}
+
+.brand-name.small { font-size: 0.85rem; }
+.brand-tag.small  { color: var(--text-3); border: none; padding: 0; }
+
+nav {
+  display: flex;
+  gap: 1.8rem;
+}
+
+nav a {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  color: var(--text-2);
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 0.2rem;
+}
+
+nav a:hover { color: var(--text-1); }
+
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 100%;
+  height: 1px;
+  background: var(--hot);
+  transition: right 0.18s ease;
+}
+
+nav a:hover::after { right: 0; }
+
+/* ───────────── Hero ───────────── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  padding: 5rem 2rem 4rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: center;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.014) 0, rgba(255,255,255,0.014) 1px, transparent 1px, transparent 4px);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-family: var(--mono);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.4rem;
+}
+
+.accent {
+  color: var(--hot);
+  text-shadow: 0 0 30px rgba(216,48,64,0.35);
+}
+
+.lede {
+  color: var(--text-2);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  max-width: 36em;
+  margin-bottom: 2rem;
+}
+
+.cta-row {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1.8rem;
+  flex-wrap: wrap;
+}
+
+.cta {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.85rem 1.4rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.cta.primary {
+  background: var(--primary);
+  color: var(--text-1);
+  border-color: var(--hot);
+  box-shadow: 0 0 0 0 rgba(216,48,64,0);
+}
+
+.cta.primary:hover {
+  background: var(--hot);
+  color: var(--text-1);
+  box-shadow: 0 0 24px -4px rgba(216,48,64,0.6);
+  transform: translateY(-1px);
+}
+
+.cta.primary.big {
+  padding: 1.1rem 2.4rem;
+  font-size: 0.95rem;
+}
+
+.cta.ghost {
+  background: transparent;
+  color: var(--text-1);
+  border-color: var(--outline);
+}
+
+.cta.ghost:hover {
+  border-color: var(--text-1);
+  background: var(--surface);
+  color: var(--text-1);
+}
+
+.meta-row {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.meta-row .dot { color: var(--outline); }
+
+/* ───────────── Hero art / screenshot frames ───────────── */
+.hero-art {
+  position: relative;
+}
+
+.screenshot-frame {
+  background: var(--surface);
+  border: 1px solid var(--outline);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow:
+    0 0 0 1px rgba(216,48,64,0.15),
+    0 30px 60px -20px rgba(0,0,0,0.7);
+  aspect-ratio: 940 / 720;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screenshot-placeholder {
+  width: 100%;
+  height: 100%;
+  border: 1px dashed var(--outline);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: var(--text-3);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 12px,
+    rgba(255,255,255,0.012) 12px,
+    rgba(255,255,255,0.012) 24px
+  );
+}
+
+.screenshot-placeholder small {
+  font-size: 0.7rem;
+  color: var(--text-3);
+  opacity: 0.7;
+}
+
+/* Replace placeholder content with <img> for actual screenshots */
+.screenshot-frame img,
+.screenshot-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* ───────────── Features ───────────── */
+.features {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.features h2,
+.screenshots h2 {
+  font-family: var(--mono);
+  font-size: 2.2rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.005em;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.features h2::after,
+.screenshots h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--hot);
+  box-shadow: 0 0 12px rgba(216,48,64,0.5);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.4rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--outline-dim);
+  border-radius: 6px;
+  padding: 1.6rem;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--outline);
+  background: var(--surface-2);
+  transform: translateY(-2px);
+}
+
+.card:hover::before { opacity: 1; }
+
+.card-icon {
+  font-size: 1.4rem;
+  color: var(--hot);
+  margin-bottom: 0.8rem;
+  font-family: var(--mono);
+}
+
+.card h3 {
+  font-family: var(--mono);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.6rem;
+  color: var(--text-1);
+}
+
+.card p {
+  color: var(--text-2);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.card strong { color: var(--text-1); font-weight: 600; }
+
+/* ───────────── Screenshots gallery ───────────── */
+.screenshots {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  border-top: 1px solid var(--outline-dim);
+}
+
+.screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.4rem;
+}
+
+.screenshot-grid figure {
+  background: var(--surface);
+  border: 1px solid var(--outline-dim);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.screenshot-grid .screenshot-placeholder {
+  border: none;
+  border-radius: 0;
+  aspect-ratio: 16 / 10;
+  border-bottom: 1px solid var(--outline-dim);
+}
+
+.screenshot-grid figcaption {
+  padding: 0.9rem 1.2rem;
+  font-size: 0.85rem;
+  color: var(--text-2);
+  font-family: var(--sans);
+}
+
+/* ───────────── Buy section ───────────── */
+.buy {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.8rem;
+  border-top: 1px solid var(--outline-dim);
+}
+
+.buy-card {
+  background: var(--surface);
+  border: 1px solid var(--outline);
+  border-radius: 8px;
+  padding: 2.4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.buy-card:first-child {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(216,48,64,0.18), 0 30px 60px -30px rgba(216,48,64,0.4);
+}
+
+.buy-card:first-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--hot), transparent);
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-bottom: 1.4rem;
+}
+
+.price {
+  font-family: var(--mono);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--hot);
+}
+
+.price-meta {
+  color: var(--text-3);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+}
+
+.includes {
+  list-style: none;
+  margin-bottom: 1.8rem;
+}
+
+.includes li {
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  border-bottom: 1px solid var(--outline-dim);
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--text-1);
+}
+
+.includes li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--hot);
+}
+
+.includes li:last-child { border-bottom: none; }
+
+.source-card h3 {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.source-card p {
+  color: var(--text-2);
+  margin-bottom: 1.4rem;
+  font-size: 0.95rem;
+}
+
+.source-card a:not(.cta) {
+  color: var(--hot);
+}
+
+.fineprint {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-3);
+  font-style: italic;
+}
+
+/* ───────────── Footer ───────────── */
+footer {
+  border-top: 1px solid var(--outline-dim);
+  background: var(--surface);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-inner > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.4rem;
+}
+
+.footer-links a {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+.footer-links a:hover { color: var(--hot); }
+
+/* ───────────── Responsive ───────────── */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 3rem 1.5rem 2rem;
+  }
+  .buy {
+    grid-template-columns: 1fr;
+  }
+  .topbar { padding: 0.8rem 1.2rem; }
+  nav { gap: 1rem; }
+  .features, .screenshots { padding: 3rem 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  nav a { font-size: 0.72rem; }
+  .price { font-size: 2.5rem; }
+  .features h2, .screenshots h2 { font-size: 1.7rem; }
+}
