@@ -9,9 +9,10 @@
 #
 # After the first successful deploy:
 #   - Cloudflare → Workers & Pages → cartridge-site → Custom domains
-#       → add  cartridge.smank.audio  (after DNS is in Cloudflare)
+#       → add  cartridge.smank.io  (DNS is already in your Cloudflare zone —
+#         smank.io is yours, so a CNAME for `cartridge` gets auto-created)
 #   - Cloudflare → Zero Trust → Access → Applications → Add an application
-#       → Self-hosted → host = cartridge.smank.audio → Policy:
+#       → Self-hosted → host = cartridge.smank.io → Policy:
 #         "Include: Emails ending in your-domain.com" or "Emails: tester1@…, tester2@…"
 #         → Identity provider: One-time PIN
 #       Result: testers visit the URL, get a 6-digit email PIN, then see the site.
