@@ -13,6 +13,8 @@
   <meta name="bingbot" content="noindex, nofollow">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="style.css">
+  <!-- Gumroad overlay checkout: turns any <a class="gumroad-button"> into an in-page modal. -->
+  <script src="https://gumroad.com/js/gumroad.js" async></script>
 </head>
 <body>
 
@@ -153,7 +155,8 @@
       <li>Email support</li>
       <li>No DRM, no activation server</li>
     </ul>
-    <a class="cta primary big" href="#" data-gumroad-link>Buy — Gumroad checkout</a>
+    <!-- TODO: replace GUMROAD_URL_HERE with the real product URL (e.g. https://staycool.gumroad.com/l/cartridge). The `gumroad-button` class is what triggers the in-page overlay. -->
+    <a class="cta primary big gumroad-button" href="GUMROAD_URL_HERE" data-gumroad-link>Buy — Gumroad checkout</a>
     <p class="fineprint">Beta build. Some rough edges expected. Feedback shapes 2.0.</p>
   </div>
 
