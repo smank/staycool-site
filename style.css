@@ -13,9 +13,9 @@
   --sc-line:  #1f1f1f;
   --sc-mono:  "JetBrains Mono", "Menlo", ui-monospace, monospace;
   --sc-sans:  -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-  --sc-accent:      #5ec8e6;  /* ice-blue — "stay cool" pun, cold vs. warm products */
-  --sc-cartridge:   #d43040;  /* Cartridge's hot red */
-  --sc-freaks:      #d8821e;  /* Little Freaks' carnival orange */
+  --sc-accent:      #7fa6b5;  /* desaturated steel-ice — cold, restrained */
+  --sc-cartridge:   #d43040;  /* Cartridge's hot red (hover only) */
+  --sc-freaks:      #d8821e;  /* Little Freaks' carnival orange (hover only) */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -147,31 +147,20 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
 
 .hero-accent {
   position: relative;
-  background: linear-gradient(100deg, var(--sc-accent) 0%, var(--sc-freaks) 55%, var(--sc-cartridge) 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: gradient-pan 6s ease-in-out infinite alternate;
+  color: var(--sc-fg);
 }
 .hero-accent::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -0.04em;
+  bottom: -0.02em;
   width: 100%;
-  height: 0.09em;
-  background: linear-gradient(90deg, var(--sc-accent), var(--sc-cartridge));
-  box-shadow: 0 0 18px rgba(216, 48, 64, 0.6);
+  height: 2px;
+  background: var(--sc-accent);
+  opacity: 0.7;
   transform: scaleX(0);
   transform-origin: left;
-  animation: underline-sweep 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
-}
-
-@keyframes gradient-pan {
-  from { background-position: 0% center; }
-  to   { background-position: 100% center; }
+  animation: underline-sweep 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
 }
 
 @keyframes underline-sweep {
@@ -193,16 +182,15 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(38% 44% at 18% 22%, rgba(94, 200, 230, 0.30), transparent 70%),
-    radial-gradient(40% 46% at 82% 30%, rgba(216, 48, 64, 0.26), transparent 70%),
-    radial-gradient(46% 50% at 60% 88%, rgba(216, 130, 30, 0.24), transparent 72%);
-  filter: blur(40px) saturate(120%);
-  animation: aurora-drift 22s ease-in-out infinite alternate;
+    radial-gradient(50% 55% at 22% 18%, rgba(90, 130, 150, 0.13), transparent 72%),
+    radial-gradient(45% 50% at 85% 75%, rgba(70, 95, 120, 0.10), transparent 74%);
+  filter: blur(50px);
+  animation: aurora-drift 34s ease-in-out infinite alternate;
 }
 
 @keyframes aurora-drift {
-  from { transform: translate3d(-3%, -2%, 0) scale(1); }
-  to   { transform: translate3d(3%, 2%, 0) scale(1.12); }
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to   { transform: translate3d(2%, 1%, 0) scale(1.06); }
 }
 
 /* keep page content above the aurora */
@@ -239,17 +227,17 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
 .marquee-track {
   display: inline-flex;
   align-items: center;
-  gap: 1.6rem;
+  gap: 1.8rem;
   font-family: var(--sc-mono);
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--sc-fg);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  color: var(--sc-dim);
   will-change: transform;
-  animation: marquee 24s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 
-.marquee-track .dot { color: var(--sc-accent); font-weight: 400; }
+.marquee-track .dot { color: var(--sc-accent); font-weight: 400; opacity: 0.7; }
 
 @keyframes marquee {
   from { transform: translateX(0); }
