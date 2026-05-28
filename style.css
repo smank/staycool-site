@@ -13,6 +13,9 @@
   --sc-line:  #1f1f1f;
   --sc-mono:  "JetBrains Mono", "Menlo", ui-monospace, monospace;
   --sc-sans:  -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --sc-accent:      #5ec8e6;  /* ice-blue — "stay cool" pun, cold vs. warm products */
+  --sc-cartridge:   #d43040;  /* Cartridge's hot red */
+  --sc-freaks:      #d8821e;  /* Little Freaks' carnival orange */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -89,9 +92,48 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
 }
 
 .label-home .hero {
-  padding-bottom: 5rem;
-  border-bottom: 1px solid var(--sc-line);
-  margin-bottom: 4rem;
+  position: relative;
+  padding: 3rem 0 5rem;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+/* Oversized ghost wordmark drifting behind the hero copy */
+.hero-watermark {
+  position: absolute;
+  top: 50%;
+  left: -2%;
+  transform: translateY(-50%);
+  font-family: var(--sc-mono);
+  font-weight: 700;
+  font-size: clamp(7rem, 24vw, 22rem);
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--sc-line);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  animation: drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  from { transform: translateY(-50%) translateX(-3%); }
+  to   { transform: translateY(-50%) translateX(3%); }
+}
+
+.hero-inner { position: relative; z-index: 1; }
+
+.hero-eyebrow {
+  display: inline-block;
+  font-family: var(--sc-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--sc-accent);
+  margin-bottom: 1.6rem;
+  padding-left: 2px;
 }
 
 .label-home h1 {
@@ -103,12 +145,104 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
   font-weight: 700;
 }
 
+.hero-accent {
+  position: relative;
+  color: var(--sc-fg);
+}
+.hero-accent::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0.08em;
+  width: 100%;
+  height: 0.09em;
+  background: var(--sc-accent);
+  box-shadow: 0 0 18px var(--sc-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: underline-sweep 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
+}
+
+@keyframes underline-sweep {
+  to { transform: scaleX(1); }
+}
+
 .label-home .tagline {
   font-size: 1.05rem;
   color: var(--sc-dim);
   max-width: 38em;
   line-height: 1.6;
   margin: 0;
+}
+
+/* ───── film grain overlay (home only) ───── */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 0.5s steps(2) infinite;
+}
+
+@keyframes grain-shift {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(-2%, 1%); }
+}
+
+/* ───── marquee ticker ───── */
+.marquee {
+  border-top: 1px solid var(--sc-line);
+  border-bottom: 1px solid var(--sc-line);
+  overflow: hidden;
+  padding: 0.9rem 0;
+  margin-bottom: 5rem;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marquee-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.6rem;
+  font-family: var(--sc-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--sc-fg);
+  will-change: transform;
+  animation: marquee 24s linear infinite;
+}
+
+.marquee-track .dot { color: var(--sc-accent); font-weight: 400; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Editorial section numbers */
+.sec-num {
+  color: var(--sc-accent);
+  margin-right: 0.5em;
+  font-weight: 400;
+}
+
+/* Per-product accent glow on the cards */
+.product-card[data-accent="cartridge"]:hover {
+  border-color: var(--sc-cartridge);
+  box-shadow: 0 0 0 1px var(--sc-cartridge), 0 18px 40px -22px var(--sc-cartridge);
+}
+.product-card[data-accent="cartridge"]:hover .product-thumb { color: var(--sc-cartridge); }
+
+.product-card[data-accent="freaks"] .product-thumb { color: var(--sc-freaks); }
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .hero-watermark, .marquee-track, .grain, .hero-accent::after { animation: none; }
+  .hero-accent::after { transform: scaleX(1); }
 }
 
 .label-home h2 {
