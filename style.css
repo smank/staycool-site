@@ -147,20 +147,31 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
 
 .hero-accent {
   position: relative;
-  color: var(--sc-fg);
+  background: linear-gradient(100deg, var(--sc-accent) 0%, var(--sc-freaks) 55%, var(--sc-cartridge) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: gradient-pan 6s ease-in-out infinite alternate;
 }
 .hero-accent::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: 0.08em;
+  bottom: -0.04em;
   width: 100%;
   height: 0.09em;
-  background: var(--sc-accent);
-  box-shadow: 0 0 18px var(--sc-accent);
+  background: linear-gradient(90deg, var(--sc-accent), var(--sc-cartridge));
+  box-shadow: 0 0 18px rgba(216, 48, 64, 0.6);
   transform: scaleX(0);
   transform-origin: left;
   animation: underline-sweep 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
+}
+
+@keyframes gradient-pan {
+  from { background-position: 0% center; }
+  to   { background-position: 100% center; }
 }
 
 @keyframes underline-sweep {
@@ -174,6 +185,28 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
   line-height: 1.6;
   margin: 0;
 }
+
+/* ───── colour aurora (home only) — cold label, hot products ───── */
+.aurora {
+  position: fixed;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 44% at 18% 22%, rgba(94, 200, 230, 0.30), transparent 70%),
+    radial-gradient(40% 46% at 82% 30%, rgba(216, 48, 64, 0.26), transparent 70%),
+    radial-gradient(46% 50% at 60% 88%, rgba(216, 130, 30, 0.24), transparent 72%);
+  filter: blur(40px) saturate(120%);
+  animation: aurora-drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift {
+  from { transform: translate3d(-3%, -2%, 0) scale(1); }
+  to   { transform: translate3d(3%, 2%, 0) scale(1.12); }
+}
+
+/* keep page content above the aurora */
+.label-bar, .label-home, .label-footer { position: relative; z-index: 1; }
 
 /* ───── film grain overlay (home only) ───── */
 .grain {
@@ -241,7 +274,8 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
 
 /* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  .hero-watermark, .marquee-track, .grain, .hero-accent::after { animation: none; }
+  .hero-watermark, .marquee-track, .grain, .hero-accent,
+  .hero-accent::after, .aurora { animation: none; }
   .hero-accent::after { transform: scaleX(1); }
 }
 
