@@ -8,7 +8,7 @@ You're getting this because I picked you personally for the closed beta of **Car
 
 ## What it is
 
-Cartridge is an 8-bit chiptune synth — a faithful 2A03 (the NES sound chip) with VRC6 Konami expansion, a per-channel step sequencer for volume/pitch/duty envelopes, a modern polyphonic engine when you want to step outside the hardware constraints, and VGM import so you can pull instruments straight from old game rips. VST3, AU, CLAP, and Standalone. macOS, signed and notarised.
+Cartridge is an 8-bit chiptune synth — a faithful Ricoh 2A03 with VRC6 expansion, a per-channel step sequencer for volume/pitch/duty envelopes, a modern polyphonic engine when you want to step outside the hardware constraints, and VGM import so you can pull instruments straight from old game rips. VST3, AU, CLAP, and Standalone. macOS, signed and notarised.
 
 ## How to grab it
 
