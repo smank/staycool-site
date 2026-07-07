@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cartridge — 8-bit Chiptune Synth Plugin (VST3 · AU · CLAP · Standalone)</title>
-  <meta name="description" content="Cartridge is a 2A03 + expansion-chip chiptune synth plugin with a polyphonic Modern engine, per-channel step sequencer, and chiptune-instrument import. macOS · VST3 · AU · CLAP.">
+  <meta name="description" content="Cartridge is an authentic 2A03 chiptune synth plugin — real 8-bit voices, a polyphonic Modern engine, a per-channel step sequencer, VGM import, and 95 presets. macOS · VST3 · AU · CLAP.">
   <meta property="og:title" content="Cartridge — 8-bit Chiptune Synth Plugin">
-  <meta property="og:description" content="Authentic 2A03 chiptune synthesis with a modern, polyphonic engine and per-channel step sequencer.">
+  <meta property="og:description" content="Authentic 2A03 chiptune synthesis with a modern polyphonic engine and a per-channel step sequencer. Hear it.">
   <meta property="og:image" content="screenshots/hero.png">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <meta name="googlebot" content="noindex, nofollow">
@@ -31,22 +31,34 @@
   <div class="brand">
     <span class="cart-logo">●</span>
     <span class="brand-name">CARTRIDGE</span>
-    <span class="brand-tag">v2.0 BETA</span>
+    <span class="brand-tag">v1.11 BETA</span>
   </div>
   <nav>
+    <a href="#sound">Sound</a>
+    <a href="#engines">Engines</a>
     <a href="#features">Features</a>
-    <a href="#screenshots">Screenshots</a>
+    <a href="#faq">FAQ</a>
     <a href="#buy">Buy</a>
   </nav>
 </header>
 
+<!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
   <div class="hero-inner">
-    <h1>The <span class="accent">2A03</span> chiptune chip in your DAW.</h1>
-    <p class="lede">Bandlimited chiptune synthesis of the iconic 8-bit sound chip. Expansion-chip support. A per-channel step sequencer. Polyphonic Modern engine. Chiptune-instrument import. Built for producers who want authentic retro timbre without leaving their DAW.</p>
+    <h1>Make the soundtrack to the <span class="accent">game in your head</span>.</h1>
+    <p class="lede">Cartridge is an authentic 2A03 chiptune synth — the real 8-bit voice, plus a polyphonic modern engine, a per-channel step sequencer, and 95 presets. Built to live in your DAW, not fight it.</p>
+
+    <!-- Full-band demo, made entirely in Cartridge -->
+    <div class="hero-player player big" data-src="audio/demo-track.mp3" role="button" tabindex="0" aria-label="Play demo track">
+      <span class="player-play">▶</span>
+      <span class="player-label"><strong>Hear it — full-band demo</strong><em>drums, bass &amp; lead, all Cartridge</em></span>
+      <span class="player-bar"><span class="player-fill"></span></span>
+      <span class="player-time">0:00</span>
+    </div>
+
     <div class="cta-row">
-      <a class="cta primary" href="#buy">Buy — $29 intro</a>
-      <a class="cta ghost" href="https://github.com/smank/cartridge" target="_blank" rel="noopener">Get the source</a>
+      <a class="cta primary" href="#buy">Get Cartridge — $29</a>
+      <a class="cta ghost" href="#sound">Hear the presets</a>
     </div>
     <div class="meta-row">
       <span>macOS · VST3 · AU · CLAP · Standalone</span>
@@ -58,138 +70,239 @@
   </div>
   <div class="hero-art">
     <div class="screenshot-frame">
-      <div class="screenshot-placeholder">
-        <span>screenshots/hero.png</span>
-        <small>drop the main UI screenshot here</small>
-      </div>
+      <img src="screenshots/hero.png" alt="Cartridge — Classic engine UI">
     </div>
   </div>
 </section>
 
+<!-- ═══════════════ SOUND ═══════════════ -->
+<section id="sound" class="sound">
+  <h2>Hear it</h2>
+  <p class="section-lede">Every clip below is a factory preset, straight out of the box — no post-processing.</p>
+  <div class="player-grid">
+    <div class="player" data-src="audio/demo-lead.mp3" role="button" tabindex="0" aria-label="Play lead demo">
+      <span class="player-play">▶</span>
+      <span class="player-label"><strong>Chiptune Poly Lead</strong><em>polyphonic lead</em></span>
+      <span class="player-bar"><span class="player-fill"></span></span>
+      <span class="player-time">0:00</span>
+    </div>
+    <div class="player" data-src="audio/demo-bass.mp3" role="button" tabindex="0" aria-label="Play bass demo">
+      <span class="player-play">▶</span>
+      <span class="player-label"><strong>Square Bass</strong><em>tight 8-bit low end</em></span>
+      <span class="player-bar"><span class="player-fill"></span></span>
+      <span class="player-time">0:00</span>
+    </div>
+    <div class="player" data-src="audio/demo-sequencer.mp3" role="button" tabindex="0" aria-label="Play sequencer demo">
+      <span class="player-play">▶</span>
+      <span class="player-label"><strong>Acid Riff</strong><em>one held note — the step sequencer plays the line</em></span>
+      <span class="player-bar"><span class="player-fill"></span></span>
+      <span class="player-time">0:00</span>
+    </div>
+    <div class="player" data-src="audio/demo-arp.mp3" role="button" tabindex="0" aria-label="Play arp demo">
+      <span class="player-play">▶</span>
+      <span class="player-label"><strong>Classic Arp</strong><em>hold a chord, the arpeggiator runs it</em></span>
+      <span class="player-bar"><span class="player-fill"></span></span>
+      <span class="player-time">0:00</span>
+    </div>
+    <div class="player" data-src="audio/demo-pad.mp3" role="button" tabindex="0" aria-label="Play pad demo">
+      <span class="player-play">▶</span>
+      <span class="player-label"><strong>Glass Pad</strong><em>modern engine — lush and wide</em></span>
+      <span class="player-bar"><span class="player-fill"></span></span>
+      <span class="player-time">0:00</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TWO ENGINES ═══════════════ -->
+<section id="engines" class="engines">
+  <h2>Two instruments in one plugin</h2>
+  <div class="engine-split">
+    <article class="engine-card">
+      <div class="engine-shot"><img src="screenshots/main.png" alt="Classic engine"></div>
+      <h3>Classic — the hardware</h3>
+      <p>A faithful 2A03: two pulse channels, triangle, noise, and DPCM sample playback, plus the optional VRC6 expansion for two more pulses and a sawtooth. Bandlimited so it stays clean at any pitch, with the nonlinear DAC curve that gives the chip its bite. This is the real 8-bit voice — not a sample of it.</p>
+    </article>
+    <article class="engine-card">
+      <div class="engine-shot"><img src="screenshots/modern.png" alt="Modern engine"></div>
+      <h3>Modern — the synth</h3>
+      <p>When you want to step outside the hardware, flip to a full polyphonic synth built from the same waveforms: dual oscillators, ADSR, unison with detune, portamento, and per-voice MPE pitch bend. Chiptune timbre, modern playability — pads, leads and stacks the original chip could never hold.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════════ SEQUENCER SHOWCASE ═══════════════ -->
 <section id="features" class="features">
-  <h2>What's in the cartridge</h2>
+  <h2>What you get to do with it</h2>
+
+  <div class="showcase">
+    <div class="showcase-copy">
+      <span class="showcase-kicker">Step sequencer</span>
+      <h3>Program lines that play themselves</h3>
+      <p>A tracker-style step sequencer on every channel — 16 steps across volume, pitch and duty lanes. Hold one note and Cartridge plays the whole riff: basslines, arps, wobbles, the works. Draw straight into the grid, lock it to your host tempo, and it's captured in your project.</p>
+      <ul class="showcase-points">
+        <li>16 steps × 3 lanes</li>
+        <li>Independent per channel</li>
+        <li>Tempo-synced &amp; loopable</li>
+        <li>Rides with the preset</li>
+      </ul>
+    </div>
+    <div class="showcase-shot"><img src="screenshots/sequencer.png" alt="Cartridge step sequencer"></div>
+  </div>
+
+  <!-- ═══ Feature cards — balanced 3×2 ═══ -->
   <div class="grid">
     <article class="card">
-      <div class="card-icon">▣</div>
-      <h3>Two engines</h3>
-      <p><strong>Classic</strong>: hardware-accurate 2A03 — 2 Pulse, Triangle, Noise, DPCM, plus optional VRC6 expansion (2 Pulse + Sawtooth). <strong>Modern</strong>: polyphonic with dual oscillators, ADSR, unison, portamento, MPE.</p>
+      <span class="card-badge">↻</span>
+      <h3>Steal from the classics</h3>
+      <p>Drop in a <code>.vgm</code> or <code>.vgz</code> game rip and Cartridge pulls each instrument out as a preset — volume, pitch and duty envelopes intact. The exact voices from decades of chiptune, ready to play.</p>
     </article>
 
     <article class="card">
-      <div class="card-icon">▦</div>
-      <h3>Step sequencer per channel</h3>
-      <p>16 steps × 3 lanes (volume, pitch, duty) on every channel. Tracker-style instrument macros without leaving your DAW. Tempo-synced, loop-capable, recorded into your project.</p>
+      <span class="card-badge">≋</span>
+      <h3>Finish it in the box</h3>
+      <p>A built-in chain — BitCrush, filter (LP/BP/HP), chorus, tempo-synced delay, reverb — always visible, always one knob away. Dirty it up or polish it without leaving the plugin.</p>
     </article>
 
     <article class="card">
-      <div class="card-icon">↻</div>
-      <h3>VGM/VGZ import</h3>
-      <p>Drop a <code>.vgm</code> or <code>.vgz</code> file in. Cartridge parses the 2A03 register stream, detects note boundaries, and turns each instrument into a preset with volume/pitch/duty envelopes intact.</p>
+      <span class="card-badge">⌥</span>
+      <h3>Play it your way</h3>
+      <p>Four MIDI modes — Split for one channel per voice, Auto for round-robin polyphony, Mono, and Layer for thick stacks where every channel fires on each key.</p>
     </article>
 
     <article class="card">
-      <div class="card-icon">≋</div>
-      <h3>Modern effects chain</h3>
-      <p>BitCrush → Filter (LP/BP/HP) → Chorus → Delay (tempo-syncable) → Reverb. Always visible. Always one knob away. Disabled effects fade so you see what's doing the work.</p>
+      <span class="card-badge">◷</span>
+      <h3>Tune it like hardware</h3>
+      <p>Four temperaments, an NTSC/PAL region switch that shifts the timing like the real consoles, per-channel transpose, and master fine-tune. Authentic down to the clock.</p>
     </article>
 
     <article class="card">
-      <div class="card-icon">⌥</div>
-      <h3>Smart MIDI routing</h3>
-      <p>Four routing modes: <strong>Split</strong> (one MIDI channel per voice), <strong>Auto</strong> (round-robin with stealing), <strong>Mono</strong>, <strong>Layer</strong>. Plays nicely with controllers, sequencers, and DAW MIDI lanes.</p>
+      <span class="card-badge">⏏</span>
+      <h3>Start from 95 presets</h3>
+      <p>Arcade leads, sub bass, a sampled drum kit, step-sequenced grooves, lush modern pads — 95 patches to start from, and full save/share for your own.</p>
     </article>
 
     <article class="card">
-      <div class="card-icon">⏏</div>
-      <h3>36 factory presets</h3>
-      <p>Curated patches from arcade leads to lo-fi pads, plus the freedom to save and share your own. Step sequence data travels with the preset, including anything imported from VGM.</p>
+      <span class="card-badge">◇</span>
+      <h3>Own it outright</h3>
+      <p>No DRM, no activation server, no phone-home. Signed and notarised, universal binary. Buy it, drop it in your plugins folder, make music. It's yours.</p>
     </article>
   </div>
 </section>
 
-<section id="screenshots" class="screenshots">
-  <h2>The interface</h2>
-  <div class="screenshot-grid">
-    <figure>
-      <div class="screenshot-placeholder">
-        <span>screenshots/main.png</span>
-        <small>full UI in Classic mode</small>
-      </div>
-      <figcaption>Classic engine — 8 channel strips, FX always open, step sequencer, modulation bar.</figcaption>
-    </figure>
-    <figure>
-      <div class="screenshot-placeholder">
-        <span>screenshots/modern.png</span>
-        <small>Modern engine</small>
-      </div>
-      <figcaption>Modern engine — polyphonic dual-oscillator synth with ADSR + unison.</figcaption>
-    </figure>
-    <figure>
-      <div class="screenshot-placeholder">
-        <span>screenshots/sequencer.png</span>
-        <small>step sequencer</small>
-      </div>
-      <figcaption>16-step sequencer with volume/pitch/duty lanes per channel.</figcaption>
-    </figure>
-    <figure>
-      <div class="screenshot-placeholder">
-        <span>screenshots/fx.png</span>
-        <small>FX rack</small>
-      </div>
-      <figcaption>Always-open effects rack — every section visible at a glance.</figcaption>
-    </figure>
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section id="faq" class="faq">
+  <h2>Questions</h2>
+  <div class="faq-list">
+    <details>
+      <summary>What do I need to run it?</summary>
+      <p>macOS 11 or later, Apple Silicon or Intel (it's a universal binary). Load it as VST3, AU, or CLAP in any modern DAW, or run the standalone app on its own.</p>
+    </details>
+    <details>
+      <summary>Which DAWs does it work in?</summary>
+      <p>Anything that hosts VST3, AU, or CLAP — Logic, Ableton Live, Reaper, Bitwig, FL Studio, Cubase, and the rest. AU is included specifically for Logic and GarageBand.</p>
+    </details>
+    <details>
+      <summary>Do I need to know chiptune to use it?</summary>
+      <p>No. Start from a preset, play your keyboard, and you're making 8-bit music. Hover any control for a plain-English description, and the built-in Help screen explains the chip, the jargon, and the shortcuts. Go as deep as you want — or don't.</p>
+    </details>
+    <details>
+      <summary>Is it really the 8-bit chip, or samples?</summary>
+      <p>The real thing. Cartridge synthesises the 2A03's voices in real time — bandlimited so they stay clean at any pitch — including the nonlinear DAC curve that gives the chip its character. Nothing is sampled from a console.</p>
+    </details>
+    <details>
+      <summary>What's the licence?</summary>
+      <p>The binary you buy comes with a clean commercial licence — use it on your records with no strings. The source is also available under AGPLv3 to commercial-licence holders on request. Buy once, own it; no subscription.</p>
+    </details>
+    <details>
+      <summary>Windows or Linux?</summary>
+      <p>The macOS build is what's signed, notarised and sold today. Windows and Linux builds exist and are on the roadmap — email me if that's you and I'll keep you posted.</p>
+    </details>
   </div>
 </section>
 
+<!-- ═══════════════ BUY ═══════════════ -->
 <section id="buy" class="buy">
   <div class="buy-card">
     <div class="price-row">
       <span class="price">$29</span>
       <span class="price-meta">USD · intro pricing</span>
     </div>
+    <p class="buy-urgency">Intro price while Cartridge is in beta — it goes up at 1.0.</p>
     <ul class="includes">
       <li>VST3, AU, CLAP &amp; macOS standalone — signed &amp; notarised</li>
       <li>Universal binary (Apple Silicon + Intel)</li>
-      <li>All 2.x updates free for life</li>
-      <li>Email support</li>
+      <li>All 1.x updates free for life</li>
+      <li>95 factory presets + full save/share</li>
       <li>No DRM, no activation server</li>
+      <li>Email support, straight from the maker</li>
     </ul>
-    <!-- Lemon Squeezy overlay checkout. Expected URL form: https://staycool.lemonsqueezy.com/buy/<product-id> -->
-    <a class="cta primary big lemonsqueezy-button" href="LEMONSQUEEZY_URL_HERE">Buy — Lemon Squeezy checkout</a>
-    <p class="fineprint">Beta build. Some rough edges expected. Feedback shapes 2.0.</p>
+    <a class="cta primary big lemonsqueezy-button" href="LEMONSQUEEZY_URL_HERE">Get Cartridge</a>
+    <p class="fineprint">Beta build — a few rough edges expected, and your feedback shapes the 1.0. Not happy in the first 14 days? Email me for a refund.</p>
   </div>
 
   <div class="buy-card source-card">
     <h3>Source &amp; licensing</h3>
-    <p>Cartridge is dual-licensed: the source is available to commercial-licence holders on request under <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPLv3</a>, and the paid binary you download here comes with a clean commercial licence — no AGPL obligations, just use it on your records.</p>
+    <p>Cartridge is dual-licensed. The paid binary here comes with a clean commercial licence — no AGPL obligations, just use it on your records. The source is available to commercial-licence holders on request under <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPLv3</a>.</p>
     <a class="cta ghost" href="mailto:stuart.mank@gmail.com?subject=Cartridge%20source%20request">Email for source access</a>
+    <p class="made-by">Built by one producer who wanted a chiptune synth that didn't fight the DAW.</p>
   </div>
 </section>
 
 <footer class="label-footer">
   <span>© 2026 Stay Cool and Stay Cool LLC · Cartridge is a product of the label.</span>
   <a href="mailto:stuart.mank@gmail.com">stuart.mank@gmail.com</a>
+  <p class="tm-disclaimer">Cartridge is an independent product, not affiliated with, endorsed by, or sponsored by any hardware manufacturer. All trademarks are the property of their respective owners. "2A03" and "VRC6" are used descriptively to identify the audio hardware Cartridge emulates.</p>
 </footer>
 
 <script>
-  // Auto-swap placeholders for real screenshots when the file exists.
-  // No HTML edits needed — drop the PNG in docs/screenshots/ and it shows up.
-  document.querySelectorAll('.screenshot-placeholder').forEach(ph => {
-    const labelSpan = ph.querySelector('span');
-    if (!labelSpan) return;
-    const src = labelSpan.textContent.trim();
-    const img = new Image();
-    img.onload = () => {
-      img.className = 'screenshot-img';
-      img.alt = ph.querySelector('small')?.textContent || src;
-      Object.assign(img.style, {
-        width: '100%', height: '100%', objectFit: 'cover',
-        borderRadius: 'inherit', display: 'block'
+  // Minimal shared audio player. One clip plays at a time; click/space toggles.
+  (function () {
+    var audio = new Audio();
+    var current = null;
+
+    function fmt(t) {
+      if (!isFinite(t)) return "0:00";
+      var m = Math.floor(t / 60), s = Math.floor(t % 60);
+      return m + ":" + (s < 10 ? "0" : "") + s;
+    }
+    function reset(el) {
+      if (!el) return;
+      el.classList.remove("playing");
+      el.querySelector(".player-play").textContent = "▶";
+      el.querySelector(".player-fill").style.width = "0%";
+      el.querySelector(".player-time").textContent = "0:00";
+    }
+    function toggle(el) {
+      var src = el.getAttribute("data-src");
+      if (current === el && !audio.paused) { audio.pause(); return; }
+      if (current !== el) {
+        reset(current);
+        current = el;
+        audio.src = src;
+      }
+      audio.play();
+    }
+    audio.addEventListener("play", function () {
+      if (current) { current.classList.add("playing"); current.querySelector(".player-play").textContent = "❚❚"; }
+    });
+    audio.addEventListener("pause", function () {
+      if (current) current.querySelector(".player-play").textContent = "▶";
+    });
+    audio.addEventListener("timeupdate", function () {
+      if (!current) return;
+      var pct = audio.duration ? (audio.currentTime / audio.duration * 100) : 0;
+      current.querySelector(".player-fill").style.width = pct + "%";
+      current.querySelector(".player-time").textContent = fmt(audio.currentTime);
+    });
+    audio.addEventListener("ended", function () { reset(current); });
+
+    document.querySelectorAll(".player").forEach(function (el) {
+      el.addEventListener("click", function () { toggle(el); });
+      el.addEventListener("keydown", function (e) {
+        if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(el); }
       });
-      ph.replaceWith(img);
-    };
-    img.src = src;
-  });
+    });
+  })();
 </script>
 
 </body>
