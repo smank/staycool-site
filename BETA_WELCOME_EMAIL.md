@@ -12,16 +12,18 @@ Cartridge is an 8-bit chiptune synth — a faithful Ricoh 2A03 with VRC6 expansi
 
 ## How to grab it
 
-1. Go to **https://staycoolandstaycool.com/cartridge**
-2. You'll hit a Cloudflare Access gate — enter your email, you'll get a 6-digit PIN, paste it back. Takes ten seconds.
-3. On the page, click the buy button. It'll open a Lemon Squeezy checkout — use code **`[DISCOUNT_CODE]`** for 100% off. You'll get a download link by email.
-4. Drop the files in the usual spots:
+1. Have a quick read of the beta agreement: **https://staycoolandstaycool.com/legal/beta-agreement.html** — you'll hit a Cloudflare gate first (enter your email, you'll get a 6-digit PIN, paste it back; ten seconds).
+2. It's short and human: the build is confidential and personalised to you, so don't share it or pass on the download. **Reply to this email with "I agree"** and I'll send you your personal download link.
+3. Your build is stamped with your name — it shows in the plugin's Help dialog — so a leaked copy points straight back. One more reason to keep it to yourself.
+4. Once you've got it, drop the files in the usual spots:
    ```
    AU:   ~/Library/Audio/Plug-Ins/Components/
    VST3: ~/Library/Audio/Plug-Ins/VST3/
    CLAP: ~/Library/Audio/Plug-Ins/CLAP/
    ```
    Or just run the Standalone .app.
+
+(No payment, no checkout — the beta's on me. The store goes live at 1.0.)
 
 ## What I need from you
 
@@ -34,7 +36,7 @@ Cartridge is an 8-bit chiptune synth — a faithful Ricoh 2A03 with VRC6 expansi
 
 - The icon, the installer polish, the website rough edges — those are on my list.
 - Don't filter your feedback. If something felt slightly off, that's worth a sentence.
-- Please don't share the link publicly yet. Tell a friend in DMs if you must, but no Twitter posts.
+- Please don't share the build or the link. Tell a friend it exists if you must, but no public posts and no forwarding the file.
 
 Reply to this email with anything. I read everything.
 
