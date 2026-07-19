@@ -904,3 +904,32 @@ section[id] { scroll-margin-top: 84px; }
   .showcase-points { grid-template-columns: 1fr; }
   .showcase-copy h3 { font-size: 1.3rem; }
 }
+
+/* ─── Beta agreement gate ───────────────────────────────────────────── */
+.beta-agree {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  margin: 0 0 0.9rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  text-align: left;
+}
+.beta-agree input {
+  margin-top: 0.2rem;
+  flex: 0 0 auto;
+}
+.cta.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+}
+.legal-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.legal-links a {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}

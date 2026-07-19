@@ -211,7 +211,7 @@
     </details>
     <details>
       <summary>What's the licence?</summary>
-      <p>The binary you buy comes with a clean commercial licence — use it on your records with no strings. The source is also available under AGPLv3 to commercial-licence holders on request. Buy once, own it; no subscription.</p>
+      <p>A clean commercial licence — use it on your records with no strings, no subscription, no DRM. Buy once, own it. Full terms in the <a href="/legal/eula.html">licence agreement</a>.</p>
     </details>
     <details>
       <summary>Windows or Linux?</summary>
@@ -236,14 +236,17 @@
       <li>No DRM, no activation server</li>
       <li>Email support, straight from the maker</li>
     </ul>
-    <a class="cta primary big lemonsqueezy-button" href="LEMONSQUEEZY_URL_HERE">Get Cartridge</a>
+    <div class="beta-agree">
+      <input type="checkbox" id="agree-beta">
+      <label for="agree-beta">I have read and agree to the <a href="/legal/beta-agreement.html" target="_blank" rel="noopener">Beta Tester Agreement</a> and the <a href="/legal/eula.html" target="_blank" rel="noopener">licence terms</a>.</label>
+    </div>
+    <a class="cta primary big lemonsqueezy-button is-disabled" id="buy-cta" aria-disabled="true" href="LEMONSQUEEZY_URL_HERE">Get Cartridge</a>
     <p class="fineprint">Beta build — a few rough edges expected, and your feedback shapes the 1.0. Not happy in the first 14 days? Email me for a refund.</p>
   </div>
 
   <div class="buy-card source-card">
-    <h3>Source &amp; licensing</h3>
-    <p>Cartridge is dual-licensed. The paid binary here comes with a clean commercial licence — no AGPL obligations, just use it on your records. The source is available to commercial-licence holders on request under <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPLv3</a>.</p>
-    <a class="cta ghost" href="mailto:stuart.mank@gmail.com?subject=Cartridge%20source%20request">Email for source access</a>
+    <h3>Licensing</h3>
+    <p>The binary comes with a clean commercial licence — use it on your records with no strings, no subscription, and no DRM or activation server. One licence per person. Full terms in the <a href="/legal/eula.html">licence agreement</a>.</p>
     <p class="made-by">Built by one producer who wanted a chiptune synth that didn't fight the DAW.</p>
   </div>
 </section>
@@ -251,6 +254,11 @@
 <footer class="label-footer">
   <span>© 2026 Stay Cool and Stay Cool LLC · Cartridge is a product of the label.</span>
   <a href="mailto:stuart.mank@gmail.com">stuart.mank@gmail.com</a>
+  <nav class="legal-links">
+    <a href="/legal/eula.html">Licence</a>
+    <a href="/legal/beta-agreement.html">Beta agreement</a>
+    <a href="/legal/privacy.html">Privacy</a>
+  </nav>
   <p class="tm-disclaimer">Cartridge is an independent product, not affiliated with, endorsed by, or sponsored by any hardware manufacturer. All trademarks are the property of their respective owners. "2A03" and "VRC6" are used descriptively to identify the audio hardware Cartridge emulates.</p>
 </footer>
 
@@ -302,6 +310,27 @@
         if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(el); }
       });
     });
+  })();
+</script>
+
+<script>
+  // Gate the buy button behind the beta-agreement checkbox. The hard gate is
+  // the required agreement checkbox at Lemon Squeezy checkout; this is the
+  // on-site presentation so nobody reaches checkout without agreeing first.
+  (function () {
+    var chk = document.getElementById('agree-beta');
+    var cta = document.getElementById('buy-cta');
+    if (!chk || !cta) return;
+    function sync() {
+      var off = !chk.checked;
+      cta.classList.toggle('is-disabled', off);
+      cta.setAttribute('aria-disabled', String(off));
+    }
+    chk.addEventListener('change', sync);
+    cta.addEventListener('click', function (e) {
+      if (!chk.checked) { e.preventDefault(); chk.focus(); }
+    });
+    sync();
   })();
 </script>
 

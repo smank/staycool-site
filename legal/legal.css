@@ -1,0 +1,42 @@
+/* Legal pages — readable prose column, inherits the label palette from style.css */
+.legal-wrap {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem 5rem;
+}
+.legal-wrap h1 {
+  font-size: 1.9rem;
+  margin: 0 0 0.35rem;
+}
+.legal-meta {
+  opacity: 0.6;
+  font-size: 0.85rem;
+  margin: 0 0 2rem;
+}
+.legal-wrap h2 {
+  font-size: 1.15rem;
+  margin: 2.25rem 0 0.6rem;
+}
+.legal-wrap p,
+.legal-wrap li {
+  line-height: 1.65;
+  font-size: 0.98rem;
+}
+.legal-wrap ul {
+  padding-left: 1.2rem;
+}
+.legal-wrap a {
+  text-decoration: underline;
+}
+.legal-back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+.legal-wrap .note {
+  border-left: 3px solid currentColor;
+  padding: 0.4rem 0 0.4rem 1rem;
+  opacity: 0.85;
+  font-size: 0.92rem;
+}

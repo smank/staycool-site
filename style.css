@@ -360,3 +360,7 @@ body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: va
   .label-home .hero { padding-bottom: 3rem; margin-bottom: 3rem; }
   .label-footer { padding: 1rem 1.5rem; }
 }
+
+/* Footer legal links (shared) */
+.legal-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+.legal-links a { font-size: 0.85rem; opacity: 0.75; }
