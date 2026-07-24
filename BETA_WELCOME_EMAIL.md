@@ -14,7 +14,7 @@ Cartridge is an 8-bit chiptune synth — a faithful Ricoh 2A03 with VRC6 expansi
 
 1. Have a quick read of the beta agreement: **https://staycoolandstaycool.com/legal/beta-agreement.html** — you'll hit a Cloudflare gate first (enter your email, you'll get a 6-digit PIN, paste it back; ten seconds).
 2. It's short and human: the build is confidential and personalised to you, so don't share it or pass on the download. **Reply to this email with "I agree"** and I'll send you your personal download link.
-3. Your build is stamped with your name — it shows in the plugin's Help dialog — so a leaked copy points straight back. One more reason to keep it to yourself.
+3. Your download link is personal to you and logged — please don't forward it or reshare the build. It's a private, unannounced beta; keep it between us.
 4. Once you've got it, drop the files in the usual spots:
    ```
    AU:   ~/Library/Audio/Plug-Ins/Components/

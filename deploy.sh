@@ -45,8 +45,8 @@ wrangler pages project create "$PROJECT_NAME" \
   --compatibility-date 2026-05-27 \
   2>/dev/null || true
 
-# Deploy current directory contents as the production build
-wrangler pages deploy . \
+# Deploy the public/ dir (ops files like deploy.sh/wrangler.toml stay out of web root)
+wrangler pages deploy public \
   --project-name "$PROJECT_NAME" \
   --branch main \
   --commit-dirty=true
