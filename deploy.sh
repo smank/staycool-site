@@ -46,7 +46,7 @@ wrangler pages project create "$PROJECT_NAME" \
   2>/dev/null || true
 
 # Deploy the public/ dir (ops files like deploy.sh/wrangler.toml stay out of web root)
-wrangler pages deploy public \
+wrangler pages deploy \
   --project-name "$PROJECT_NAME" \
   --branch main \
   --commit-dirty=true
