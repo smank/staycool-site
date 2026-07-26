@@ -1,0 +1,9 @@
+name = "cartridge-fulfillment"
+main = "src/worker.js"
+compatibility_date = "2026-05-27"
+# Secrets (set with `wrangler secret put NAME`, never commit):
+#   LS_WEBHOOK_SECRET  LICENSE_PRIVATE_KEY  RESEND_API_KEY
+# Optional: create a KV namespace and bind it as LEDGER for an audit trail:
+#   [[kv_namespaces]]
+#   binding = "LEDGER"
+#   id = "<kv-namespace-id>"
