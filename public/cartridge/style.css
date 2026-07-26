@@ -945,7 +945,7 @@ section[id] { scroll-margin-top: 84px; }
   background: var(--surface-hi, #1b1b1b);
   color: inherit;
 }
-.notify-email:focus { outline: 2px solid var(--cart-red, #e5484d); outline-offset: 1px; }
+.notify-email:focus { outline: 2px solid var(--primary, #b82030); outline-offset: 1px; }
 .notify-consent {
   display: flex;
   gap: 0.55rem;
