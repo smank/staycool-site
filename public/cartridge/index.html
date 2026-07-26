@@ -234,9 +234,22 @@
       <li>No iLok, no activation server — works offline</li>
       <li>Email support, straight from the maker</li>
     </ul>
-    <!-- NOTIFY_SIGNUP_FORM -->
-    <a class="cta primary big" href="mailto:stuart.mank@gmail.com?subject=Notify%20me%20when%20Cartridge%20launches">Notify me at launch</a>
-    <p class="fineprint">Free demo and one-time purchase at launch — no subscription.</p>
+    <!-- Buttondown embed. Double opt-in + unsubscribe + consent logging are
+         handled in the Buttondown account settings. Swap BUTTONDOWN_USERNAME. -->
+    <form class="notify-form"
+          action="https://buttondown.com/api/emails/embed-subscribe/BUTTONDOWN_USERNAME"
+          method="post" target="_blank">
+      <input type="email" name="email" class="notify-email"
+             placeholder="you@email.com" required autocomplete="email"
+             aria-label="Email address">
+      <label class="notify-consent">
+        <input type="checkbox" name="metadata__consent" value="yes" required>
+        <span>Email me once, when Cartridge launches. I've read the
+          <a href="/legal/privacy.html">privacy notice</a>. Unsubscribe anytime.</span>
+      </label>
+      <button type="submit" class="cta primary big">Notify me at launch</button>
+    </form>
+    <p class="fineprint">One launch email, then done — unless you opt in to more. Free demo and one-time purchase at launch, no subscription.</p>
   </div>
 
   <div class="buy-card source-card">

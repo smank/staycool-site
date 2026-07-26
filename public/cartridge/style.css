@@ -933,3 +933,27 @@ section[id] { scroll-margin-top: 84px; }
   font-size: 0.85rem;
   opacity: 0.75;
 }
+
+/* ─── Launch-notification signup ────────────────────────────────────── */
+.notify-form { display: flex; flex-direction: column; gap: 0.7rem; margin: 0.5rem 0 0.4rem; }
+.notify-email {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font: inherit;
+  border-radius: 8px;
+  border: 1px solid var(--outline-dim, #444);
+  background: var(--surface-hi, #1b1b1b);
+  color: inherit;
+}
+.notify-email:focus { outline: 2px solid var(--cart-red, #e5484d); outline-offset: 1px; }
+.notify-consent {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  text-align: left;
+  opacity: 0.85;
+}
+.notify-consent input { margin-top: 0.2rem; flex: 0 0 auto; }
+.notify-form button { width: 100%; cursor: pointer; border: none; }
