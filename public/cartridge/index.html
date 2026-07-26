@@ -30,14 +30,14 @@
   <div class="brand">
     <span class="cart-logo">●</span>
     <span class="brand-name">CARTRIDGE</span>
-    <span class="brand-tag">v1.11 BETA</span>
+    <span class="brand-tag">COMING SOON</span>
   </div>
   <nav>
     <a href="#sound">Sound</a>
     <a href="#engines">Engines</a>
     <a href="#features">Features</a>
     <a href="#faq">FAQ</a>
-    <a href="#buy">Buy</a>
+    <a href="#buy">Coming soon</a>
   </nav>
 </header>
 
@@ -56,7 +56,7 @@
     </div>
 
     <div class="cta-row">
-      <a class="cta primary" href="#buy">Get Cartridge — $29</a>
+      <a class="cta primary" href="mailto:stuart.mank@gmail.com?subject=Notify%20me%20when%20Cartridge%20launches">Get notified at launch</a>
       <a class="cta ghost" href="#sound">Hear the presets</a>
     </div>
     <div class="meta-row">
@@ -224,9 +224,9 @@
   <div class="buy-card">
     <div class="price-row">
       <span class="price">$29</span>
-      <span class="price-meta">USD · intro pricing</span>
+      <span class="price-meta">USD · at launch</span>
     </div>
-    <p class="buy-urgency">Intro price while Cartridge is in beta — it goes up at 1.0.</p>
+    <p class="buy-urgency">Cartridge is launching soon. Get on the list and you'll be first to know.</p>
     <ul class="includes">
       <li>macOS, Windows &amp; Linux — VST3, AU (macOS), CLAP &amp; standalone</li>
       <li>macOS signed &amp; notarised, universal binary (Apple Silicon + Intel)</li>
@@ -235,12 +235,8 @@
       <li>No iLok, no activation server, no phone-home</li>
       <li>Email support, straight from the maker</li>
     </ul>
-    <div class="beta-agree">
-      <input type="checkbox" id="agree-beta">
-      <label for="agree-beta">I have read and agree to the <a href="/legal/beta-agreement.html" target="_blank" rel="noopener">Beta Tester Agreement</a> and the <a href="/legal/eula.html" target="_blank" rel="noopener">licence terms</a>.</label>
-    </div>
-    <a class="cta primary big lemonsqueezy-button is-disabled" id="buy-cta" aria-disabled="true" href="LEMONSQUEEZY_URL_HERE">Get Cartridge</a>
-    <p class="fineprint">Beta build — a few rough edges expected, and your feedback shapes the 1.0. Not happy in the first 14 days? Email me for a refund.</p>
+    <a class="cta primary big" href="mailto:stuart.mank@gmail.com?subject=Notify%20me%20when%20Cartridge%20launches">Notify me at launch</a>
+    <p class="fineprint">Free demo and one-time purchase at launch — no subscription. 14-day refunds.</p>
   </div>
 
   <div class="buy-card source-card">
@@ -255,7 +251,6 @@
   <a href="mailto:stuart.mank@gmail.com">stuart.mank@gmail.com</a>
   <nav class="legal-links">
     <a href="/legal/eula.html">Licence</a>
-    <a href="/legal/beta-agreement.html">Beta agreement</a>
     <a href="/legal/privacy.html">Privacy</a>
   </nav>
   <p class="tm-disclaimer">Cartridge is an independent product, not affiliated with, endorsed by, or sponsored by any hardware manufacturer. All trademarks are the property of their respective owners. "2A03" and "VRC6" are used descriptively to identify the audio hardware Cartridge emulates.</p>
@@ -309,27 +304,6 @@
         if (e.key === " " || e.key === "Enter") { e.preventDefault(); toggle(el); }
       });
     });
-  })();
-</script>
-
-<script>
-  // Gate the buy button behind the beta-agreement checkbox. The hard gate is
-  // the required agreement checkbox at Lemon Squeezy checkout; this is the
-  // on-site presentation so nobody reaches checkout without agreeing first.
-  (function () {
-    var chk = document.getElementById('agree-beta');
-    var cta = document.getElementById('buy-cta');
-    if (!chk || !cta) return;
-    function sync() {
-      var off = !chk.checked;
-      cta.classList.toggle('is-disabled', off);
-      cta.setAttribute('aria-disabled', String(off));
-    }
-    chk.addEventListener('change', sync);
-    cta.addEventListener('click', function (e) {
-      if (!chk.checked) { e.preventDefault(); chk.focus(); }
-    });
-    sync();
   })();
 </script>
 
