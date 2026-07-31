@@ -181,7 +181,7 @@ async function handleActivate(request, env) {
   if (seats.machines.length >= SEAT_LIMIT)
     return json(409, {
       error: "seat_limit",
-      message: `All ${SEAT_LIMIT} machines for this licence are activated. Deactivate one first, or email stuart.mank@gmail.com.`,
+      message: `All ${SEAT_LIMIT} machines for this licence are activated. Deactivate one first, or email support@staycoolandstaycool.com.`,
     });
 
   seats.machines.push({ m: machine, at: new Date().toISOString() });
