@@ -63,6 +63,74 @@ body { background: var(--g-bg); overflow-x: hidden; }
   margin: 2rem 0 0.2rem;
 }
 
+/* ── support: collapsible answers ───────────────────────────────────── */
+.faq-block { margin: 1.2rem 0; max-width: 72ch; }
+.faq-block details {
+  border: 1px solid var(--g-line);
+  border-radius: 8px;
+  background: #191919;
+  margin-bottom: 0.7rem;
+  overflow: hidden;
+}
+.faq-block details[open] { border-color: #4a1620; }
+.faq-block summary {
+  cursor: pointer;
+  padding: 0.85rem 1.1rem;
+  color: var(--g-bone);
+  font-weight: 600;
+  list-style: none;
+  position: relative;
+  padding-right: 2.4rem;
+}
+.faq-block summary::-webkit-details-marker { display: none; }
+.faq-block summary::after {
+  content: "+";
+  position: absolute;
+  right: 1.1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--g-hot);
+  font-family: var(--mono, monospace);
+}
+.faq-block details[open] summary::after { content: "–"; }
+.faq-block summary:hover { color: #fff; }
+.faq-block details > p {
+  margin: 0 0 0.85rem;
+  padding: 0 1.1rem;
+  color: var(--g-t2);
+  max-width: none;
+}
+.faq-block details > p:first-of-type { padding-top: 0.1rem; }
+
+/* ── support: contact ───────────────────────────────────────────────── */
+.contact-address {
+  font-family: var(--mono, monospace);
+  font-size: 1.05rem;
+  color: var(--g-bone);
+  background: #191919;
+  border: 1px solid var(--g-line);
+  border-left: 4px solid var(--g-primary);
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin: 1rem 0;
+  user-select: all;
+  overflow-wrap: anywhere;
+}
+a.contact-btn {
+  display: inline-block;
+  font-family: var(--mono, monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--g-bone);
+  background: var(--g-primary);
+  border-radius: 6px;
+  padding: 0.7rem 1.3rem;
+  transition: background 120ms ease, transform 120ms ease;
+}
+a.contact-btn:hover { background: var(--g-hot); transform: translateY(-1px); }
+
 /* ── changelog ──────────────────────────────────────────────────────── */
 .guide .rel-date {
   font-family: var(--mono, monospace);

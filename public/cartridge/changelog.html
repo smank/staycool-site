@@ -54,47 +54,6 @@
       <li>Support contact is support@staycoolandstaycool.com throughout.</li>
     </ul>
   </section>
-  <section>
-    <h2>Version 1.11.0</h2>
-    <div class="rule"></div>
-    <p class="rel-date">2026-07-05</p>
-    <h3 class="sub-head">Added</h3>
-    <ul class="changes">
-      <li>Step sequencer is now a first-class SEQ tab (FX | MOD | SEQ) with its own transport header; presets with embedded sequences auto-open it.</li>
-      <li>Edited-preset indicator next to the preset name.</li>
-      <li>95 factory presets (79 Classic + 16 Modern), including a sampled DPCM rock kit, step-sequenced riffs, and a Modern Init blank canvas.</li>
-      <li>Tag-driven release workflow (<code>v*</code> tags build, test, package all platforms and open a draft GitHub release).</li>
-      <li>Overwrite confirmation when saving over an existing user preset.</li>
-    </ul>
-    <h3 class="sub-head">Changed</h3>
-    <ul class="changes">
-      <li>UI scale is a true zoom (fonts and bars scale together).</li>
-      <li>Status bar removed; Hold and version moved to the top bar, octave/velocity readout onto the keyboard.</li>
-      <li>Cmd+S saves a preset; Solo/Mute are Cmd+Shift+S / Cmd+Shift+M.</li>
-      <li>Pan values display as C / L50 / R50; DPCM rate defaults to 15.</li>
-      <li>A/B toggle no longer interrupts audio unless the engine changes.</li>
-    </ul>
-    <h3 class="sub-head">Fixed</h3>
-    <ul class="changes">
-      <li>Toggle parameters restore exactly under strict hosts (pluginval clean).</li>
-      <li>Step-sequence edits can no longer tear against the audio thread (seqlock).</li>
-      <li>User preset save/export now captures the full patch: VRC6 routing gates, per-channel pans, step-sequencer enable/rate/sync, tempo-sync params, and embedded step-sequence data. Preset/bank import no longer strips embedded sequences.</li>
-      <li>LFO vibrato and the step-sequencer pitch lane now work in the Modern engine.</li>
-      <li>No allocation or first-use synthesis on the audio thread in the DPCM drum path (fixes a likely audio glitch on the first drum hit of a session).</li>
-      <li>MIDI CC and MIDI Learn parameter changes are applied from the message thread instead of the audio thread.</li>
-      <li>Step counts from corrupt session data are clamped (out-of-bounds read guard).</li>
-      <li>Host BPM of zero no longer produces infinite tempo-synced rates.</li>
-      <li>Output limiter sanitises non-finite samples.</li>
-      <li>Reese Detune preset actually detunes; Sub Bass differentiated from Rock Bass; Chiptune Poly Lead fleshed out.</li>
-      <li>Pan gains computed per block (~16 fewer transcendental calls per sample).</li>
-    </ul>
-  </section>
-  <section>
-    <h2>Version 1.10.0</h2>
-    <div class="rule"></div>
-    <p class="rel-date">2026-06</p>
-    <p>Initial commercial release candidate: 2A03 Classic engine + polyphonic Modern engine, VRC6 expansion, step sequencer, VGM import, MIDI learn/MPE, 4 temperaments, full FX chain, A/B compare, preset banks — VST3/AU/CLAP/ Standalone on macOS, Windows, and Linux.</p>
-  </section>
 </div>
 
 <footer class="guide-foot">
