@@ -1,11 +1,17 @@
 # Cartridge — Lemon Squeezy fulfillment + activation Worker
 
-On a paid Lemon Squeezy order, LS calls `POST /webhook`. The Worker verifies
-the signature, signs an **unbound** Cartridge licence key (v2 format:
-`2|full|name|email|order|0|`), and emails it via Resend. The buyer pastes the
-key into the plugin's DEMO badge; the plugin calls `POST /activate` once to
-bind it to that machine (3 seats per order, tracked in KV), then verifies
-offline forever after. `POST /deactivate` releases a machine's seat.
+On a paid Lemon Squeezy order, LS calls `POST /webhook`. The Worker matches
+the LS product name against the `PRODUCTS` catalog (worker.js), signs an
+**unbound** licence key (v2 format: `2|product|full|name|email|order|0|`),
+and emails it via Resend. The buyer pastes the key into the plugin's DEMO
+badge; the plugin calls `POST /activate` once to bind it to that machine
+(3 seats per order per product, tracked in KV), then verifies offline forever
+after. `POST /deactivate` releases a machine's seat.
+
+One signing key serves every product — the `product` slug in the signed
+payload is what stops one plugin's key unlocking another (each build only
+honours its own slug). **New product = one row in `PRODUCTS`** (LS name
+matcher → slug + display name); no new keys, endpoints, or store code.
 
 Beta keys never touch this Worker — they're minted offline with
 `CartridgeLicenseTool sign-beta` (wildcard machine + expiry date).

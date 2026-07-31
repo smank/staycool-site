@@ -44,12 +44,15 @@ export async function lsSign(raw, secret = "test-webhook-secret") {
   return [...new Uint8Array(mac)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-export function orderCreatedEvent({ name = "Jo Tester", email = "jo@example.com", order = 1042, status = "paid" } = {}) {
+export function orderCreatedEvent({ name = "Jo Tester", email = "jo@example.com", order = 1042, status = "paid", productName = "Cartridge" } = {}) {
   return JSON.stringify({
     meta: { event_name: "order_created" },
     data: {
       id: String(order),
-      attributes: { status, user_name: name, user_email: email, order_number: order },
+      attributes: {
+        status, user_name: name, user_email: email, order_number: order,
+        first_order_item: { product_name: productName },
+      },
     },
   });
 }

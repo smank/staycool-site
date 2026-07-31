@@ -39,7 +39,7 @@ function post(path, body, headers = {}) {
 async function mintUnbound(order = "ls-1042") {
   return signLicence(
     TEST_PRIVATE_KEY,
-    buildPayloadV2({ type: "full", name: "Jo Tester", email: "jo@example.com", order, expiry: 0, machine: "" })
+    buildPayloadV2({ product: "cartridge", type: "full", name: "Jo Tester", email: "jo@example.com", order, expiry: 0, machine: "" })
   );
 }
 
@@ -80,6 +80,14 @@ test("webhook rejects bad signature, ignores non-order and unpaid events", async
   const unpaid = orderCreatedEvent({ status: "pending" });
   const r2 = await post("/webhook", unpaid, { "X-Signature": await lsSign(unpaid) });
   assert.equal(r2.status, 200);
+  assert.equal(sentEmails.length, 0);
+});
+
+test("webhook ignores orders for unknown products", async () => {
+  const raw = orderCreatedEvent({ productName: "Some Future Thing" });
+  const res = await post("/webhook", raw, { "X-Signature": await lsSign(raw) });
+  assert.equal(res.status, 200);
+  assert.match(await res.text(), /unknown product/);
   assert.equal(sentEmails.length, 0);
 });
 
@@ -125,13 +133,13 @@ test("activate rejects garbage, invalid keys, bound keys, beta keys", async () =
   assert.equal((await post("/activate", { key: await mintUnbound(), machine: "BAD" })).status, 400);
 
   const bound = await signLicence(TEST_PRIVATE_KEY,
-    buildPayloadV2({ type: "full", name: "A", email: "", order: "o", machine: MACHINE_A }));
+    buildPayloadV2({ product: "cartridge", type: "full", name: "A", email: "", order: "o", machine: MACHINE_A }));
   const r1 = await post("/activate", { key: bound, machine: MACHINE_B });
   assert.equal(r1.status, 400);
   assert.equal((await r1.json()).error, "not_activatable");
 
   const beta = await signLicence(TEST_PRIVATE_KEY,
-    buildPayloadV2({ type: "beta", name: "A", email: "", order: "b", expiry: 20991231, machine: "*" }));
+    buildPayloadV2({ product: "cartridge", type: "beta", name: "A", email: "", order: "b", expiry: 20991231, machine: "*" }));
   const r2 = await post("/activate", { key: beta, machine: MACHINE_B });
   assert.equal(r2.status, 400);
 });
@@ -159,7 +167,7 @@ test("deactivate releases the seat and is idempotent", async () => {
 
 test("deactivate rejects wildcard/beta and invalid licences", async () => {
   const beta = await signLicence(TEST_PRIVATE_KEY,
-    buildPayloadV2({ type: "beta", name: "A", email: "", order: "b", expiry: 20991231, machine: "*" }));
+    buildPayloadV2({ product: "cartridge", type: "beta", name: "A", email: "", order: "b", expiry: 20991231, machine: "*" }));
   const r = await post("/deactivate", { licence: beta });
   assert.equal(r.status, 400);
   assert.equal((await r.json()).error, "not_seat_managed");

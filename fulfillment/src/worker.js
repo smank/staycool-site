@@ -24,6 +24,19 @@ import { signLicence, buildPayloadV2, verifyLicence } from "./sign.js";
 const SEAT_LIMIT = 3;
 const CORS_ORIGIN = "https://staycoolandstaycool.com"; // future web activation page
 
+// Product catalog: LS product names (matched case-insensitively against
+// first_order_item.product_name) → licence slug + email display name.
+// One signing key serves every product; the slug in the payload is what keeps
+// one product's key from unlocking another. Add a row per new product.
+const PRODUCTS = [
+  { slug: "cartridge", match: /cartridge/i, display: "Cartridge" },
+];
+
+function productForOrder(attributes) {
+  const name = attributes?.first_order_item?.product_name ?? "";
+  return PRODUCTS.find((p) => p.match.test(name)) ?? null;
+}
+
 export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
@@ -73,7 +86,10 @@ async function handleWebhook(request, env) {
   if (a.status && a.status !== "paid")
     return new Response("not paid", { status: 200 });
 
-  const name = (a.user_name || "Cartridge user").trim();
+  const product = productForOrder(a);
+  if (!product) return new Response("ignored (unknown product)", { status: 200 });
+
+  const name = (a.user_name || "Music maker").trim();
   const email = (a.user_email || "").trim();
   const order = "ls-" + String(a.order_number || event.data.id);
   if (!email) return new Response("no email", { status: 200 });
@@ -82,7 +98,7 @@ async function handleWebhook(request, env) {
   // bound to their machine (SEAT_LIMIT machines per order).
   const licence = await signLicence(
     env.LICENSE_PRIVATE_KEY,
-    buildPayloadV2({ type: "full", name, email, order, expiry: 0, machine: "" })
+    buildPayloadV2({ product: product.slug, type: "full", name, email, order, expiry: 0, machine: "" })
   );
 
   // LS retries webhooks on non-200; deterministic signing means a retry mints
@@ -90,7 +106,7 @@ async function handleWebhook(request, env) {
   // Data minimisation: only a HASH of the licence is stored — no name, email,
   // or key ever persists here. Lost keys are re-sent from the LS dashboard
   // (webhook resend re-mints the identical key).
-  const ledgerKey = `order:${order}`;
+  const ledgerKey = `order:${product.slug}:${order}`;
   const licHash = await sha256Hex(licence);
   if (env.LEDGER) {
     const prior = await env.LEDGER.get(ledgerKey, "json");
@@ -98,7 +114,7 @@ async function handleWebhook(request, env) {
     await env.LEDGER.put(ledgerKey, JSON.stringify({ licHash, at: new Date().toISOString() }));
   }
 
-  await sendLicenceEmail(env, email, name, licence);
+  await sendLicenceEmail(env, email, name, licence, product.display);
   return new Response("ok", { status: 200 });
 }
 
@@ -150,12 +166,13 @@ async function handleActivate(request, env) {
   if (f.type !== "full" || f.machine !== "")
     return json(400, { error: "not_activatable", message: "This key doesn't need online activation." });
 
-  const seatsKey = `seats:${f.order}`;
+  const seatsKey = `seats:${f.product}:${f.order}`;
   const seats = (await env.LEDGER.get(seatsKey, "json")) ?? { machines: [] };
 
   const bound = await signLicence(
     env.LICENSE_PRIVATE_KEY,
-    buildPayloadV2({ type: f.type, name: f.name, email: f.email, order: f.order, expiry: f.expiry, machine })
+    buildPayloadV2({ product: f.product, type: f.type, name: f.name, email: f.email,
+                     order: f.order, expiry: f.expiry, machine })
   );
 
   if (seats.machines.some((m) => m.m === machine))
@@ -184,7 +201,7 @@ async function handleDeactivate(request, env) {
   if (!/^[0-9a-f]{16,64}$/.test(f.machine))
     return json(400, { error: "not_seat_managed", message: "This licence has no machine seat to release." });
 
-  const seatsKey = `seats:${f.order}`;
+  const seatsKey = `seats:${f.product}:${f.order}`;
   const seats = (await env.LEDGER.get(seatsKey, "json")) ?? { machines: [] };
   const remaining = seats.machines.filter((m) => m.m !== f.machine);
   if (remaining.length !== seats.machines.length)
@@ -194,21 +211,21 @@ async function handleDeactivate(request, env) {
 
 // ---------------------------------------------------------------- email
 
-async function sendLicenceEmail(env, to, name, licence) {
+async function sendLicenceEmail(env, to, name, licence, display) {
   const text =
     `Hi ${name},\n\n` +
-    `Thanks for buying Cartridge. Here's your licence key:\n\n${licence}\n\n` +
-    `To activate: open Cartridge, click the DEMO badge in the top bar, paste the ` +
+    `Thanks for buying ${display}. Here's your licence key:\n\n${licence}\n\n` +
+    `To activate: open ${display}, click the DEMO badge in the top bar, paste the ` +
     `key in, and hit Activate. A one-time online activation binds it to that ` +
     `machine — you can activate up to 3 machines, and free one up any time from ` +
-    `the licence badge. After activation Cartridge runs fully offline.\n\n` +
+    `the licence badge. After activation ${display} runs fully offline.\n\n` +
     `Keep this email; it's your proof of licence.\n\n— Stay Cool and Stay Cool`;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: "Cartridge <licences@staycoolandstaycool.com>",
-      to: [to], subject: "Your Cartridge licence key", text,
+      from: `${display} <licences@staycoolandstaycool.com>`,
+      to: [to], subject: `Your ${display} licence key`, text,
     }),
   });
   if (!res.ok) throw new Error("email send failed: " + (await res.text()));
