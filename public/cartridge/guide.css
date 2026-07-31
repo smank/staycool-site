@@ -53,6 +53,16 @@ body { background: var(--g-bg); overflow-x: hidden; }
 .guide strong { color: var(--g-bone); }
 .guide a { color: var(--g-hot-br); }
 
+/* Sub-heading within a section (e.g. "macOS" / "Windows & Linux") */
+.guide .sub-head {
+  font-family: var(--mono, monospace);
+  font-size: 0.74rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--g-t2);
+  margin: 2rem 0 0.2rem;
+}
+
 /* ── platform cards ─────────────────────────────────────────────────── */
 /* Full-width rows: every destination path fits on one line at desktop
    width, so nothing breaks mid-path. Collapses to stacked pairs on phones. */
