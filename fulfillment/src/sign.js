@@ -4,8 +4,18 @@
 //
 // Key format: "exponentHex,modulusHex" (juce::RSAKey.toString()).
 // Licence:    base64(payload) + "." + signatureHex
-//   payload   = "Name|email|order"
+//   payload   = "2|type|name|email|order|expiry|machine"   (licence v2)
 //   signature = (SHA256(payload) ^ privateExponent) mod modulus   (RSA, no padding)
+//
+// Signing is deterministic: the same payload always yields the identical
+// licence string, which is what makes /activate retries idempotent for free.
+//
+// Payload fields:
+//   type    "full" | "beta"
+//   expiry  "0" (perpetual) or YYYYMMDD, valid through that day inclusive
+//   machine "" (unbound retail key — must be exchanged via /activate)
+//           "*" (any machine — beta / NFR keys)
+//           16-64 lowercase hex chars (bound to one machine)
 
 function modpow(base, exp, mod) {
   let result = 1n;
@@ -29,6 +39,12 @@ function b64utf8(str) {
   return btoa(bin);
 }
 
+function b64decodeUtf8(b64) {
+  const bin = atob(b64);
+  const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
 async function sha256BigInt(str) {
   const data = new TextEncoder().encode(str);
   const digest = await crypto.subtle.digest("SHA-256", data);
@@ -43,4 +59,65 @@ export async function signLicence(privateKeyStr, payload) {
   const hash = await sha256BigInt(payload);
   const sig = modpow(hash, exp, mod);
   return b64utf8(payload) + "." + sig.toString(16);
+}
+
+/** Mint-time sanitisation: pipes and newlines can never enter a payload field. */
+export function sanitizeField(s) {
+  return String(s ?? "").replace(/[|\r\n]/g, "").trim();
+}
+
+const TYPES = new Set(["full", "beta"]);
+const EXPIRY_RE = /^0$|^[0-9]{8}$/;
+const MACHINE_RE = /^$|^\*$|^[0-9a-f]{16,64}$/;
+
+/** Build a v2 payload string from fields (sanitises name/email/order). */
+export function buildPayloadV2({ type, name, email, order, expiry = 0, machine = "" }) {
+  if (!TYPES.has(type)) throw new Error("bad type");
+  name = sanitizeField(name) || "Cartridge user";
+  email = sanitizeField(email);
+  order = sanitizeField(order);
+  if (!order) throw new Error("bad order");
+  const exp = String(expiry);
+  if (!EXPIRY_RE.test(exp)) throw new Error("bad expiry");
+  if (!MACHINE_RE.test(machine)) throw new Error("bad machine");
+  if (type === "beta" && machine === "") throw new Error("beta keys must not be unbound");
+  return ["2", type, name, email, order, exp, machine].join("|");
+}
+
+/**
+ * Split and grammar-check a licence key (no signature check).
+ * Returns { payload, sigHex, fields: {type,name,email,order,expiry,machine} } or null.
+ */
+export function parseLicence(licenceKey) {
+  const key = String(licenceKey ?? "").trim();
+  const dot = key.lastIndexOf(".");
+  if (dot <= 0) return null;
+  let payload;
+  try {
+    payload = b64decodeUtf8(key.slice(0, dot));
+  } catch {
+    return null;
+  }
+  const sigHex = key.slice(dot + 1);
+  if (!/^[0-9a-f]+$/.test(sigHex)) return null;
+
+  const parts = payload.split("|");
+  if (parts.length !== 7 || parts[0] !== "2") return null;
+  const [, type, name, email, order, expiry, machine] = parts;
+  if (!TYPES.has(type) || !order) return null;
+  if (!EXPIRY_RE.test(expiry)) return null;
+  if (expiry !== "0" && (+expiry < 20000101 || +expiry > 21001231)) return null;
+  if (!MACHINE_RE.test(machine)) return null;
+  if (type === "beta" && machine === "") return null;
+  return { payload, sigHex, fields: { type, name, email, order, expiry: +expiry, machine } };
+}
+
+/** Verify a licence key's signature with the PUBLIC key. Returns parseLicence() result or null. */
+export async function verifyLicence(publicKeyStr, licenceKey) {
+  const parsed = parseLicence(licenceKey);
+  if (!parsed) return null;
+  const [expHex, modHex] = publicKeyStr.split(",");
+  const recovered = modpow(BigInt("0x" + parsed.sigHex), BigInt("0x" + expHex), BigInt("0x" + modHex));
+  if (recovered !== (await sha256BigInt(parsed.payload))) return null;
+  return parsed;
 }

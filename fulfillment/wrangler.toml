@@ -1,9 +1,19 @@
 name = "cartridge-fulfillment"
 main = "src/worker.js"
 compatibility_date = "2026-05-27"
+
 # Secrets (set with `wrangler secret put NAME`, never commit):
 #   LS_WEBHOOK_SECRET  LICENSE_PRIVATE_KEY  RESEND_API_KEY
-# Optional: create a KV namespace and bind it as LEDGER for an audit trail:
-#   [[kv_namespaces]]
-#   binding = "LEDGER"
-#   id = "<kv-namespace-id>"
+
+[vars]
+# Public half of the licence signing key (safe to commit — it also ships inside
+# the plugin binary). MUST match kPublicKey in src/License/LicenseManager.cpp.
+# Placeholder until the production rotation; see README launch steps.
+LICENSE_PUBLIC_KEY = "ROTATE_ME_exp,mod"
+
+# REQUIRED: activation seat lists + issued-licence ledger.
+# Create with: npx wrangler kv namespace create LEDGER
+# then paste the returned id below.
+# [[kv_namespaces]]
+# binding = "LEDGER"
+# id = "<kv-namespace-id>"

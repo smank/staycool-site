@@ -1,0 +1,8 @@
+{
+  "name": "cartridge-fulfillment",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

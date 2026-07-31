@@ -1,0 +1,10 @@
+# Local-dev config: `npx wrangler dev --config wrangler.dev.toml`
+# Same worker with a fake KV id (miniflare keeps KV local; the id is never
+# contacted). Secrets/vars come from .dev.vars. NEVER deploy from this file.
+name = "cartridge-fulfillment-dev"
+main = "src/worker.js"
+compatibility_date = "2026-05-27"
+
+[[kv_namespaces]]
+binding = "LEDGER"
+id = "0000000000000000000000000000dev0"
