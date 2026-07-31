@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartridge — Operator's Manual</title>
+  <meta name="description" content="The complete Cartridge manual: Classic and Modern engines, step sequencer, MIDI routing, effects, presets, VGM import, and every parameter.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <link rel="stylesheet" href="manual.css">
+</head>
+<body>
+
+<!-- ═══════════ COVER ═══════════ -->
+<section class="cover">
+  <div class="cart-label">
+    <h1>CARTRIDGE<span class="dot">.</span></h1>
+    <p class="subtitle">Operator's Manual</p>
+    <p class="meta">v1.13.0 <span>·</span> 2A03 CHIPTUNE SYNTHESIZER <span>·</span> VST3 / AU / CLAP / STANDALONE</p>
+  </div>
+  <div class="cover-shot"><img src="../screenshots/main.png" alt="Cartridge, Classic engine with VRC6 expansion"></div>
+  <p class="meta" style="margin-top:2.5rem">STAY COOL &amp; STAY COOL <span>·</span> JULY 2026</p>
+</section>
+<div class="pins"></div>
+
+<!-- ═══════════ PRINT TOC ═══════════ -->
+<div class="toc-print">
+  <h2>CONTENTS</h2>
+  <ol>
+    <li><span class="n">01</span>Meet Cartridge</li>
+    <li><span class="n">02</span>Getting Started</li>
+    <li><span class="n">03</span>The Top Bar</li>
+    <li><span class="n">04</span>The Classic Engine</li>
+    <li><span class="n">05</span>The Modern Engine</li>
+    <li><span class="n">06</span>MIDI</li>
+    <li><span class="n">07</span>The Step Sequencer</li>
+    <li><span class="n">08</span>Modulation</li>
+    <li><span class="n">09</span>Effects</li>
+    <li><span class="n">10</span>Presets &amp; VGM Import</li>
+    <li><span class="n">11</span>Keyboard Shortcuts</li>
+    <li><span class="n">12</span>Licence &amp; Activation</li>
+    <li><span class="n">13</span>Specifications</li>
+  </ol>
+</div>
+
+<div class="frame">
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <a href="#ch01"><span class="n">01</span>Meet Cartridge</a>
+  <a href="#ch02"><span class="n">02</span>Getting Started</a>
+  <a href="#ch03"><span class="n">03</span>The Top Bar</a>
+  <a href="#ch04"><span class="n">04</span>The Classic Engine</a>
+  <a href="#ch05"><span class="n">05</span>The Modern Engine</a>
+  <a href="#ch06"><span class="n">06</span>MIDI</a>
+  <a href="#ch07"><span class="n">07</span>The Step Sequencer</a>
+  <a href="#ch08"><span class="n">08</span>Modulation</a>
+  <a href="#ch09"><span class="n">09</span>Effects</a>
+  <a href="#ch10"><span class="n">10</span>Presets &amp; VGM Import</a>
+  <a href="#ch11"><span class="n">11</span>Keyboard Shortcuts</a>
+  <a href="#ch12"><span class="n">12</span>Licence &amp; Activation</a>
+  <a href="#ch13"><span class="n">13</span>Specifications</a>
+</nav>
+
+<main>
+
+<!-- ═══════════ 01 MEET CARTRIDGE ═══════════ -->
+<section class="chapter" id="ch01">
+  <header class="chapter-head">
+    <span class="num">01</span>
+    <h2>Meet Cartridge</h2>
+    <div class="rule"></div>
+  </header>
+
+  <p>Cartridge is a chiptune synthesizer built around the Ricoh 2A03, the sound chip that scored a generation of 8-bit games. It is not a sample pack and not a lo-fi filter. Every voice is synthesized live, with the chip's real quirks intact: the four pulse duties, the 32-step triangle staircase, the two-mode noise generator, the 1-bit sample channel, and the nonlinear way the hardware mixed them all together.</p>
+
+  <p>Two engines share this palette:</p>
+  <p><strong>Classic</strong> is the hardware, honestly. Eight monophonic channels (five from the 2A03, three more from the VRC6 expansion), each with its own strip of controls, per-channel panning the real chip never had, and a per-channel step sequencer that plays the role of tracker-style macros.</p>
+  <p><strong>Modern</strong> takes the same waveforms and puts them in a conventional polyphonic synth voice: up to 16 notes, dual oscillators, unison detune, and a full ADSR. Chip tone, synth workflow.</p>
+
+  <div class="flow">
+    MIDI <span class="arr">→</span> Voice manager <span class="arr">→</span> <b>Classic</b> 8 channels / <b>Modern</b> voice pool <span class="arr">→</span> Step sequencer <span class="arr">→</span> LFO <span class="arr">→</span> Pan (Classic) <span class="arr">→</span> <b>Crush</b> <span class="arr">→</span> <b>Filter</b> <span class="arr">→</span> <b>Chorus</b> <span class="arr">→</span> <b>Delay</b> <span class="arr">→</span> <b>Reverb</b> <span class="arr">→</span> Soft limiter <span class="arr">→</span> Out
+  </div>
+
+  <p>The interface stacks top to bottom: the top bar (presets, engine, global controls), a waveform display, the channel strips or Modern panel, the accordion bars (FX, MOD, SEQ), and a playable keyboard. Everything in this manual is reachable from that one window.</p>
+
+  <div class="callout">
+    <span class="tag">Read me first</span>
+    <p>If you only read one chapter, make it <a href="#ch04">04 · The Classic Engine</a>. Understanding what each channel can and cannot do (the triangle has no volume control, noise has two personalities, the sample channel maps drums to specific keys) is what separates fighting the chip from playing it.</p>
+  </div>
+</section>
+
+<!-- ═══════════ 02 GETTING STARTED ═══════════ -->
+<section class="chapter" id="ch02">
+  <header class="chapter-head">
+    <span class="num">02</span>
+    <h2>Getting Started</h2>
+    <div class="rule"></div>
+  </header>
+
+  <h3>Install</h3>
+  <p>Your download contains every format. Copy the ones you use into place, then rescan plugins in your DAW.</p>
+  <table>
+    <tr><th>Platform</th><th>Format</th><th>Destination</th></tr>
+    <tr><td>macOS</td><td>Standalone</td><td><code>/Applications</code></td></tr>
+    <tr><td></td><td>AU</td><td><code>/Library/Audio/Plug-Ins/Components</code></td></tr>
+    <tr><td></td><td>VST3</td><td><code>/Library/Audio/Plug-Ins/VST3</code></td></tr>
+    <tr><td></td><td>CLAP</td><td><code>/Library/Audio/Plug-Ins/CLAP</code></td></tr>
+    <tr><td>Windows</td><td>VST3</td><td><code>C:\Program Files\Common Files\VST3</code></td></tr>
+    <tr><td></td><td>CLAP</td><td><code>C:\Program Files\Common Files\CLAP</code></td></tr>
+    <tr><td></td><td>Standalone</td><td>anywhere</td></tr>
+    <tr><td>Linux</td><td>VST3 / CLAP</td><td><code>~/.vst3</code> · <code>~/.clap</code></td></tr>
+  </table>
+  <p>The macOS build is signed and notarised. Logic and GarageBand sometimes want a full quit and relaunch before a new AU appears.</p>
+
+  <h3>Activate</h3>
+  <p>Your licence key arrives by email right after purchase. Click the <strong>DEMO</strong> badge in the top bar, paste the key, and click <strong>Activate</strong>. Activation touches the internet once; after that the licence verifies offline, forever. One licence covers three machines. Chapter <a href="#ch12">12</a> has the full story, including offline activation and moving seats between machines.</p>
+
+  <h3>First sound</h3>
+  <p>Open the standalone or load Cartridge on an instrument track and play. The Init preset is a bare Classic patch. For a guided tour of what the instrument can do, step through the factory presets with the arrow keys. Names like <em>Sequenced</em> and <em>Rock</em> are whole performances: hold one key and let the step sequencer work.</p>
+</section>
+
+<!-- ═══════════ 03 THE TOP BAR ═══════════ -->
+<section class="chapter" id="ch03">
+  <header class="chapter-head">
+    <span class="num">03</span>
+    <h2>The Top Bar</h2>
+    <div class="rule"></div>
+  </header>
+
+  <figure><img src="img/fig-topbar.png" alt="The Cartridge top bar"><figcaption>The top bar: presets and transport on the first row, engine and globals on the second, master sliders on the third.</figcaption></figure>
+
+  <h3>Presets row</h3>
+  <table>
+    <tr><th>Control</th><th>What it does</th></tr>
+    <tr><td>&lt; &gt;</td><td>Previous and next preset. Wraps around, and skips presets that belong to the other engine, so browsing in Classic never lands on a Modern patch. The left and right arrow keys do the same.</td></tr>
+    <tr><td>Preset menu</td><td>Factory presets grouped by category and filtered to the current engine. Your user presets appear after them, in every mode.</td></tr>
+    <tr><td>● dot</td><td>Appears when the live sound has drifted from the loaded preset. Save to keep it.</td></tr>
+    <tr><td>Save</td><td>Saves the current state, step sequences included, as a user preset. Asks before overwriting.</td></tr>
+    <tr><td>Import</td><td>Loads <code>.cartpreset</code> presets, <code>.cartbank</code> banks, raw <code>.xml</code>, or <code>.vgm</code>/<code>.vgz</code> chip logs (see chapter <a href="#ch10">10</a>).</td></tr>
+    <tr><td>Export</td><td>Writes the current preset to a <code>.cartpreset</code> file you can share.</td></tr>
+    <tr><td>Del</td><td>Deletes the selected user preset. Factory presets can never be deleted; the button dims to remind you.</td></tr>
+    <tr><td>A / B</td><td>Two full parameter states, step sequences included. Each click stores the live state into the current slot and swaps to the other, so edits made on B stay on B. Notes keep ringing through a same-engine swap.</td></tr>
+    <tr><td>Hold</td><td>Latch. Notes sustain until Hold is toggled off, then everything releases at once. Same as the <kbd>\</kbd> key.</td></tr>
+    <tr><td>Panic</td><td>All notes off, immediately. Same as <kbd>Space</kbd>.</td></tr>
+  </table>
+
+  <h3>Engine row</h3>
+  <table>
+    <tr><th>Control</th><th>What it does</th></tr>
+    <tr><td>Classic / Modern</td><td>Switches engines. The centre panel swaps between channel strips and the Modern panel, and the preset browser re-filters.</td></tr>
+    <tr><td>NTSC / PAL</td><td>Console region. Pitched notes stay in tune either way, but hardware envelopes and sweeps run about 17% slower in PAL, and both the noise and sample-channel timing tables change flavour. PAL is subtly slower and darker.</td></tr>
+    <tr><td>Split / Auto / Mono / Layer</td><td>Classic MIDI routing. Chapter <a href="#ch06">06</a>.</td></tr>
+    <tr><td>VRC6</td><td>Enables the three expansion channels and reveals their strips. Disabled while the Modern engine is active.</td></tr>
+    <tr><td>Help</td><td>A quick-reference card: the chip, the jargon, the shortcuts.</td></tr>
+    <tr><td>MIDI</td><td>The CC map, plus four Learn slots for your own controller assignments (chapter <a href="#ch06">06</a>).</td></tr>
+    <tr><td>100%</td><td>UI scale: 100 / 125 / 150 / 200 percent. A true zoom; the choice is remembered.</td></tr>
+    <tr><td>Settings</td><td>Audio and MIDI device setup. Standalone only.</td></tr>
+    <tr><td>LICENCE badge</td><td>Your licence state. Chapter <a href="#ch12">12</a>.</td></tr>
+  </table>
+
+  <h3>Master row</h3>
+  <p>Four sliders: <strong>Vol</strong> (master output), <strong>Tune</strong> (±100 cents), <strong>Vel</strong> (velocity sensitivity, 0 means velocity is ignored, the hardware way), and <strong>Bend</strong> (pitch-bend range, 1 to 24 semitones).</p>
+
+  <div class="callout">
+    <span class="tag">Tip</span>
+    <p>Double-click anywhere on the top bar for fullscreen. <kbd>Ctrl</kbd><kbd>Cmd</kbd><kbd>F</kbd> does the same.</p>
+  </div>
+</section>
+
+<!-- ═══════════ 04 CLASSIC ENGINE ═══════════ -->
+<section class="chapter" id="ch04">
+  <header class="chapter-head">
+    <span class="num">04</span>
+    <h2>The Classic Engine</h2>
+    <div class="rule"></div>
+  </header>
+
+  <p>Eight channels, each a strip, each one voice. Left to right: <strong>PLS 1</strong>, <strong>PLS 2</strong>, <strong>TRI</strong>, <strong>NOISE</strong>, <strong>DPCM</strong>, then with the expansion on, <strong>V.PLS1</strong>, <strong>V.PLS2</strong>, <strong>V.SAW</strong>. Every strip has an enable LED, a <strong>MIX</strong> fader (the channel's level after the chip), a <strong>PAN</strong> knob, and, on melodic channels, a <strong>TRANS</strong> transpose of ±24 semitones. The arrow in a strip's header opens its detail panel for the deeper hardware controls.</p>
+
+  <div class="fig-row">
+    <figure class="narrow"><img src="img/fig-strip-pulse.png" alt="Pulse 1 channel strip"><figcaption>A pulse strip: duty, transpose, volume, pan, mix.</figcaption></figure>
+    <figure><img src="img/fig-vrc6.png" alt="VRC6 channel strips"><figcaption>The VRC6 expansion strips, marked in ember orange.</figcaption></figure>
+  </div>
+
+  <h3>Pulse 1 &amp; Pulse 2</h3>
+  <p>The lead voices. Four duty cycles: <strong>12.5%</strong> is thin and nasal, <strong>25%</strong> is the classic lead, <strong>50%</strong> is a hollow square, and <strong>75%</strong> is the inverted 25% wave, which the chip renders identically to 25%. That duplicate is not a bug; it is the hardware being the hardware.</p>
+  <p><strong>VOL</strong> (0–15) is the chip's own 4-bit level and part of the timbre. With <strong>Constant Volume</strong> off, VOL instead sets the speed of the hardware decay envelope, which counts the note down from 15; add <strong>Envelope Loop</strong> and it re-triggers endlessly for a buzzing tremolo. The <strong>sweep</strong> unit (period, shift, negate) bends pitch the hardware way, and yes, it will swallow the note entirely when the sweep runs out of range. That silence is authentic. Pulse 1 and Pulse 2 even negate their sweeps slightly differently, exactly like the chip.</p>
+
+  <h3>Triangle</h3>
+  <p>The bass voice. A 32-step staircase triangle one octave below the pulse range, with the gritty edge that quantization gives it. It has <em>no volume control</em>; the hardware never had one. Shape the level with its MIX fader, or shorten notes with the <strong>linear counter</strong> (LIN.RLD low = clipped, staccato notes).</p>
+
+  <h3>Noise</h3>
+  <p>A 15-bit shift register with two personalities. <strong>Long</strong> mode is full white noise for hats, snares, and wind. <strong>Short</strong> mode loops a 93-step sequence and turns metallic and pitched, the classic laser-engine buzz. <strong>PERIOD</strong> (0–15) runs from bright hiss down to low rumble. By default, played notes retune the noise (higher key, brighter noise); the factory drum presets fix the period instead so every hit lands identically.</p>
+
+  <h3>DPCM</h3>
+  <p>The sample channel: 1-bit delta-coded playback through a 7-bit converter, which is exactly why it crunches. Four built-in drums (<strong>Kick</strong>, <strong>Snare</strong>, <strong>Hi-Hat</strong>, <strong>Tom</strong>) plus sixteen user slots that accept <code>.dmc</code> or <code>.wav</code> files (loaded from the MOD bar's DPCM tab; they travel inside your DAW session).</p>
+  <p>Four keys map straight to the kit, matching a standard drum map: <strong>C2</strong> kick, <strong>D2</strong> snare, <strong>F#2</strong> hi-hat, <strong>A2</strong> tom. Any other key plays whichever sample the Sample menu selects. <strong>RATE</strong> (0–15) is playback speed; 15 is the drums' native rate, and lower values pitch them down into ever-darker territory. Notes do not track pitch here; RATE is the pitch.</p>
+
+  <h3>VRC6 expansion</h3>
+  <p>Three more channels, from the expansion chip found in a handful of late-era cartridges. The two <strong>VRC6 pulses</strong> have an eight-step duty knob (6.25% to 50% in even steps), a finer palette than the 2A03's four, with no envelope or sweep: cleaner, more synth-like. The <strong>sawtooth</strong> is a coarse 32-level accumulator saw, reedy and bright, unlike anything on the base chip.</p>
+  <div class="callout hw">
+    <span class="tag">Sound design</span>
+    <p>The saw's RATE knob is clean up to 42, its default. Push past 42 and the accumulator overflows: the tone breaks into snarling, ring-mod-like distortion. That is not a malfunction. It is a dirty little instrument hiding at the top of the knob.</p>
+  </div>
+
+  <h3>The mixer is part of the sound</h3>
+  <p>Cartridge mixes its channels through the 2A03's measured nonlinear converter curves, not a linear sum. Stacked pulses compress into each other; the triangle, noise, and sample channel share one curve, so a loud drum sample audibly ducks the bass. If a mix feels alive in a way a DAW mixer doesn't, this is why. Per-channel <strong>PAN</strong> (constant-power, displayed as C, L50, R100 and so on) then places each voice in stereo, a luxury the console never offered.</p>
+</section>
+
+<!-- ═══════════ 05 MODERN ENGINE ═══════════ -->
+<section class="chapter" id="ch05">
+  <header class="chapter-head">
+    <span class="num">05</span>
+    <h2>The Modern Engine</h2>
+    <div class="rule"></div>
+  </header>
+
+  <figure><img src="img/fig-modern.png" alt="The Modern engine panel"><figcaption>The Modern panel: oscillators, envelope, and global voicing.</figcaption></figure>
+
+  <p>Switch the engine combo to <strong>Modern</strong> and the channel strips give way to a polyphonic synth that speaks fluent chip. Up to <strong>16 voices</strong>, each with two oscillators drawing from the same seven waveforms: four pulse duties, the 32-step triangle, the accumulator saw, and the noise generator.</p>
+
+  <h3>Oscillators</h3>
+  <p><strong>Osc A</strong> carries the note. <strong>Osc B</strong> layers on top with its own waveform, a <strong>Level</strong> control, and <strong>Semi</strong> detune of ±24 semitones in tenths, so it works as an octave or fifth layer, not just a fattener. Fractional detune beats slowly against A for movement.</p>
+
+  <h3>Envelope</h3>
+  <p>A full ADSR per voice. Attack is linear for that instant chip snap; decay and release are exponential for natural tails. The time knobs are weighted toward the fast end, where chiptune lives: attack defaults to 5 ms.</p>
+
+  <h3>Global</h3>
+  <table>
+    <tr><th>Control</th><th>Range</th><th>Notes</th></tr>
+    <tr><td>Voices</td><td><span class="range">1–16</span></td><td>Set 1 for mono lead work. Stealing favours the oldest note.</td></tr>
+    <tr><td>Volume</td><td><span class="range">0–1</span></td><td>Engine output level.</td></tr>
+    <tr><td>Unison</td><td><span class="range">1–7</span></td><td>Stacked copies per oscillator. With Osc B on, 7-voice unison means 14 oscillators per note. Loudness is normalised, so unison widens without getting louder.</td></tr>
+    <tr><td>Detune</td><td><span class="range">0–50 cents</span></td><td>Unison spread, symmetric around the note.</td></tr>
+    <tr><td>Porta + Time</td><td><span class="range">10 ms–2 s</span></td><td>Glide between notes without resetting oscillator phase. Independent of the Classic engine's portamento.</td></tr>
+    <tr><td>Vel&gt;Flt</td><td><span class="range">0–1</span></td><td>Velocity-to-filter amount, for use with the FX filter.</td></tr>
+  </table>
+
+  <p>Two things Modern deliberately leaves behind: the nonlinear hardware mixer and per-channel panning. The Modern voice is mono at the source; its stereo width comes entirely from chorus, delay, and reverb. If you want a wide Modern patch, that is where to reach.</p>
+</section>
+
+<!-- ═══════════ 06 MIDI ═══════════ -->
+<section class="chapter" id="ch06">
+  <header class="chapter-head">
+    <span class="num">06</span>
+    <h2>MIDI</h2>
+    <div class="rule"></div>
+  </header>
+
+  <h3>Routing modes (Classic)</h3>
+  <table>
+    <tr><th>Mode</th><th>Behaviour</th></tr>
+    <tr><td>Split</td><td>Each MIDI channel owns a chip voice: <strong>1</strong> Pulse 1 · <strong>2</strong> Pulse 2 · <strong>3</strong> Triangle · <strong>4</strong> DPCM · <strong>5/6/7</strong> VRC6 Pulse 1/Pulse 2/Saw · <strong>10</strong> Noise. The tracker workflow: one DAW track per channel, total control.</td></tr>
+    <tr><td>Auto</td><td>Notes round-robin across every enabled channel, giving pseudo-polyphony on hardware voices. Repeated notes reuse their channel; when everything is busy, the oldest note is stolen.</td></tr>
+    <tr><td>Mono</td><td>Everything plays Pulse 1. Last note wins.</td></tr>
+    <tr><td>Layer</td><td>Every enabled channel plays every note. Thick, instant, gloriously excessive.</td></tr>
+  </table>
+
+  <div class="callout">
+    <span class="tag">Good to know</span>
+    <p>In Auto and Layer modes, a channel takes part when its <em>enable</em> LED is on. Pull a channel's MIX to zero and it still receives notes; switch its LED off to take it out of the rotation.</p>
+  </div>
+
+  <p>The Modern engine ignores routing modes; it is simply polyphonic on all channels, and it responds to per-note pitch bend from MPE controllers, so two fingers on the same key bend independently.</p>
+
+  <h3>Pitch bend</h3>
+  <p>Range is the top bar's Bend slider. Bend retunes the pulses, triangle, and VRC6 voices; the noise and sample channels do not bend. In Split mode, bend follows its MIDI channel to that one voice, which means per-channel bend automation, a genuinely tracker-ish trick.</p>
+
+  <h3>Control changes</h3>
+  <table>
+    <tr><th>CC</th><th>Target</th></tr>
+    <tr><td>1</td><td>Vibrato depth</td></tr>
+    <tr><td>11</td><td>Master volume</td></tr>
+    <tr><td>64</td><td>Sustain pedal</td></tr>
+    <tr><td>71</td><td>Filter resonance</td></tr>
+    <tr><td>74</td><td>Filter cutoff</td></tr>
+    <tr><td>91</td><td>Reverb mix</td></tr>
+    <tr><td>93</td><td>Chorus mix</td></tr>
+  </table>
+  <p>The MIDI button in the top bar shows this map plus four <strong>Learn</strong> slots. Click Learn, turn a knob on your controller, and that CC is captured. Targets include channel volumes, filter, effect mixes, and the LFO. A learned CC overrides the built-in map for that number, and your mappings survive preset changes.</p>
+
+  <h3>Sustain and Hold</h3>
+  <p>The sustain pedal (CC 64) and the Hold button do the same thing by different hands: while either is down, note-offs are suppressed. When the last of them lifts, everything releases together. If a stuck controller leaves the pedal down, CC 121 (reset all controllers) clears it, as does Panic.</p>
+</section>
+
+<!-- ═══════════ 07 STEP SEQUENCER ═══════════ -->
+<section class="chapter" id="ch07">
+  <header class="chapter-head">
+    <span class="num">07</span>
+    <h2>The Step Sequencer</h2>
+    <div class="rule"></div>
+  </header>
+
+  <figure><img src="img/fig-seq.png" alt="The step sequencer panel"><figcaption>The SEQ bar: one pattern per channel, three lanes each, drawn directly into the grid.</figcaption></figure>
+
+  <p>This is Cartridge's answer to tracker macros: a 16-step modulation sequencer, per channel, that retriggers from step one on every note-on. It does not play notes for you; it plays the <em>voice</em>, reshaping volume, pitch, and duty while you hold the key. It is the difference between a preset that sounds like a tone and one that sounds like a game.</p>
+
+  <h3>The grid</h3>
+  <p>Pick a channel (P1 through V.SAW), pick a lane, and draw:</p>
+  <table>
+    <tr><th>Lane</th><th>Range</th><th>What it does</th></tr>
+    <tr><td>VOL</td><td><span class="range">0–15</span></td><td>Absolute volume per step. Honoured by the pulses, noise, and VRC6 pulses; the triangle, saw, and sample channel have no volume register to override.</td></tr>
+    <tr><td>PITCH</td><td><span class="range">±12 st</span></td><td>Semitone offset per step. Instant arpeggio-on-one-key effects live here.</td></tr>
+    <tr><td>DUTY</td><td><span class="range">0–3 / 0–7</span></td><td>Duty override per step (eight values on the VRC6 pulses). In the Modern engine this lane switches the oscillator waveform between the four pulse duties.</td></tr>
+  </table>
+
+  <p>Each lane has its own length, set with the <strong>−</strong> and <strong>+</strong> stepper or simply by drawing past the end. A lane of length zero is off. <strong>Clr</strong> resets the selected lane.</p>
+
+  <h3>Loop, and lanes as polyrhythm</h3>
+  <p>The <strong>Loop</strong> toggle applies per lane. Looped lanes wrap; un-looped lanes play once and hold their last value, which is exactly how a volume envelope should behave. Because every lane keeps its own length, a 3-step pitch loop against a 4-step volume loop drifts in and out of phase like a proper tracker line. Lanes advance in lockstep on the same clock; their lengths make the rhythm.</p>
+
+  <h3>Clock</h3>
+  <p><strong>Rate</strong> runs 1 to 60 Hz free, or flip <strong>Sync</strong> and choose a division from 1/1 to 1/32, triplets included, locked to host tempo. 60 Hz is the magic number for authenticity: that is one step per video frame, the rate every classic soundtrack macro ran at, and the rate VGM-imported instruments arrive with.</p>
+</section>
+
+<!-- ═══════════ 08 MODULATION ═══════════ -->
+<section class="chapter" id="ch08">
+  <header class="chapter-head">
+    <span class="num">08</span>
+    <h2>Modulation</h2>
+    <div class="rule"></div>
+  </header>
+
+  <p>The MOD bar holds four panels: LFO, portamento, the arpeggiator, and the sample channel's controls.</p>
+
+  <h3>LFO</h3>
+  <p>One global sine LFO, 0.1 to 20 Hz, with two depth controls that run simultaneously: <strong>Vibrato</strong> (pitch, up to ±2 semitones) and <strong>Tremolo</strong> (level, dipping below unity so engaging it never jumps the volume). It is free-running and does not retrigger per note, which keeps chords shimmering rather than pulsing in lockstep.</p>
+
+  <h3>Portamento</h3>
+  <p>Glide for the Classic engine, 10 ms to 1 second. The Modern engine has its own independent portamento on its panel; the two do not share settings.</p>
+
+  <h3>Arpeggiator</h3>
+  <table>
+    <tr><th>Control</th><th>Options</th></tr>
+    <tr><td>Pattern</td><td>Up · Down · Up-Down · Random · As Played</td></tr>
+    <tr><td>Rate</td><td><span class="range">1–30 Hz</span> free, or tempo-synced (1/1 to 1/32 with triplets)</td></tr>
+    <tr><td>Octaves</td><td><span class="range">1–4</span>, repeating the held chord upward</td></tr>
+    <tr><td>Gate</td><td><span class="range">10–100%</span> of each step, for staccato through legato</td></tr>
+  </table>
+  <p>The arpeggiator sits before the engines and drives either one. Hold a chord and it does the rest; release everything and it stops cleanly, no ringing tails.</p>
+  <div class="callout">
+    <span class="tag">Good to know</span>
+    <p>The arpeggiator's output always arrives on MIDI channel 1. In Split mode that means an arpeggiated chord plays entirely on Pulse 1. For arps across channels, use Auto mode and let the round-robin spread the notes.</p>
+  </div>
+
+  <h3>DPCM panel</h3>
+  <p>Enable the sample channel, choose the active sample, and load your own. <code>.dmc</code> files load raw; <code>.wav</code> files are converted to the chip's 1-bit format on the way in, which is where they pick up that unmistakable crunch. Sixteen user slots, embedded in your DAW session so projects stay portable.</p>
+</section>
+
+<!-- ═══════════ 09 EFFECTS ═══════════ -->
+<section class="chapter" id="ch09">
+  <header class="chapter-head">
+    <span class="num">09</span>
+    <h2>Effects</h2>
+    <div class="rule"></div>
+  </header>
+
+  <figure><img src="img/fig-fx.png" alt="The effects bar"><figcaption>The FX bar: Crush, Filter, Chorus, Delay, Reverb, in signal order.</figcaption></figure>
+
+  <p>Five effects in a fixed chain, all off by default, every one chosen to flatter chip waveforms. The chain runs Crush → Filter → Chorus → Delay → Reverb, and the stereo split happens between Filter and Chorus. In the Classic engine your per-channel pans pass through untouched; in the Modern engine, chorus, delay, and reverb are the sources of width.</p>
+
+  <h3>Crush</h3>
+  <p>Bit-depth reduction (16 down to 1 bit, continuously) plus sample-rate reduction (up to 50×). The chip is already lo-fi; this is for going further, from vintage-handheld grit to total collapse.</p>
+
+  <h3>Filter</h3>
+  <p>A clean state-variable filter: low-pass, band-pass, or high-pass, 20 Hz to 20 kHz, resonance up to self-oscillating territory. CC 74 and 71 reach it from a controller, and the Modern engine's Vel&gt;Flt drives it from velocity.</p>
+
+  <h3>Chorus</h3>
+  <p>A true stereo chorus, two taps in quadrature, designed so square waves widen instead of turning into vibrato. Subtle rates and depths are where it shines on chip tone.</p>
+
+  <h3>Delay</h3>
+  <p>Stereo ping-pong. Feedback saturates gently instead of running away, and each repeat passes through a darkening filter, so trails sink backward like tape. Free time from 10 ms to 2 seconds, or tempo-synced divisions from 1/1 to 1/32 with triplets.</p>
+
+  <h3>Reverb</h3>
+  <p>Size, damping, width, mix. From a small-room sheen to washed-out ambient tails; the Ambient Drone preset shows its long-tail behaviour.</p>
+
+  <p>After everything, a gentle soft limiter rounds off the output. Stack all five effects as hard as you like; the output cannot digitally clip, it just saturates musically.</p>
+</section>
+
+<!-- ═══════════ 10 PRESETS & VGM ═══════════ -->
+<section class="chapter" id="ch10">
+  <header class="chapter-head">
+    <span class="num">10</span>
+    <h2>Presets &amp; VGM Import</h2>
+    <div class="rule"></div>
+  </header>
+
+  <h3>The factory library</h3>
+  <p>95 presets plus Init: 75 for the Classic engine, 21 for Modern. Categories run from the practical (Bass, Lead, Pad, Pluck/Key, Arp) through the percussive (Percussion, Rock, with drum kits mapped C2 kick, D2 snare, F#2 hat, A2 tom) to the theatrical (SFX, Atmosphere, Texture, Ensemble, Sequenced). The Sequenced bank is the step sequencer showing off: hold one key, get a riff.</p>
+
+  <h3>Your presets</h3>
+  <p>Saved presets live as single files, one per preset, in <code>~/Library/Application Support/Cartridge/Presets</code> on macOS (the equivalent app-data folder elsewhere). Everything is captured: parameters, all eight step sequences, the works. <strong>Export</strong> writes a shareable <code>.cartpreset</code>; <strong>Import</strong> reads presets and <code>.cartbank</code> bundles, and a bank imports as its own category so it arrives as one tidy group in the browser.</p>
+
+  <h3>VGM import</h3>
+  <p>This one is special. Feed the Import dialog a <code>.vgm</code> or <code>.vgz</code> chip log and Cartridge studies how the music drove the 2A03: every write to the volume, pitch, and duty registers, frame by frame. Each distinct instrument it finds becomes a user preset, with the original's per-frame behaviour rebuilt as a 60 Hz step sequence on the right channel. Load one, hold a key, and you are playing the instrument from the original soundtrack, macros and all. Imports land in the browser as one category per file, named after the source.</p>
+  <div class="callout">
+    <span class="tag">Note</span>
+    <p>Instruments are only extracted where the log shows the sound actually moving (volume, pitch, or duty changing during notes). A file that arrives with "no instruments found" is not broken; it just never modulated the chip.</p>
+  </div>
+</section>
+
+<!-- ═══════════ 11 SHORTCUTS ═══════════ -->
+<section class="chapter" id="ch11">
+  <header class="chapter-head">
+    <span class="num">11</span>
+    <h2>Keyboard Shortcuts</h2>
+    <div class="rule"></div>
+  </header>
+
+  <h3>Playing</h3>
+  <table>
+    <tr><th>Keys</th><th>Action</th></tr>
+    <tr><td><kbd>A</kbd>–<kbd>;</kbd> row</td><td>Play notes. <kbd>A</kbd> is C, the row above (<kbd>W</kbd> <kbd>E</kbd> <kbd>T</kbd> <kbd>Y</kbd> <kbd>U</kbd> <kbd>O</kbd> <kbd>P</kbd>) plays the black keys.</td></tr>
+    <tr><td><kbd>[</kbd> / <kbd>]</kbd></td><td>Octave down / up. A small toast shows the new octave, then fades.</td></tr>
+    <tr><td><kbd>-</kbd> / <kbd>=</kbd></td><td>Velocity down / up in steps of 10%.</td></tr>
+    <tr><td><kbd>\</kbd></td><td>Hold (latch) on/off.</td></tr>
+    <tr><td><kbd>Space</kbd></td><td>Panic. All notes off.</td></tr>
+  </table>
+
+  <h3>Channels</h3>
+  <table>
+    <tr><th>Keys</th><th>Action</th></tr>
+    <tr><td><kbd>1</kbd>–<kbd>5</kbd></td><td>Toggle Pulse 1, Pulse 2, Triangle, Noise, DPCM.</td></tr>
+    <tr><td><kbd>6</kbd> <kbd>7</kbd> <kbd>8</kbd></td><td>Toggle the three VRC6 channels' mix.</td></tr>
+    <tr><td><kbd>Cmd</kbd><kbd>V</kbd></td><td>VRC6 expansion on/off.</td></tr>
+    <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd><kbd>Tab</kbd></td><td>Cycle the focused channel. The QWERTY keyboard follows, so typing plays the focused channel in Split routing.</td></tr>
+    <tr><td><kbd>Cmd</kbd><kbd>Shift</kbd><kbd>S</kbd></td><td>Solo the focused channel.</td></tr>
+    <tr><td><kbd>Cmd</kbd><kbd>Shift</kbd><kbd>M</kbd></td><td>Mute the focused channel.</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>Un-solo: restore every channel's mix.</td></tr>
+  </table>
+
+  <h3>Presets and window</h3>
+  <table>
+    <tr><th>Keys</th><th>Action</th></tr>
+    <tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td>Previous / next preset.</td></tr>
+    <tr><td><kbd>Cmd</kbd><kbd>S</kbd></td><td>Save preset.</td></tr>
+    <tr><td><kbd>Ctrl</kbd><kbd>Cmd</kbd><kbd>F</kbd></td><td>Fullscreen (or double-click the top bar).</td></tr>
+  </table>
+  <p>On Windows and Linux, read <kbd>Cmd</kbd> as <kbd>Ctrl</kbd>.</p>
+</section>
+
+<!-- ═══════════ 12 LICENCE ═══════════ -->
+<section class="chapter" id="ch12">
+  <header class="chapter-head">
+    <span class="num">12</span>
+    <h2>Licence &amp; Activation</h2>
+    <div class="rule"></div>
+  </header>
+
+  <p>The badge at the top right tells the story: <strong>DEMO</strong> in red before activation, a quiet <strong>LICENCE</strong> after. In demo mode the instrument is fully functional, but it interrupts the audio with a short burst of noise about every 45 seconds. Everything else is identical to the licensed build.</p>
+
+  <h3>Activating</h3>
+  <p>Click the badge, paste the key from your purchase email, click <strong>Activate</strong>. The plugin checks in with the activation server once, binds the seat to your machine, and from then on verifies offline. No account, no dongle, no phoning home.</p>
+
+  <h3>Seats</h3>
+  <p>One licence, three machines. To move on, click the badge on a machine you are retiring and choose <strong>Deactivate this machine</strong>; the seat frees up immediately. If that machine is dead and cannot deactivate itself, email support and we will release it.</p>
+
+  <h3>Offline machines</h3>
+  <p>A studio machine with no internet can still activate: the licence dialog shows a <strong>machine code</strong> with a copy button. Send us that code with your key, and you will get back a licence bound to that machine that activates with no connection at all.</p>
+
+  <p>Questions, stuck keys, seat juggling: <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a>, with your order number if you have it handy.</p>
+</section>
+
+<!-- ═══════════ 13 SPECS ═══════════ -->
+<section class="chapter" id="ch13">
+  <header class="chapter-head">
+    <span class="num">13</span>
+    <h2>Specifications</h2>
+    <div class="rule"></div>
+  </header>
+
+  <table>
+    <tr><th>Item</th><th>Detail</th></tr>
+    <tr><td>Formats</td><td>VST3 · AU (macOS) · CLAP · Standalone</td></tr>
+    <tr><td>Platforms</td><td>macOS 11+ (Intel &amp; Apple silicon) · Windows 10+ · Linux</td></tr>
+    <tr><td>Engines</td><td>Classic: 8 monophonic channels (2A03 + VRC6 expansion) · Modern: 16-voice polyphonic</td></tr>
+    <tr><td>Synthesis</td><td>Bandlimited at the host sample rate; hardware-accurate behaviour without cycle-emulation aliasing</td></tr>
+    <tr><td>Mixing</td><td>Measured 2A03 nonlinear DAC curves; constant-power per-channel pan (Classic)</td></tr>
+    <tr><td>Sequencer</td><td>16 steps × 3 lanes × 8 channels; free-run 1–60 Hz or host-synced</td></tr>
+    <tr><td>Effects</td><td>Bit crush · SVF filter · stereo chorus · ping-pong delay · reverb · soft limiter</td></tr>
+    <tr><td>Presets</td><td>95 factory + Init · unlimited user presets · <code>.cartpreset</code> / <code>.cartbank</code> exchange</td></tr>
+    <tr><td>Import</td><td><code>.vgm</code> / <code>.vgz</code> instrument extraction · <code>.dmc</code> / <code>.wav</code> samples</td></tr>
+    <tr><td>MIDI</td><td>4 routing modes · MPE per-note pitch bend (Modern) · 7 mapped CCs + 4 learnable · microtuning (equal, just, Pythagorean, meantone via host automation)</td></tr>
+    <tr><td>Licence</td><td>3 machines per licence · offline after activation</td></tr>
+  </table>
+
+  <p>Cartridge references the Ricoh 2A03 sound generator and VRC6 expansion audio by their part designations. All synthesis is original; no ROMs, recordings, or code from any console are included.</p>
+</section>
+
+</main>
+</div>
+
+<div class="pins dim"></div>
+<footer class="colophon">
+  CARTRIDGE OPERATOR'S MANUAL · v1.13.0 · JULY 2026<br>
+  STAY COOL &amp; STAY COOL · <a href="https://staycoolandstaycool.com/cartridge/">staycoolandstaycool.com/cartridge</a> · <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+/* Cartridge Operator's Manual — carries the plugin's own design language.
+   Dark throughout, on screen and in the PDF export. Print styles at the
+   bottom drive the headless-Chrome PDF render. */
+
+:root {
+  --bg:        #141414;
+  --bg-deep:   #0e0e0e;
+  --surface:   #222222;
+  --surface-2: #2e2e2e;
+  --surface-3: #383838;
+  --outline:   #454545;
+  --outline-dim: #303030;
+  --primary:   #b82030;
+  --primary-dim: #801828;
+  --hot:       #d43040;
+  --hot-bright: #e84050;
+  --vrc6:      #d04828;
+  --bone:      #e8e4df;
+  --text-1:    #d8d4d0;
+  --text-2:    #9a9691;
+  --text-3:    #646464;
+  --mono:      "JetBrains Mono", "Menlo", ui-monospace, monospace;
+  --sans:      -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  --measure:   72ch;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── chip-pin divider motif ─────────────────────────────────────────── */
+.pins {
+  height: 14px;
+  background:
+    repeating-linear-gradient(90deg,
+      var(--primary) 0 10px,
+      transparent 10px 18px);
+  opacity: 0.85;
+  border: 0;
+  margin: 0;
+}
+.pins.dim { opacity: 0.28; }
+
+/* ── cover ──────────────────────────────────────────────────────────── */
+.cover {
+  min-height: 96vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #241416 0%, var(--bg-deep) 60%);
+  padding: 4rem 2rem 3rem;
+  position: relative;
+}
+.cover .cart-label {
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  padding: 3rem 4rem 2.6rem;
+  background: linear-gradient(180deg, #1c1416 0%, #171112 100%);
+  box-shadow: 0 0 0 6px #1a1a1a, 0 0 60px rgba(184, 32, 48, 0.25);
+  max-width: 640px;
+}
+.cover h1 {
+  font-family: var(--mono);
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  letter-spacing: 0.14em;
+  margin: 0;
+  color: var(--bone);
+}
+.cover h1 .dot { color: var(--hot-bright); }
+.cover .subtitle {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--hot);
+  margin: 1.2rem 0 0;
+}
+.cover .meta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--text-2);
+  letter-spacing: 0.12em;
+  margin-top: 2.2rem;
+}
+.cover .meta span { color: var(--text-3); padding: 0 0.5em; }
+.cover .cover-shot {
+  margin-top: 3rem;
+  max-width: min(860px, 92vw);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+}
+.cover .cover-shot img { display: block; width: 100%; }
+
+/* ── layout: sticky TOC + content ───────────────────────────────────── */
+.frame {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+nav.toc {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 2.5rem 1.5rem 2.5rem 2rem;
+  border-right: 1px solid var(--outline-dim);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+nav.toc .toc-title {
+  color: var(--text-3);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  margin-bottom: 1.2rem;
+}
+nav.toc a {
+  display: block;
+  color: var(--text-2);
+  text-decoration: none;
+  padding: 0.32rem 0;
+  border-left: 2px solid transparent;
+  padding-left: 0.8rem;
+  margin-left: -0.8rem;
+}
+nav.toc a:hover { color: var(--bone); border-left-color: var(--primary); }
+nav.toc a .n { color: var(--primary); margin-right: 0.6em; }
+
+main { padding: 0 3rem 6rem; min-width: 0; }
+
+/* ── chapters ───────────────────────────────────────────────────────── */
+.chapter { padding-top: 4.5rem; }
+.chapter-head { margin-bottom: 2.2rem; }
+.chapter-head .num {
+  font-family: var(--mono);
+  font-size: 4.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  display: block;
+}
+.chapter-head h2 {
+  font-family: var(--mono);
+  font-size: 1.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bone);
+  margin: 0.4rem 0 0.9rem;
+}
+.chapter-head .rule {
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0 120px, var(--outline-dim) 120px 100%);
+}
+.chapter > p, .chapter li, .chapter td { max-width: var(--measure); }
+
+h3 {
+  font-family: var(--mono);
+  font-size: 1.02rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hot);
+  margin: 2.6rem 0 0.8rem;
+}
+h4 {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-1);
+  margin: 1.8rem 0 0.5rem;
+}
+p { margin: 0.8rem 0; }
+a { color: var(--hot-bright); }
+strong { color: var(--bone); }
+em { color: var(--text-1); }
+
+/* ── figures ────────────────────────────────────────────────────────── */
+figure {
+  margin: 1.8rem 0;
+  background: var(--bg-deep);
+  border: 1px solid var(--outline-dim);
+  border-radius: 8px;
+  overflow: hidden;
+}
+figure img { display: block; width: 100%; height: auto; }
+figure.narrow { max-width: 420px; }
+figure.mid { max-width: 640px; }
+figcaption {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text-2);
+  padding: 0.55rem 0.9rem;
+  border-top: 1px solid var(--outline-dim);
+  background: #181818;
+}
+figcaption::before { content: "▸ "; color: var(--primary); }
+.fig-row { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.fig-row figure { flex: 1 1 260px; margin: 1.2rem 0; }
+
+/* ── parameter tables ───────────────────────────────────────────────── */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.4rem 0 2rem;
+  font-size: 0.88rem;
+  background: #191919;
+  border: 1px solid var(--outline-dim);
+  border-radius: 8px;
+  overflow: hidden;
+}
+th {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--text-2);
+  background: var(--surface);
+  padding: 0.6rem 0.9rem;
+  border-bottom: 2px solid var(--primary-dim);
+}
+td {
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid #242424;
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: 0; }
+td:first-child {
+  font-family: var(--mono);
+  color: var(--bone);
+  white-space: nowrap;
+  font-size: 0.82rem;
+}
+td .range {
+  font-family: var(--mono);
+  color: var(--hot);
+  font-size: 0.78rem;
+}
+tr.vrc6 td:first-child { color: var(--vrc6); }
+
+/* ── callouts ───────────────────────────────────────────────────────── */
+.callout {
+  border: 1px solid var(--outline-dim);
+  border-left: 4px solid var(--primary);
+  background: #1b1717;
+  border-radius: 6px;
+  padding: 0.9rem 1.2rem;
+  margin: 1.6rem 0;
+  max-width: var(--measure);
+}
+.callout .tag {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--hot-bright);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.callout.hw { border-left-color: var(--vrc6); }
+.callout.hw .tag { color: var(--vrc6); }
+.callout p { margin: 0.2rem 0; }
+
+/* ── keyboard keys ──────────────────────────────────────────────────── */
+kbd {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--bone);
+  background: var(--surface-2);
+  border: 1px solid var(--outline);
+  border-bottom-width: 3px;
+  border-radius: 5px;
+  padding: 0.1rem 0.5rem;
+  white-space: nowrap;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  background: var(--surface);
+  border: 1px solid var(--outline-dim);
+  border-radius: 4px;
+  padding: 0.08em 0.4em;
+  color: var(--bone);
+}
+
+/* ── signal-flow diagram ────────────────────────────────────────────── */
+.flow {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  background: var(--bg-deep);
+  border: 1px solid var(--outline-dim);
+  border-radius: 8px;
+  padding: 1.4rem 1.6rem;
+  overflow-x: auto;
+  color: var(--text-1);
+  line-height: 2.1;
+}
+.flow b { color: var(--hot); font-weight: 600; }
+.flow .arr { color: var(--text-3); padding: 0 0.35em; }
+
+/* ── footer ─────────────────────────────────────────────────────────── */
+footer.colophon {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-3);
+  letter-spacing: 0.12em;
+  text-align: center;
+  padding: 3rem 1rem 4rem;
+  border-top: 1px solid var(--outline-dim);
+}
+footer.colophon a { color: var(--text-2); }
+
+/* ── responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .frame { grid-template-columns: 1fr; }
+  nav.toc { display: none; }
+  main { padding: 0 1.4rem 4rem; }
+}
+
+/* ── print / PDF ────────────────────────────────────────────────────── */
+@page { size: A4; margin: 0; }
+@media print {
+  html, body { background: var(--bg); }
+  body { font-size: 10.5pt; }
+  nav.toc { display: none; }
+  .frame { display: block; max-width: none; }
+  main { padding: 0 16mm; }
+  .cover {
+    min-height: auto;
+    height: 100vh;
+    overflow: hidden;
+    page-break-after: always;
+    padding: 8mm 2rem;
+  }
+  .cover .cart-label { padding: 2rem 3rem 1.8rem; }
+  .cover .cover-shot { box-shadow: none; max-width: 62%; margin-top: 1.6rem; }
+  .cover .meta { margin-top: 1.2rem; }
+  .chapter { page-break-before: always; padding-top: 14mm; }
+  .chapter:first-of-type { page-break-before: auto; }
+  figure, table, .callout, .flow { break-inside: avoid; }
+  a { color: var(--text-1); text-decoration: none; }
+  .toc-print { page-break-after: always; }
+}
+
+/* Print-only TOC page (hidden on screen) */
+.toc-print { display: none; }
+@media print {
+  .toc-print {
+    display: block;
+    padding: 20mm 16mm;
+  }
+  .toc-print h2 {
+    font-family: var(--mono);
+    letter-spacing: 0.3em;
+    color: var(--bone);
+    font-size: 1.1rem;
+  }
+  .toc-print ol {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text-2);
+    line-height: 2.2;
+    list-style: none;
+    padding: 0;
+  }
+  .toc-print .n { color: var(--primary); margin-right: 1em; }
+}
