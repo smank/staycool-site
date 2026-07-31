@@ -191,3 +191,45 @@ test("LEDGER never persists name, email, or licence keys", async () => {
   const [payloadB64] = emailedKey.split(".");
   assert.ok(!stored.includes(payloadB64), "payload must not persist in any form");
 });
+
+// ---------------------------------------------------------------- mint-beta
+
+test("mint-beta requires the admin token", async () => {
+  const body = { name: "Jo", email: "jo@x.com", order: "beta-jo", expiry: "20991231" };
+  assert.equal((await post("/mint-beta", body)).status, 401);
+  assert.equal((await post("/mint-beta", body, { Authorization: "Bearer wrong" })).status, 401);
+});
+
+test("mint-beta mints a valid wildcard beta key and stores no PII", async () => {
+  const r = await post("/mint-beta",
+    { name: "Jo Tester", email: "jo@example.com", order: "beta-jo", expiry: "20991231" },
+    { Authorization: "Bearer test-admin-token" });
+  assert.equal(r.status, 200);
+  const { licence, order, expiry } = await r.json();
+  assert.equal(order, "beta-jo");
+  assert.equal(expiry, "20991231");
+  const parsed = await verifyLicence(TEST_PUBLIC_KEY, licence);
+  assert.ok(parsed);
+  assert.equal(parsed.fields.type, "beta");
+  assert.equal(parsed.fields.machine, "*");
+  assert.equal(parsed.fields.expiry, 20991231);
+  assert.equal(sentEmails.length, 0); // no send unless asked
+
+  const stored = [...env.LEDGER.store.values()].join(" ");
+  assert.doesNotMatch(stored, /Jo Tester/);
+  assert.ok(!stored.includes(licence));
+});
+
+test("mint-beta rejects missing/perpetual expiry and unknown product; send=true emails", async () => {
+  const auth = { Authorization: "Bearer test-admin-token" };
+  assert.equal((await post("/mint-beta", { name: "A", email: "a@b.c", order: "o" }, auth)).status, 400);
+  assert.equal((await post("/mint-beta", { name: "A", email: "a@b.c", order: "o", expiry: "0" }, auth)).status, 400);
+  assert.equal((await post("/mint-beta", { name: "A", email: "a@b.c", order: "o", expiry: "20991231", product: "nope" }, auth)).status, 400);
+
+  const r = await post("/mint-beta",
+    { name: "Jo", email: "jo@example.com", order: "beta-jo2", expiry: "20991231", send: true }, auth);
+  assert.equal(r.status, 200);
+  assert.equal(sentEmails.length, 1);
+  assert.match(sentEmails[0].subject, /beta licence key/);
+  assert.match(sentEmails[0].text, /2099-12-31/);
+});

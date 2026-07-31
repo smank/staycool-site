@@ -30,6 +30,7 @@ export function mockEnv(overrides = {}) {
     LICENSE_PRIVATE_KEY: TEST_PRIVATE_KEY,
     LICENSE_PUBLIC_KEY: TEST_PUBLIC_KEY,
     RESEND_API_KEY: "re_test",
+    BETA_ADMIN_TOKEN: "test-admin-token",
     LEDGER: mockKV(),
     ...overrides,
   };

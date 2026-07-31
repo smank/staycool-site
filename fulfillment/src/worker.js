@@ -9,6 +9,7 @@
 //   LS_WEBHOOK_SECRET     Lemon Squeezy webhook signing secret
 //   LICENSE_PRIVATE_KEY   juce::RSAKey private key ("exp,mod" hex) — ROTATED, never logged
 //   RESEND_API_KEY        Resend API key for sending the licence email
+//   BETA_ADMIN_TOKEN      bearer token for the vendor-only POST /mint-beta
 // Required vars (wrangler.toml):
 //   LICENSE_PUBLIC_KEY    matching public key (used to verify inbound keys)
 // Required binding: LEDGER (KV) — dedup + seat state. Data-minimised: holds
@@ -51,6 +52,7 @@ export default {
       case "/webhook":    return handleWebhook(request, env);
       case "/activate":   return withCors(await handleActivate(request, env));
       case "/deactivate": return withCors(await handleDeactivate(request, env));
+      case "/mint-beta":  return handleMintBeta(request, env);
       default:            return new Response("Not found", { status: 404 });
     }
   },
@@ -207,6 +209,87 @@ async function handleDeactivate(request, env) {
   if (remaining.length !== seats.machines.length)
     await env.LEDGER.put(seatsKey, JSON.stringify({ machines: remaining }));
   return json(200, { ok: true, seatsUsed: remaining.length }); // idempotent
+}
+
+// ---------------------------------------------------------------- beta minting
+
+function timingSafeEqualStr(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+// Vendor-only: mint a beta key (wildcard machine + hard expiry) without the
+// private key ever leaving the Worker. Auth: Bearer BETA_ADMIN_TOKEN secret.
+// Body: { name, email, order, expiry, product?, send? } — expiry YYYYMMDD
+// required (betas always expire). send:true emails the key via Resend.
+async function handleMintBeta(request, env) {
+  const auth = request.headers.get("Authorization") || "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!env.BETA_ADMIN_TOKEN || !token || !timingSafeEqualStr(token, env.BETA_ADMIN_TOKEN))
+    return json(401, { error: "unauthorized" });
+
+  const body = await readJson(request);
+  if (!body) return json(400, { error: "bad_request", message: "Body must be JSON." });
+
+  const slug = String(body.product ?? "cartridge");
+  const product = PRODUCTS.find((p) => p.slug === slug);
+  if (!product) return json(400, { error: "bad_request", message: `Unknown product "${slug}".` });
+
+  const expiry = String(body.expiry ?? "");
+  if (!/^[0-9]{8}$/.test(expiry) || +expiry < 20000101 || +expiry > 21001231)
+    return json(400, { error: "bad_request", message: "expiry must be YYYYMMDD — beta keys always expire." });
+
+  let payload;
+  try {
+    payload = buildPayloadV2({
+      product: product.slug, type: "beta",
+      name: body.name, email: body.email, order: body.order,
+      expiry, machine: "*",
+    });
+  } catch (e) {
+    return json(400, { error: "bad_request", message: String(e.message ?? e) });
+  }
+
+  const licence = await signLicence(env.LICENSE_PRIVATE_KEY, payload);
+  const order = payload.split("|")[5];
+
+  if (env.LEDGER)
+    await env.LEDGER.put(
+      `beta:${product.slug}:${order}:${expiry}`,
+      JSON.stringify({ licHash: await sha256Hex(licence), at: new Date().toISOString() })
+    );
+
+  if (body.send === true) {
+    const email = String(body.email ?? "").trim();
+    if (!email) return json(400, { error: "bad_request", message: "send:true needs an email." });
+    await sendBetaEmail(env, email, String(body.name ?? "tester").trim(), licence, product.display, expiry);
+  }
+
+  return json(200, { licence, order, expiry, product: product.slug });
+}
+
+async function sendBetaEmail(env, to, name, licence, display, expiry) {
+  const nice = `${expiry.slice(0, 4)}-${expiry.slice(4, 6)}-${expiry.slice(6, 8)}`;
+  const text =
+    `Hi ${name},\n\n` +
+    `Here's your ${display} beta licence key:\n\n${licence}\n\n` +
+    `To activate: open ${display}, click the DEMO badge in the top bar, paste ` +
+    `the key in, and hit Activate. Beta keys work on any of your machines and ` +
+    `validate offline — no server involved.\n\n` +
+    `This beta key expires on ${nice}; the plugin returns to demo mode after ` +
+    `that. You'll get a fresh key (or a release build) before then.\n\n` +
+    `Thanks for testing!\n\n— Stay Cool and Stay Cool`;
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: `${display} <licences@staycoolandstaycool.com>`,
+      to: [to], subject: `Your ${display} beta licence key`, text,
+    }),
+  });
+  if (!res.ok) throw new Error("email send failed: " + (await res.text()));
 }
 
 // ---------------------------------------------------------------- email

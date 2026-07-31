@@ -13,8 +13,10 @@ payload is what stops one plugin's key unlocking another (each build only
 honours its own slug). **New product = one row in `PRODUCTS`** (LS name
 matcher → slug + display name); no new keys, endpoints, or store code.
 
-Beta keys never touch this Worker — they're minted offline with
-`CartridgeLicenseTool sign-beta` (wildcard machine + expiry date).
+Beta keys are minted through the Worker too (`POST /mint-beta`, admin-token
+gated) so the private key never leaves Cloudflare — drive it with
+`cartridge/tools/beta-keys.py` (mint/batch/list + committed ledger).
+`CartridgeLicenseTool sign-beta` remains as the fully offline fallback.
 
 ## Routes
 
@@ -23,6 +25,7 @@ Beta keys never touch this Worker — they're minted offline with
 | `POST /webhook` | LS `order_created` → mint unbound key, email buyer |
 | `POST /activate` | `{key, machine}` → `{licence}` bound to machine, or `409 seat_limit` |
 | `POST /deactivate` | `{licence}` → releases that machine's seat (idempotent) |
+| `POST /mint-beta` | vendor-only (Bearer `BETA_ADMIN_TOKEN`): mint a beta key (wildcard machine, required expiry); optional `send:true` emails it via Resend. Use `cartridge/tools/beta-keys.py`. |
 
 ## Setup (one time)
 
@@ -39,6 +42,7 @@ Beta keys never touch this Worker — they're minted offline with
    `wrangler secret put LS_WEBHOOK_SECRET`
    `wrangler secret put LICENSE_PRIVATE_KEY`   (the rotated private key)
    `wrangler secret put RESEND_API_KEY`
+   `wrangler secret put BETA_ADMIN_TOKEN`   (1P: "Cartridge Beta Admin Token")
 5. **Resend:** verify `staycoolandstaycool.com` as a sending domain (SPF/DKIM).
 6. **Lemon Squeezy:** create the Cartridge product ($29, LS's own "generate
    license keys" toggle OFF); add a webhook → `<worker-url>/webhook`, event
