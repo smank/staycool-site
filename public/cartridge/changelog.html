@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartridge — Changelog</title>
+  <meta name="description" content="Release history for Cartridge, the 2A03 chiptune synthesizer.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="guide.css">
+</head>
+<body>
+
+<header class="label-bar">
+  <a class="wordmark" href="/">STAY COOL <span class="ampersand">&amp;</span> STAY COOL</a>
+  <nav>
+    <a href="/cartridge/">Cartridge</a>
+    <a href="/#products">Products</a>
+    <a href="/#about">About</a>
+    <a href="mailto:support@staycoolandstaycool.com">Contact</a>
+  </nav>
+</header>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="cart-logo">●</span>
+    <span class="brand-name">CARTRIDGE</span>
+    <span class="brand-tag">CHANGELOG</span>
+  </div>
+  <nav>
+    <a href="install">Setup</a>
+    <a href="manual/">Manual</a>
+    <a href="/cartridge/#faq">FAQ</a>
+  </nav>
+</header>
+
+<div class="guide">
+  <section>
+    <h2>Version 1.13.0</h2>
+    <div class="rule"></div>
+    <p class="rel-date">2026-07-31</p>
+    <p class="lede">First public release of the licensing line — 1.12.0 existed only as a private beta (proprietary relicence, purchase watermarking, distribution hardening).</p>
+    <h3 class="sub-head">Added</h3>
+    <ul class="changes">
+      <li>Demo mode: unlicensed instances overlay a short noise burst every ~45s of audio; everything else works, so the full plugin is the demo.</li>
+      <li>Licensing: retail keys activate online once and bind to a machine (3 machines per order, self-serve deactivation from the licence badge); after activation the licence validates fully offline, forever. Beta keys carry an expiry date and never contact a server.</li>
+      <li>Licence badge in the top bar (DEMO / BETA / LICENCE) opening a themed in-editor dialog: paste-a-key activation with inline progress and errors, copyable machine code for offline activation, licensee info, deactivation.</li>
+      <li>Purchase watermarking and per-buyer licence emails (fulfilment via the store&#x27;s licence server).</li>
+    </ul>
+    <h3 class="sub-head">Changed</h3>
+    <ul class="changes">
+      <li>Relicensed as proprietary (from the 1.11 source-available line); see LICENSE and the EULA.</li>
+      <li>Support contact is support@staycoolandstaycool.com throughout.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Version 1.11.0</h2>
+    <div class="rule"></div>
+    <p class="rel-date">2026-07-05</p>
+    <h3 class="sub-head">Added</h3>
+    <ul class="changes">
+      <li>Step sequencer is now a first-class SEQ tab (FX | MOD | SEQ) with its own transport header; presets with embedded sequences auto-open it.</li>
+      <li>Edited-preset indicator next to the preset name.</li>
+      <li>95 factory presets (79 Classic + 16 Modern), including a sampled DPCM rock kit, step-sequenced riffs, and a Modern Init blank canvas.</li>
+      <li>Tag-driven release workflow (<code>v*</code> tags build, test, package all platforms and open a draft GitHub release).</li>
+      <li>Overwrite confirmation when saving over an existing user preset.</li>
+    </ul>
+    <h3 class="sub-head">Changed</h3>
+    <ul class="changes">
+      <li>UI scale is a true zoom (fonts and bars scale together).</li>
+      <li>Status bar removed; Hold and version moved to the top bar, octave/velocity readout onto the keyboard.</li>
+      <li>Cmd+S saves a preset; Solo/Mute are Cmd+Shift+S / Cmd+Shift+M.</li>
+      <li>Pan values display as C / L50 / R50; DPCM rate defaults to 15.</li>
+      <li>A/B toggle no longer interrupts audio unless the engine changes.</li>
+    </ul>
+    <h3 class="sub-head">Fixed</h3>
+    <ul class="changes">
+      <li>Toggle parameters restore exactly under strict hosts (pluginval clean).</li>
+      <li>Step-sequence edits can no longer tear against the audio thread (seqlock).</li>
+      <li>User preset save/export now captures the full patch: VRC6 routing gates, per-channel pans, step-sequencer enable/rate/sync, tempo-sync params, and embedded step-sequence data. Preset/bank import no longer strips embedded sequences.</li>
+      <li>LFO vibrato and the step-sequencer pitch lane now work in the Modern engine.</li>
+      <li>No allocation or first-use synthesis on the audio thread in the DPCM drum path (fixes a likely audio glitch on the first drum hit of a session).</li>
+      <li>MIDI CC and MIDI Learn parameter changes are applied from the message thread instead of the audio thread.</li>
+      <li>Step counts from corrupt session data are clamped (out-of-bounds read guard).</li>
+      <li>Host BPM of zero no longer produces infinite tempo-synced rates.</li>
+      <li>Output limiter sanitises non-finite samples.</li>
+      <li>Reese Detune preset actually detunes; Sub Bass differentiated from Rock Bass; Chiptune Poly Lead fleshed out.</li>
+      <li>Pan gains computed per block (~16 fewer transcendental calls per sample).</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Version 1.10.0</h2>
+    <div class="rule"></div>
+    <p class="rel-date">2026-06</p>
+    <p>Initial commercial release candidate: 2A03 Classic engine + polyphonic Modern engine, VRC6 expansion, step sequencer, VGM import, MIDI learn/MPE, 4 temperaments, full FX chain, A/B compare, preset banks — VST3/AU/CLAP/ Standalone on macOS, Windows, and Linux.</p>
+  </section>
+</div>
+
+<footer class="guide-foot">
+  CARTRIDGE RELEASE HISTORY<br>
+  STAY COOL &amp; STAY COOL · <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a>
+</footer>
+
+</body>
+</html>

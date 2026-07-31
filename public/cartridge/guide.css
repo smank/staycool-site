@@ -63,6 +63,33 @@ body { background: var(--g-bg); overflow-x: hidden; }
   margin: 2rem 0 0.2rem;
 }
 
+/* ── changelog ──────────────────────────────────────────────────────── */
+.guide .rel-date {
+  font-family: var(--mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--g-t3);
+  margin: -0.9rem 0 1.2rem;
+}
+.guide ul.changes {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 1.2rem;
+  max-width: 68ch;
+}
+.guide ul.changes li {
+  position: relative;
+  padding: 0.28rem 0 0.28rem 1.4rem;
+  line-height: 1.65;
+}
+.guide ul.changes li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--g-primary);
+}
+
 /* ── platform cards ─────────────────────────────────────────────────── */
 /* Full-width rows: every destination path fits on one line at desktop
    width, so nothing breaks mid-path. Collapses to stacked pairs on phones. */
