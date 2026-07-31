@@ -165,3 +165,21 @@ test("deactivate rejects wildcard/beta and invalid licences", async () => {
   assert.equal((await r.json()).error, "not_seat_managed");
   assert.equal((await post("/deactivate", { licence: "garbage" })).status, 400);
 });
+
+// ---------------------------------------------------------------- privacy
+
+test("LEDGER never persists name, email, or licence keys", async () => {
+  const raw = orderCreatedEvent();
+  await post("/webhook", raw, { "X-Signature": await lsSign(raw) });
+  const emailedKey = sentEmails[0].text.match(/^\S+\.\S+$/m)[0];
+  const { licence } = await (await post("/activate", { key: emailedKey, machine: MACHINE_A })).json();
+
+  const stored = [...env.LEDGER.store.values()].join(" ");
+  assert.ok(env.LEDGER.store.size >= 2); // order record + seat record exist
+  assert.doesNotMatch(stored, /Jo Tester/);
+  assert.doesNotMatch(stored, /jo@example\.com/);
+  assert.ok(!stored.includes(emailedKey), "unbound key must not persist");
+  assert.ok(!stored.includes(licence), "bound licence must not persist");
+  const [payloadB64] = emailedKey.split(".");
+  assert.ok(!stored.includes(payloadB64), "payload must not persist in any form");
+});

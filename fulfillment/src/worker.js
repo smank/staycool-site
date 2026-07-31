@@ -11,7 +11,9 @@
 //   RESEND_API_KEY        Resend API key for sending the licence email
 // Required vars (wrangler.toml):
 //   LICENSE_PUBLIC_KEY    matching public key (used to verify inbound keys)
-// Required binding: LEDGER (KV) — issued licences + activation seat lists.
+// Required binding: LEDGER (KV) — dedup + seat state. Data-minimised: holds
+// only order ids, a SHA-256 of each issued licence, machine hashes, and
+// timestamps. Buyer name/email/keys pass through requests but never persist.
 //
 // Seat bookkeeping uses a plain KV read-modify-write. Two simultaneous
 // activations can race (KV is last-write-wins); at one-buyer scale that's
@@ -85,11 +87,15 @@ async function handleWebhook(request, env) {
 
   // LS retries webhooks on non-200; deterministic signing means a retry mints
   // the identical key, so skip the duplicate email if we already sent this one.
+  // Data minimisation: only a HASH of the licence is stored — no name, email,
+  // or key ever persists here. Lost keys are re-sent from the LS dashboard
+  // (webhook resend re-mints the identical key).
   const ledgerKey = `order:${order}`;
+  const licHash = await sha256Hex(licence);
   if (env.LEDGER) {
     const prior = await env.LEDGER.get(ledgerKey, "json");
-    if (prior?.licence === licence) return new Response("ok (duplicate)", { status: 200 });
-    await env.LEDGER.put(ledgerKey, JSON.stringify({ name, email, order, licence, at: new Date().toISOString() }));
+    if (prior?.licHash === licHash) return new Response("ok (duplicate)", { status: 200 });
+    await env.LEDGER.put(ledgerKey, JSON.stringify({ licHash, at: new Date().toISOString() }));
   }
 
   await sendLicenceEmail(env, email, name, licence);
@@ -111,6 +117,11 @@ async function verifyLsSignature(raw, sigHex, secret) {
 
 function bytesToHexStr(bytes) {
   return [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function sha256Hex(str) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return bytesToHexStr(new Uint8Array(digest));
 }
 
 // ---------------------------------------------------------------- activation

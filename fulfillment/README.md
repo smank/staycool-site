@@ -61,12 +61,33 @@ environment variable (Standalone build).
 - The full buy → email → paste → activate loop
 - File download delivery (LS disables downloads for test-mode orders)
 
+## Data handling (GDPR posture)
+
+The Worker persists as little as possible. KV (`LEDGER`) holds, per order:
+`order:<order>` → `{licHash, at}` (SHA-256 of the issued licence, for webhook
+dedup) and `seats:<order>` → `{machines:[{m, at}]}` (machine hashes for the
+seat limit). **Buyer name, email, and licence keys pass through requests but
+are never stored** — a regression test (`routes.test.mjs` "LEDGER never
+persists…") enforces this. Lost keys are re-sent from the LS dashboard
+(webhook resend re-mints the identical key), not from our records.
+
+- Lawful basis: performance of contract (the buyer asked for a seat-limited
+  licence; the seat list is the licence).
+- Erasure request: `wrangler kv key delete --binding LEDGER "order:ls-<n>"`
+  and `"seats:ls-<n>"` — that is the entirety of our copy. (Purchase records
+  live with Lemon Squeezy, the merchant of record.)
+- Retention: for the life of the licence (the seat list must outlive the sale).
+- Processors: Cloudflare (Workers/KV, standard DPA), Resend (email transit,
+  DPA), Lemon Squeezy (merchant of record — they are the controller for the
+  purchase itself).
+- The site privacy policy must disclose the above (see launch wording pass).
+
 ## Behaviour notes
 
 - Signing is deterministic raw RSA, so LS webhook retries and `/activate`
   retries are idempotent for free (same payload → identical licence string).
 - The webhook skips the duplicate email if the LEDGER already records the
-  identical licence for that order.
+  identical licence hash for that order.
 - Seat bookkeeping is a KV read-modify-write; simultaneous activations can
   race — at one-buyer scale that's acceptable (Durable Object per order is the
   upgrade path if it ever matters).
