@@ -33,8 +33,20 @@ body {
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.65;
+  overflow-x: hidden;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
+}
+
+/* ── reading-progress bar ───────────────────────────────────────────── */
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--primary), var(--hot-bright));
+  z-index: 200;
+  transition: width 90ms linear;
 }
 
 /* ── chip-pin divider motif ─────────────────────────────────────────── */
@@ -66,33 +78,40 @@ body {
 .cover .cart-label {
   border: 2px solid var(--primary);
   border-radius: 10px;
-  padding: 3rem 4rem 2.6rem;
+  padding: clamp(1.6rem, 4vw, 3rem) clamp(1.1rem, 4vw, 3.2rem) clamp(1.4rem, 3.4vw, 2.6rem);
   background: linear-gradient(180deg, #1c1416 0%, #171112 100%);
   box-shadow: 0 0 0 6px #1a1a1a, 0 0 60px rgba(184, 32, 48, 0.25);
-  max-width: 640px;
+  width: min(640px, 92vw);
 }
 .cover h1 {
   font-family: var(--mono);
-  font-size: clamp(3rem, 9vw, 5.5rem);
+  /* 10 mono glyphs ≈ 6em + 0.14em tracking each ≈ 7.4em wide: this ceiling
+     keeps the wordmark inside the frame at every width. */
+  font-size: clamp(1.6rem, 9.4vw, 4.4rem);
   letter-spacing: 0.14em;
-  margin: 0;
+  /* tracking also lands after the final glyph; pull it back so the
+     wordmark stays optically centred inside the frame */
+  margin: 0 -0.14em 0 0;
   color: var(--bone);
+  white-space: nowrap;
 }
 .cover h1 .dot { color: var(--hot-bright); }
 .cover .subtitle {
   font-family: var(--mono);
-  font-size: 0.95rem;
+  font-size: clamp(0.7rem, 2.1vw, 0.95rem);
   letter-spacing: 0.5em;
+  margin: 1.2rem -0.5em 0 0;
   text-transform: uppercase;
   color: var(--hot);
-  margin: 1.2rem 0 0;
+  white-space: nowrap;
 }
 .cover .meta {
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: clamp(0.66rem, 1.5vw, 0.78rem);
   color: var(--text-2);
   letter-spacing: 0.12em;
   margin-top: 2.2rem;
+  text-wrap: balance;
 }
 .cover .meta span { color: var(--text-3); padding: 0 0.5em; }
 .cover .cover-shot {
@@ -140,12 +159,17 @@ nav.toc a {
   margin-left: -0.8rem;
 }
 nav.toc a:hover { color: var(--bone); border-left-color: var(--primary); }
+nav.toc a.active {
+  color: var(--bone);
+  border-left-color: var(--hot);
+  background: linear-gradient(90deg, rgba(184,32,48,0.14), transparent 70%);
+}
 nav.toc a .n { color: var(--primary); margin-right: 0.6em; }
 
 main { padding: 0 3rem 6rem; min-width: 0; }
 
 /* ── chapters ───────────────────────────────────────────────────────── */
-.chapter { padding-top: 4.5rem; }
+.chapter { padding-top: 4.5rem; scroll-margin-top: 1.5rem; }
 .chapter-head { margin-bottom: 2.2rem; }
 .chapter-head .num {
   font-family: var(--mono);
@@ -333,6 +357,24 @@ footer.colophon a { color: var(--text-2); }
   .frame { grid-template-columns: 1fr; }
   nav.toc { display: none; }
   main { padding: 0 1.4rem 4rem; }
+  .cover { min-height: auto; padding: 3.5rem 1rem 2.5rem; }
+  .cover .cover-shot { margin-top: 2rem; }
+  .chapter { padding-top: 3rem; }
+  .chapter-head .num { font-size: 3rem; }
+  .chapter-head h2 { font-size: 1.25rem; letter-spacing: 0.12em; }
+  /* tables reflow to stacked rows rather than squeezing to unreadable columns */
+  table, thead, tbody, tr, td { display: block; width: 100%; }
+  thead { display: none; }
+  tr { border-bottom: 1px solid #242424; padding: 0.5rem 0; }
+  tr:last-child { border-bottom: 0; }
+  td { border: 0; padding: 0.25rem 0.9rem; }
+  td:first-child {
+    color: var(--hot);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: normal;
+  }
 }
 
 /* ── print / PDF ────────────────────────────────────────────────────── */
@@ -340,7 +382,7 @@ footer.colophon a { color: var(--text-2); }
 @media print {
   html, body { background: var(--bg); }
   body { font-size: 10.5pt; }
-  nav.toc { display: none; }
+  nav.toc, .progress { display: none; }
   .frame { display: block; max-width: none; }
   main { padding: 0 16mm; }
   .cover {

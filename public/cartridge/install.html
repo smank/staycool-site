@@ -8,6 +8,7 @@
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="guide.css">
 </head>
 <body>
 
@@ -30,69 +31,106 @@
   <nav>
     <a href="#install">Install</a>
     <a href="#activate">Activate</a>
-    <a href="#seats">Moving machines</a>
-    <a href="#help">Help</a>
+    <a href="#seats">Seats</a>
+    <a href="manual/">Manual</a>
   </nav>
 </header>
 
-<section id="install" class="faq">
-  <h2>Install</h2>
-  <p class="section-lede">Your download is a zip with every plugin format inside. Unzip it, then copy the formats you use into place. When in doubt, install VST3 and the standalone app.</p>
+<div class="guide">
 
-  <div class="faq-list">
-    <details open>
-      <summary>macOS</summary>
-      <p>Copy each bundle to the folder for its format, then restart your DAW:</p>
-      <ul>
-        <li><strong>Cartridge.app</strong> (standalone) → <code>/Applications</code></li>
-        <li><strong>Cartridge.component</strong> (AU) → <code>/Library/Audio/Plug-Ins/Components</code></li>
-        <li><strong>Cartridge.vst3</strong> → <code>/Library/Audio/Plug-Ins/VST3</code></li>
-        <li><strong>Cartridge.clap</strong> → <code>/Library/Audio/Plug-Ins/CLAP</code></li>
-      </ul>
-      <p>The build is signed and notarised, so macOS opens it without warnings. If your DAW doesn't see the AU right away, Logic and GarageBand sometimes need a full quit and relaunch to rescan.</p>
-    </details>
+  <section id="install">
+    <h2>Install</h2>
+    <div class="rule"></div>
+    <p class="lede">Your download is a single zip containing every plugin format. Unzip it, copy the formats you use into place, then rescan plugins in your DAW. When in doubt, install VST3 and the standalone app.</p>
 
-    <details>
-      <summary>Windows</summary>
-      <ul>
-        <li><strong>Cartridge.vst3</strong> → <code>C:\Program Files\Common Files\VST3</code></li>
-        <li><strong>Cartridge.clap</strong> → <code>C:\Program Files\Common Files\CLAP</code></li>
-        <li><strong>Cartridge.exe</strong> (standalone) → anywhere you like</li>
-      </ul>
-      <p>Rescan plugins in your DAW after copying.</p>
-    </details>
+    <div class="os-grid">
+      <div class="os-card">
+        <h3>macOS</h3>
+        <ul>
+          <li><span class="fmt">Cartridge.app</span><span class="path">/Applications</span></li>
+          <li><span class="fmt">Cartridge.component</span><span class="path">/Library/Audio/Plug-Ins/Components</span></li>
+          <li><span class="fmt">Cartridge.vst3</span><span class="path">/Library/Audio/Plug-Ins/VST3</span></li>
+          <li><span class="fmt">Cartridge.clap</span><span class="path">/Library/Audio/Plug-Ins/CLAP</span></li>
+        </ul>
+      </div>
+      <div class="os-card">
+        <h3>Windows</h3>
+        <ul>
+          <li><span class="fmt">Cartridge.vst3</span><span class="path">C:\Program Files\Common Files\VST3</span></li>
+          <li><span class="fmt">Cartridge.clap</span><span class="path">C:\Program Files\Common Files\CLAP</span></li>
+          <li><span class="fmt">Cartridge.exe</span><span class="path">anywhere you like</span></li>
+        </ul>
+      </div>
+      <div class="os-card">
+        <h3>Linux</h3>
+        <ul>
+          <li><span class="fmt">Cartridge.vst3</span><span class="path">~/.vst3</span></li>
+          <li><span class="fmt">Cartridge.clap</span><span class="path">~/.clap</span></li>
+          <li><span class="fmt">Cartridge</span><span class="path">anywhere on your path</span></li>
+        </ul>
+      </div>
+    </div>
 
-    <details>
-      <summary>Linux</summary>
-      <ul>
-        <li><strong>Cartridge.vst3</strong> → <code>~/.vst3</code></li>
-        <li><strong>Cartridge.clap</strong> → <code>~/.clap</code></li>
-        <li><strong>Cartridge</strong> (standalone) → anywhere on your path</li>
-      </ul>
-    </details>
-  </div>
-</section>
+    <div class="note">
+      <span class="tag">macOS</span>
+      <p>The build is signed and notarised, so it opens without security warnings. If Logic or GarageBand doesn't list the AU straight away, quit the app fully and relaunch to trigger a rescan.</p>
+    </div>
+  </section>
 
-<section id="activate" class="faq">
-  <h2>Activate</h2>
-  <p class="section-lede">Your licence key arrives by email right after purchase, from licences@staycoolandstaycool.com. Check spam if it hasn't landed within a few minutes.</p>
-  <ol>
-    <li>Open Cartridge (any format) and click the <strong>DEMO</strong> badge in the top bar.</li>
-    <li>Paste your licence key and click <strong>Activate</strong>.</li>
-    <li>Done. Activation needs the internet once; after that the licence works fully offline.</li>
-  </ol>
-  <p>One licence covers up to <strong>3 machines</strong>. Activate on each machine the same way, with the same key.</p>
-</section>
+  <section id="activate">
+    <h2>Activate</h2>
+    <div class="rule"></div>
+    <p class="lede">Your licence key arrives by email right after purchase, from licences@staycoolandstaycool.com. Check spam if it hasn't landed within a few minutes.</p>
 
-<section id="seats" class="faq">
-  <h2>Moving machines</h2>
-  <p class="section-lede">Retiring a computer or hit the 3-machine limit? Click the <strong>LICENCE</strong> badge on the old machine and choose <em>Deactivate</em>. That frees the seat so you can activate elsewhere. If the old machine is dead and you can't deactivate, write to support and we'll free it for you.</p>
-</section>
+    <ol class="steps">
+      <li>Open Cartridge in any format and click the <strong>DEMO</strong> badge in the top bar.</li>
+      <li>Paste your licence key and click <strong>Activate</strong>.</li>
+      <li>Done. Activation needs the internet once. After that the licence verifies offline, forever.</li>
+    </ol>
 
-<section id="help" class="faq">
-  <h2>Help</h2>
-  <p class="section-lede">Stuck on anything, or the key won't take? Email <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a> with your order number and we'll sort it out. The <a href="/cartridge/manual/">Operator's Manual</a> covers every control in depth, and the <a href="/cartridge/#faq">FAQ</a> covers system requirements and DAW compatibility.</p>
-</section>
+    <p>One licence covers up to <strong>three machines</strong>. Activate each one the same way, with the same key.</p>
+
+    <div class="note">
+      <span class="tag">No internet on that machine?</span>
+      <p>The licence dialog shows a <strong>machine code</strong> with a copy button. Send us that code along with your key and we'll return a licence bound to that machine, which activates with no connection at all.</p>
+    </div>
+  </section>
+
+  <section id="seats">
+    <h2>Moving machines</h2>
+    <div class="rule"></div>
+    <p class="lede">Retiring a computer, or hit the three-machine limit? Click the <strong>LICENCE</strong> badge on the machine you're leaving behind and choose <strong>Deactivate this machine</strong>. The seat frees up immediately and you can activate elsewhere.</p>
+    <p>If that machine is gone for good and can't deactivate itself, email support with your order number and we'll release the seat for you.</p>
+  </section>
+
+  <section id="next">
+    <h2>Where to next</h2>
+    <div class="rule"></div>
+    <div class="next">
+      <a href="manual/">
+        <span class="k">Manual</span>
+        <span class="t">Operator's Manual</span>
+        <span class="d">Every control, both engines, the step sequencer, MIDI routing, and VGM import.</span>
+      </a>
+      <a href="/cartridge/#faq">
+        <span class="k">FAQ</span>
+        <span class="t">Requirements &amp; DAWs</span>
+        <span class="d">System requirements, format support, and compatibility answers.</span>
+      </a>
+      <a href="mailto:support@staycoolandstaycool.com">
+        <span class="k">Support</span>
+        <span class="t">Talk to a human</span>
+        <span class="d">Stuck on anything at all? Include your order number and we'll sort it out.</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="guide-foot">
+  CARTRIDGE SETUP GUIDE · v1.13.0<br>
+  STAY COOL &amp; STAY COOL · <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a>
+</footer>
 
 </body>
 </html>

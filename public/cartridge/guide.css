@@ -1,0 +1,194 @@
+/* Setup guide — borrows the manual's visual language so the two pages read
+   as one document set. Loaded after the label frame and product styles. */
+
+:root {
+  --g-bg:      #141414;
+  --g-deep:    #0e0e0e;
+  --g-surface: #222222;
+  --g-line:    #303030;
+  --g-primary: #b82030;
+  --g-hot:     #d43040;
+  --g-hot-br:  #e84050;
+  --g-bone:    #e8e4df;
+  --g-t1:      #d8d4d0;
+  --g-t2:      #9a9691;
+  --g-t3:      #646464;
+}
+
+body { background: var(--g-bg); overflow-x: hidden; }
+
+.guide {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── section headings, matching the manual's chapter rule ───────────── */
+.guide section {
+  padding: 3.4rem 0 0;
+  scroll-margin-top: 1.5rem;
+}
+.guide section + section { border-top: 1px solid var(--g-line); margin-top: 3.4rem; }
+.guide h2 {
+  font-family: var(--mono, monospace);
+  font-size: 1.35rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--g-bone);
+  margin: 0 0 0.9rem;
+}
+.guide .rule {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--g-primary) 0 96px, var(--g-line) 96px 100%);
+  margin-bottom: 1.6rem;
+}
+.guide .lede {
+  color: var(--g-t2);
+  max-width: 68ch;
+  line-height: 1.7;
+  margin: 0 0 1.4rem;
+}
+.guide p { line-height: 1.7; max-width: 68ch; }
+.guide strong { color: var(--g-bone); }
+.guide a { color: var(--g-hot-br); }
+
+/* ── platform cards ─────────────────────────────────────────────────── */
+/* Full-width rows: every destination path fits on one line at desktop
+   width, so nothing breaks mid-path. Collapses to stacked pairs on phones. */
+.os-grid { display: block; margin: 1.4rem 0 0.6rem; }
+.os-card {
+  background: #191919;
+  border: 1px solid var(--g-line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.9rem;
+}
+.os-card:last-child { margin-bottom: 0; }
+.os-card h3 {
+  font-family: var(--mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--g-t2);
+  background: var(--g-surface);
+  border-bottom: 2px solid #4a1620;
+  margin: 0;
+  padding: 0.55rem 1rem;
+}
+.os-card ul { list-style: none; margin: 0; padding: 0.3rem 0; }
+.os-card li {
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid #242424;
+}
+.os-card li:last-child { border-bottom: 0; }
+.os-card .fmt {
+  font-family: var(--mono, monospace);
+  font-size: 0.8rem;
+  color: var(--g-bone);
+}
+.os-card .path {
+  font-family: var(--mono, monospace);
+  font-size: 0.75rem;
+  color: var(--g-hot);
+  overflow-wrap: anywhere;
+}
+
+/* ── numbered steps ─────────────────────────────────────────────────── */
+.steps { list-style: none; counter-reset: s; margin: 1.2rem 0; padding: 0; }
+.steps li {
+  counter-increment: s;
+  position: relative;
+  padding: 0 0 1rem 3rem;
+  max-width: 66ch;
+  line-height: 1.7;
+}
+.steps li::before {
+  content: counter(s, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: -0.05rem;
+  font-family: var(--mono, monospace);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--g-primary);
+}
+
+/* ── note strip ─────────────────────────────────────────────────────── */
+.note {
+  border: 1px solid var(--g-line);
+  border-left: 4px solid var(--g-primary);
+  background: #1b1717;
+  border-radius: 6px;
+  padding: 0.9rem 1.2rem;
+  margin: 1.4rem 0;
+  max-width: 68ch;
+}
+.note .tag {
+  display: block;
+  font-family: var(--mono, monospace);
+  font-size: 0.64rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--g-hot-br);
+  margin-bottom: 0.3rem;
+}
+.note p { margin: 0; }
+
+/* ── next-steps cards ───────────────────────────────────────────────── */
+.next {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.4rem 0 0;
+}
+.next a {
+  display: block;
+  text-decoration: none;
+  background: #191919;
+  border: 1px solid var(--g-line);
+  border-radius: 8px;
+  padding: 1.1rem 1.2rem;
+  transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+}
+.next a:hover {
+  border-color: var(--g-primary);
+  background: #1d1819;
+  transform: translateY(-2px);
+}
+.next .k {
+  display: block;
+  font-family: var(--mono, monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--g-hot);
+  margin-bottom: 0.4rem;
+}
+.next .t { display: block; color: var(--g-bone); font-weight: 600; margin-bottom: 0.2rem; }
+.next .d { display: block; color: var(--g-t2); font-size: 0.88rem; line-height: 1.5; }
+
+.guide-foot {
+  font-family: var(--mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--g-t3);
+  text-align: center;
+  padding: 3rem 1rem 3.5rem;
+  margin-top: 3.4rem;
+  border-top: 1px solid var(--g-line);
+}
+.guide-foot a { color: var(--g-t2); }
+
+@media (max-width: 640px) {
+  .guide { padding: 0 1.1rem; }
+  .guide h2 { font-size: 1.1rem; letter-spacing: 0.12em; }
+  .guide section { padding-top: 2.4rem; }
+  .guide section + section { margin-top: 2.4rem; }
+  .os-card li { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+  .steps li { padding-left: 2.4rem; }
+}
