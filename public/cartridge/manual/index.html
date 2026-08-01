@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartridge — Operator's Manual</title>
+  <title>Cartridge · Operator's Manual</title>
   <meta name="description" content="The complete Cartridge manual: Classic and Modern engines, step sequencer, MIDI routing, effects, presets, VGM import, and every parameter.">
   <link rel="stylesheet" href="manual.css">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -90,7 +90,7 @@
 
   <div class="callout">
     <span class="tag">Read me first</span>
-    <p>If you only read one chapter, make it <a href="#ch04">04 · The Classic Engine</a>. Understanding what each channel can and cannot do (the triangle has no volume control, noise has two personalities, the sample channel maps drums to specific keys) is what separates fighting the chip from playing it.</p>
+    <p>Read <a href="#ch04">04 · The Classic Engine</a> before anything else. Understanding what each channel can and cannot do (the triangle has no volume control, noise has two personalities, the sample channel maps drums to specific keys) is what separates fighting the chip from playing it.</p>
   </div>
 </section>
 
@@ -240,7 +240,7 @@
     <tr><td>Vel&gt;Flt</td><td><span class="range">0–1</span></td><td>Velocity-to-filter amount, for use with the FX filter.</td></tr>
   </table>
 
-  <p>Two things Modern deliberately leaves behind: the nonlinear hardware mixer and per-channel panning. The Modern voice is mono at the source; its stereo width comes entirely from chorus, delay, and reverb. If you want a wide Modern patch, that is where to reach.</p>
+  <p>Two things Modern deliberately leaves behind: the nonlinear hardware mixer and per-channel panning. The Modern voice is mono at the source; its stereo width comes entirely from chorus, delay, and reverb. For a wide Modern patch, reach for those.</p>
 </section>
 
 <!-- ═══════════ 06 MIDI ═══════════ -->
@@ -268,7 +268,7 @@
   <p>The Modern engine ignores routing modes; it is simply polyphonic on all channels, and it responds to per-note pitch bend from MPE controllers, so two fingers on the same key bend independently.</p>
 
   <h3>Pitch bend</h3>
-  <p>Range is the top bar's Bend slider. Bend retunes the pulses, triangle, and VRC6 voices; the noise and sample channels do not bend. In Split mode, bend follows its MIDI channel to that one voice, which means per-channel bend automation, a genuinely tracker-ish trick.</p>
+  <p>Range is the top bar's Bend slider. Bend retunes the pulses, triangle, and VRC6 voices; the noise and sample channels do not bend. In Split mode, bend follows its MIDI channel to that one voice, which means per-channel bend automation, a properly tracker-ish trick.</p>
 
   <h3>Control changes</h3>
   <table>
@@ -399,7 +399,7 @@
   <p>This one is special. Feed the Import dialog a <code>.vgm</code> or <code>.vgz</code> chip log and Cartridge studies how the music drove the 2A03: every write to the volume, pitch, and duty registers, frame by frame. Each distinct instrument it finds becomes a user preset, with the original's per-frame behaviour rebuilt as a 60 Hz step sequence on the right channel. Load one, hold a key, and you are playing the instrument from the original soundtrack, macros and all. Imports land in the browser as one category per file, named after the source.</p>
   <div class="callout">
     <span class="tag">Note</span>
-    <p>Instruments are only extracted where the log shows the sound actually moving (volume, pitch, or duty changing during notes). A file that arrives with "no instruments found" is not broken; it just never modulated the chip.</p>
+    <p>Instruments are only extracted where the log shows the sound moving (volume, pitch, or duty changing during notes). A file that arrives with "no instruments found" is not broken; it just never modulated the chip.</p>
   </div>
 </section>
 
