@@ -234,6 +234,9 @@
   .news-copy{min-width:0}
   .news-copy h3{margin-top:.35rem;max-width:17ch}
   .news-art{display:flex;justify-content:flex-end;align-items:center}
+  .bd-sink{position:absolute;width:0;height:0;border:0;visibility:hidden}
+  .news-done{font-size:1.02rem;font-weight:600;line-height:1.45;max-width:30ch}
+  .news-done small{display:block;font-weight:400;font-size:.84rem;opacity:.75;margin-top:.35rem}
   .news-art .mailplane{width:clamp(112px,11vw,164px);height:auto;display:block;transform:rotate(-6deg)}
   .newsform-row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
   .newsform-row input[type=email]{flex:1 1 190px;min-width:0}
@@ -365,7 +368,7 @@
       <p class="clause">§ 005 / The list</p>
       <h3>An email when something ships. Nothing else.</h3>
     </div>
-    <form class="newsform" action="https://buttondown.com/api/emails/embed-subscribe/staycool" method="post" target="_blank">
+    <form class="newsform" action="https://buttondown.com/api/emails/embed-subscribe/staycool" method="post" target="bd-sink">
       <!-- required by Buttondown for embedded forms; tag records the source -->
       <input type="hidden" name="embed" value="1">
       <input type="hidden" name="tag" value="label">
@@ -378,6 +381,9 @@
         <span>Email me when something ships. I've read the <a href="/legal/privacy">privacy notice</a>.</span>
       </label>
     </form>
+    <!-- Posting into a hidden iframe keeps the visitor on the page. Buttondown
+         still receives the submission and sends its confirmation email. -->
+    <iframe name="bd-sink" class="bd-sink" title="" aria-hidden="true" tabindex="-1"></iframe>
     <div class="news-art">
       <img class="mailplane" src="/img/mailplane.png" alt="Paper aeroplane launched by a skeleton hand">
     </div>
@@ -466,5 +472,21 @@
 </script>
 
 
+<script>
+(function () {
+  var f = document.querySelector('.newsform');
+  if (!f) return;
+  f.addEventListener('submit', function () {
+    // the POST is already on its way into the hidden iframe
+    setTimeout(function () {
+      var d = document.createElement('p');
+      d.className = 'news-done';
+      d.setAttribute('role', 'status');
+      d.innerHTML = "Check your email to confirm.<small>One click and you're on the list.</small>";
+      f.replaceWith(d);
+    }, 150);
+  });
+})();
+</script>
 </body>
 </html>

@@ -254,9 +254,10 @@
     </ul>
     <!-- Buttondown embed (account: staycool). Double opt-in + unsubscribe +
          consent logging are configured in the Buttondown account settings. -->
+    <iframe name="bd-sink" style="position:absolute;width:0;height:0;border:0;visibility:hidden" title="" aria-hidden="true" tabindex="-1"></iframe>
     <form class="notify-form"
           action="https://buttondown.com/api/emails/embed-subscribe/staycool"
-          method="post" target="_blank">
+          method="post" target="bd-sink">
       <!-- Required by Buttondown for embedded forms; without it submissions
            may not process. Tag records which product drew them in, so one
            list can be segmented per product instead of splitting it. -->
@@ -344,5 +345,21 @@
   })();
 </script>
 
+<script>
+(function () {
+  var f = document.querySelector('.notify-form');
+  if (!f) return;
+  f.addEventListener('submit', function () {
+    setTimeout(function () {
+      var d = document.createElement('p');
+      d.className = 'fineprint';
+      d.setAttribute('role', 'status');
+      d.style.fontSize = '1rem';
+      d.innerHTML = "<strong>Check your email to confirm.</strong><br>One click and you're on the list.";
+      f.replaceWith(d);
+    }, 150);
+  });
+})();
+</script>
 </body>
 </html>
