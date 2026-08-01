@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.add("js")</script>
 <title>Stay Cool and Stay Cool · software label</title>
 <meta name="description" content="Stay Cool and Stay Cool is a one-person software label making synths, effects and games. Home of Cartridge, an 8-bit chiptune synthesizer.">
 <meta property="og:type" content="website">
@@ -48,11 +49,36 @@
   .top nav a{font-family:var(--mono);text-transform:uppercase;font-size:.66rem;letter-spacing:.1em;font-weight:700;
     text-decoration:none;color:var(--paper);background:var(--ink);border:2px solid var(--ink);padding:.34rem .58rem;
     border-radius:6px;display:inline-block;box-shadow:1.5px 1.5px 0 rgba(23,18,31,.25);transition:transform .12s ease,box-shadow .12s ease}
-  .top nav a:nth-of-type(1){background:var(--blue);transform:rotate(-2deg)}
-  .top nav a:nth-of-type(2){background:var(--coral);transform:rotate(1.5deg)}
-  .top nav a:nth-of-type(3){background:var(--lime);color:var(--ink);transform:rotate(-1deg)}
-  .top nav a:nth-of-type(4){background:var(--pink);color:var(--ink);transform:rotate(2deg)}
-  .top nav a:hover{transform:rotate(0) translateY(-2px);box-shadow:2.5px 3px 0 rgba(23,18,31,.3)}
+  .top nav a:hover{transform:translateY(-2px);box-shadow:2.5px 3px 0 rgba(23,18,31,.3)}
+  .top nav a[aria-current]{background:var(--butter);color:var(--ink)}
+
+  /* Hamburger. Hidden unless the nav collapses; the .js gate means a
+     no-JS visitor keeps a plain visible nav instead of an inert button. */
+  .navtoggle{display:none;width:40px;height:34px;padding:0;cursor:pointer;
+    align-items:center;justify-content:center;background:var(--paper);
+    border:2.5px solid var(--ink);border-radius:8px;
+    box-shadow:1.5px 1.5px 0 rgba(23,18,31,.25)}
+  .navtoggle .bars,.navtoggle .bars::before,.navtoggle .bars::after{
+    content:"";display:block;width:18px;height:2.5px;background:var(--ink);border-radius:2px}
+  .navtoggle .bars{position:relative}
+  .navtoggle .bars::before{position:absolute;top:-6px}
+  .navtoggle .bars::after{position:absolute;top:6px}
+  .navtoggle[aria-expanded=true] .bars{background:transparent}
+  .navtoggle[aria-expanded=true] .bars::before{top:0;transform:rotate(45deg)}
+  .navtoggle[aria-expanded=true] .bars::after{top:0;transform:rotate(-45deg)}
+
+  /* Four links plus the wordmark stop fitting around here, so the nav
+     collapses into the hamburger. .top is sticky (therefore positioned), so
+     the panel anchors to it. */
+  @media(max-width:760px){
+    .js .navtoggle{display:flex}
+    .js .top nav{display:none;position:absolute;top:calc(100% + .5rem);right:1rem;
+      flex-direction:column;align-items:stretch;gap:.4rem;min-width:180px;
+      background:var(--paper);border:2.5px solid var(--ink);border-radius:10px;
+      padding:.6rem;box-shadow:4px 5px 0 rgba(23,18,31,.25);z-index:60}
+    .js .top nav.open{display:flex}
+    .js .top nav a{text-align:center;font-size:.68rem;padding:.5rem .6rem}
+  }
   /* Phone header: the wordmark must stay on one line — it was wrapping into
      a broken-up stack because logo + wordmark + nav overflowed the row. Scale
      the type with the viewport and shrink the mark to buy the room. */
@@ -333,9 +359,12 @@
 <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="marker" x="-6%" y="-6%" width="112%" height="112%"><feTurbulence type="fractalNoise" baseFrequency="0.0075 0.009" numOctaves="1" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="0.3"/></filter></svg>
 <header class="top">
   <a class="brand" href="/" aria-label="Stay Cool &amp; Stay Cool — home"><span class="logo"><span class="mark gl"></span></span> Stay Cool &amp; Stay Cool</a>
-  <nav>
+  <button class="navtoggle" type="button" aria-expanded="false" aria-controls="topnav" aria-label="Menu"><span class="bars"></span></button>
+  <nav id="topnav">
     <a href="#work">Catalog</a>
-    <a href="#hi">Hi</a>
+    <a href="/cartridge/">Cartridge</a>
+    <a href="#about">About</a>
+    <a href="#hi">Say hi</a>
   </nav>
 </header>
 
@@ -400,7 +429,7 @@
   </div>
 </div>
 
-<div class="about">
+<div class="about" id="about">
   <section class="block">
       <div class="about-grid">
         <div class="about-copy">
@@ -523,6 +552,32 @@
 })();
 </script>
 
+
+<script>
+(function () {
+  // Collapsed nav toggle. Closes on link click, outside click, and Escape.
+  var btn = document.querySelector('.navtoggle');
+  var nav = document.getElementById('topnav');
+  if (!btn || !nav) return;
+  function set(open) {
+    nav.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    set(!nav.classList.contains('open'));
+  });
+  nav.addEventListener('click', function (e) {
+    if (e.target.closest('a')) set(false);
+  });
+  document.addEventListener('click', function (e) {
+    if (!nav.contains(e.target) && !btn.contains(e.target)) set(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { set(false); btn.blur(); }
+  });
+})();
+</script>
 
 <script>
 (function () {
