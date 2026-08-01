@@ -273,7 +273,10 @@
   .about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(2.6rem,5vw,5rem);align-items:center;direction:rtl}
   .about-art{display:flex;justify-content:center}
   .about-art .zippo{width:100%;max-width:300px;height:auto;transform:rotate(4deg)}
-  @media(max-width:760px){.about-grid{grid-template-columns:1fr;gap:1.8rem}.about-art{order:-1;max-width:210px;margin-right:auto}}
+  /* Size the graphic, not its container: the flex container stays full width
+     so justify-content:center actually centres it, and the lighter matches
+     the presence of the other stacked art instead of shrinking to 210px. */
+  @media(max-width:760px){.about-grid{grid-template-columns:1fr;gap:1.8rem}.about-art{order:-1}.about-art .zippo{width:min(72vw,300px)}}
 
   .gl{background-image:url("/img/shades.png");background-size:contain;background-repeat:no-repeat;background-position:center}
   .feat--c .box-art{width:100%;height:auto;display:block;transform:rotate(-2deg)}
