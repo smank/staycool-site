@@ -1,2 +1,9 @@
+# Public. Post-action and utility pages stay out of the index.
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /cartridge/subscribed
+Disallow: /cartridge/confirmed
+Disallow: /legal/beta-agreement
+Disallow: /404.html
+
+Sitemap: https://staycoolandstaycool.com/sitemap.xml
