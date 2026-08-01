@@ -265,6 +265,10 @@
      desktop row; below that the form is stacked under the copy. */
   @media(min-width:921px){
     .newsform{position:relative;top:1.4rem}
+    /* Size the plane off the row height so it spans the copy and the form
+       rather than floating as a small spot illustration. */
+    .news-art{align-self:stretch;align-items:stretch}
+    .news-art .mailplane{width:auto;height:100%;max-width:none}
   }
   @media(max-width:920px){
     .news-in{grid-template-columns:1fr auto;gap:1.2rem 1.6rem}
