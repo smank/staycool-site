@@ -51,10 +51,20 @@
   .top nav a:nth-of-type(3){background:var(--lime);color:var(--ink);transform:rotate(-1deg)}
   .top nav a:nth-of-type(4){background:var(--pink);color:var(--ink);transform:rotate(2deg)}
   .top nav a:hover{transform:rotate(0) translateY(-2px);box-shadow:2.5px 3px 0 rgba(23,18,31,.3)}
-  @media(max-width:640px){.top .status{display:none}.top nav{gap:.4rem}.top nav a{font-size:.6rem;padding:.3rem .45rem}}
-  .top .status{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;display:flex;align-items:center;gap:.4rem}
-  .top .status::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--lime);border:1.5px solid var(--ink);animation:blink 2.4s steps(1) infinite}
-  @keyframes blink{0%,80%{opacity:1}90%,100%{opacity:.3}}
+  /* Phone header: the wordmark must stay on one line — it was wrapping into
+     a broken-up stack because logo + wordmark + nav overflowed the row. Scale
+     the type with the viewport and shrink the mark to buy the room. */
+  @media(max-width:640px){
+    .top{padding:.7rem 1rem}
+    .brand{gap:.45rem;min-width:0;white-space:nowrap;font-size:clamp(.74rem,3.4vw,1.02rem)}
+    .brand .logo{height:24px}.brand .logo .mark{height:21px;width:59px}
+    .top nav{gap:.4rem;flex:0 0 auto}
+    .top nav a{font-size:.6rem;padding:.3rem .45rem}
+  }
+  /* Narrowest phones: the mark carries the brand on its own. */
+  @media(max-width:370px){
+    .brand{font-size:0;gap:0}
+  }
 
   .hero{position:relative;margin:0;max-width:none;overflow:hidden;background-color:#fdfdf9}
   .hero-in{max-width:1120px;margin:0 auto;padding:6rem 1.4rem 5rem;position:relative;z-index:2}
@@ -168,6 +178,8 @@
   .feat.rev .art{order:2}.feat.rev .copy{order:1}
   .feat .no{font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;opacity:.75;margin-bottom:.7rem;display:block}
   .feat h3{font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:900;letter-spacing:-.03em;line-height:.98;margin:0 0 1rem}
+  /* Sized in em so the mark tracks the heading at every breakpoint. */
+  .feat h3 .wave-mark{width:.82em;height:.46em;display:inline-block;vertical-align:.06em;margin-right:.28em;overflow:visible}
   .feat p{font-size:1.02rem;line-height:1.5;max-width:44ch;margin-bottom:1.6rem}
   .feat .fbtn{font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;text-decoration:none;display:inline-block;padding:.8rem 1.25rem;border:2.5px solid var(--ink);border-radius:40px;transition:transform .12s ease}
   .feat .fbtn:hover{transform:translate(-2px,-2px)}
@@ -298,7 +310,6 @@
     <a href="#work">Catalog</a>
     <a href="#hi">Hi</a>
   </nav>
-  <div class="status mono">systems: cool</div>
 </header>
 
 <section class="hero">
@@ -329,7 +340,10 @@
       <div class="art"><div class="art-shot"><img src="/img/cartridge-shot.jpg" alt="Cartridge plugin interface" loading="lazy"></div></div>
       <div class="copy">
         <span class="no">01 / Sound</span>
-        <h3>Cartridge</h3>
+        <!-- App-icon wave, background removed. Inline so it inherits the
+             card's colour via currentColor; /img/cartridge-mark.svg is the
+             standalone red-on-nothing version. -->
+        <h3><svg class="wave-mark" viewBox="0 0 100 56" aria-hidden="true"><path d="M6 44 H28 V12 H50 V44 H72 V12 H94" fill="none" stroke="currentColor" stroke-width="12"/></svg>Cartridge</h3>
         <p>An 8-bit synth with chip-accurate voices, a modern polyphonic engine, and a step sequencer for pushing it somewhere new.</p>
         <a class="fbtn" href="/cartridge/">Meet Cartridge →</a>
       </div>

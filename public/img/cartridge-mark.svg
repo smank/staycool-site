@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="56" viewBox="0 0 100 56" role="img" aria-label="Cartridge">
+  <!-- Cartridge mark: the app icon's square wave with the rounded-square
+       background removed, tightly cropped to the glyph. -->
+  <path d="M6 44 H28 V12 H50 V44 H72 V12 H94" fill="none" stroke="#d43040" stroke-width="12"/>
+</svg>
