@@ -348,6 +348,40 @@
 </script>
 
 <script>
+  // Accent scroll-reveal. Classes are added only when JS runs AND motion is
+  // allowed, and removed once the animation finishes — so no-JS and
+  // reduced-motion visitors get fully-visible, unmodified content.
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    var singles = [].slice.call(document.querySelectorAll(
+      '#sound h2, #engines h2, #features h2, #faq h2, .showcase, .buy-card'));
+    var groups = [].slice.call(document.querySelectorAll(
+      '.player-grid, .engine-split, .features .grid, .faq-list'));
+
+    singles.forEach(function (el) { el.classList.add('reveal'); });
+    groups.forEach(function (el) { el.classList.add('reveal-group'); });
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        el.classList.add('in');
+        io.unobserve(el);
+        // Drop the reveal classes after the animation so hover/static styles
+        // are untouched afterwards.
+        setTimeout(function () {
+          el.classList.remove('reveal', 'reveal-group', 'in');
+        }, 1400);
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+
+    singles.concat(groups).forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+<script>
 (function () {
   var f = document.querySelector('.notify-form');
   if (!f) return;

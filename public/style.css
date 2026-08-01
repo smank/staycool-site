@@ -19,8 +19,13 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: var(--sc-sans); }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;      /* no rubber-band bounce / scroll chaining */
+  background: var(--sc-bg);        /* dark gutter instead of a white flash */
+}
+body { margin: 0; background: var(--sc-bg); color: var(--sc-fg); font-family: var(--sc-sans); overscroll-behavior: none; }
 
 /* ───── label bar (sits above any product page) ───── */
 .label-bar {
