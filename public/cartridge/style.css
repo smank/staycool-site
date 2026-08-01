@@ -482,7 +482,7 @@ nav a:hover::after { right: 0; }
 
 .includes {
   list-style: none;
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.2rem;
 }
 
 .includes li {
@@ -945,25 +945,39 @@ section[id] { scroll-margin-top: 84px; }
 }
 
 /* ─── Launch-notification signup ────────────────────────────────────── */
-.notify-form { display: flex; flex-direction: column; gap: 0.7rem; margin: 0.5rem 0 0.4rem; }
+.notify-form { display: flex; flex-direction: column; gap: 0.75rem; margin: 0.2rem 0 0.4rem; }
+/* Email + submit sit on one row so they read as a single signup control. */
+.notify-row { display: flex; gap: 0.6rem; align-items: stretch; }
 .notify-email {
-  width: 100%;
-  padding: 0.7rem 0.9rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.8rem 1rem;
   font: inherit;
   border-radius: 8px;
   border: 1px solid var(--outline-dim, #444);
   background: var(--surface-hi, #1b1b1b);
   color: inherit;
 }
+.notify-email::placeholder { color: var(--text-3, #888); }
 .notify-email:focus { outline: 2px solid var(--primary, #b82030); outline-offset: 1px; }
+.notify-row button {
+  flex: 0 0 auto;
+  width: auto;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+}
 .notify-consent {
   display: flex;
   gap: 0.55rem;
   align-items: flex-start;
   font-size: 0.82rem;
-  line-height: 1.4;
+  line-height: 1.45;
   text-align: left;
-  opacity: 0.85;
+  color: var(--text-2, #a8a8a8);
 }
-.notify-consent input { margin-top: 0.2rem; flex: 0 0 auto; }
-.notify-form button { width: 100%; cursor: pointer; border: none; }
+.notify-consent input { margin-top: 0.15rem; flex: 0 0 auto; }
+@media (max-width: 620px) {
+  .notify-row { flex-direction: column; }
+  .notify-row button { width: 100%; }
+}

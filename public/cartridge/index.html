@@ -263,15 +263,17 @@
            list can be segmented per product instead of splitting it. -->
       <input type="hidden" name="embed" value="1">
       <input type="hidden" name="tag" value="signup-cartridge">
-      <input type="email" name="email" class="notify-email"
-             placeholder="you@email.com" required autocomplete="email"
-             aria-label="Email address">
+      <div class="notify-row">
+        <input type="email" name="email" class="notify-email"
+               placeholder="you@email.com" required autocomplete="email"
+               aria-label="Email address">
+        <button type="submit" class="cta primary">Notify me</button>
+      </div>
       <label class="notify-consent">
         <input type="checkbox" name="metadata__consent" value="yes" required>
         <span>Email me once, when Cartridge launches. I've read the
           <a href="/legal/privacy.html">privacy notice</a>. Unsubscribe anytime.</span>
       </label>
-      <button type="submit" class="cta primary big">Notify me at launch</button>
     </form>
     <p class="fineprint">One launch email, then done, unless you opt in to more. Free demo and one-time purchase at launch, no subscription.</p>
   </div>
