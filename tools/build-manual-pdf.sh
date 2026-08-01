@@ -82,6 +82,12 @@ echo "==> rendering manual -> $OUT"
 
 [[ -s "$OUT" ]] || { echo "render produced no output" >&2; exit 1; }
 
+# Add a chapter bookmark outline so PDF viewers get a navigation panel (the
+# in-page TOC already jumps; this lets you jump from anywhere). Needs pypdf;
+# the step no-ops cleanly if it isn't installed.
+echo "==> adding PDF outline"
+python3 "$HERE/_add_pdf_outline.py" "$OUT" "$MANUAL" || echo "  (outline step skipped)"
+
 echo "==> done: $OUT ($(du -h "$OUT" | cut -f1))"
 echo
 echo "Next:"
