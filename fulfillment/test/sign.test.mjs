@@ -32,7 +32,8 @@ test("buildPayloadV2 validation", () => {
   assert.throws(() => buildPayloadV2({ product: "cartridge", type: "full", name: "A", email: "", order: "" }));
   assert.throws(() => buildPayloadV2({ product: "cartridge", type: "full", name: "A", email: "", order: "o", expiry: "banana" }));
   assert.throws(() => buildPayloadV2({ product: "cartridge", type: "full", name: "A", email: "", order: "o", machine: "XYZ" }));
-  assert.throws(() => buildPayloadV2({ product: "cartridge", type: "beta", name: "A", email: "", order: "o", expiry: 20261101, machine: "" }));
+  // Beta keys may be unbound (they bind on activation, like retail keys).
+  assert.ok(buildPayloadV2({ product: "cartridge", type: "beta", name: "A", email: "", order: "o", expiry: 20261101, machine: "" }));
   assert.throws(() => buildPayloadV2({ product: "Not A Slug!", type: "full", name: "A", email: "", order: "o" }));
   // Pipe injection cannot add fields.
   const p = buildPayloadV2({ product: "cartridge", type: "full", name: "Evil|beta|x", email: "e@x|.com", order: "o|1" });

@@ -15,7 +15,8 @@
 //           product; each plugin only honours its own slug
 //   type    "full" | "beta"
 //   expiry  "0" (perpetual) or YYYYMMDD, valid through that day inclusive
-//   machine "" (unbound retail key — must be exchanged via /activate)
+//   machine "" (unbound — retail and beta keys alike are exchanged via
+//           /activate for a machine-bound licence)
 //           "*" (any machine — beta / NFR keys)
 //           16-64 lowercase hex chars (bound to one machine)
 
@@ -84,7 +85,6 @@ export function buildPayloadV2({ product, type, name, email, order, expiry = 0, 
   const exp = String(expiry);
   if (!EXPIRY_RE.test(exp)) throw new Error("bad expiry");
   if (!MACHINE_RE.test(machine)) throw new Error("bad machine");
-  if (type === "beta" && machine === "") throw new Error("beta keys must not be unbound");
   return ["2", product, type, name, email, order, exp, machine].join("|");
 }
 
@@ -112,7 +112,6 @@ export function parseLicence(licenceKey) {
   if (!EXPIRY_RE.test(expiry)) return null;
   if (expiry !== "0" && (+expiry < 20000101 || +expiry > 21001231)) return null;
   if (!MACHINE_RE.test(machine)) return null;
-  if (type === "beta" && machine === "") return null;
   return { payload, sigHex, fields: { product, type, name, email, order, expiry: +expiry, machine } };
 }
 

@@ -14,6 +14,10 @@
 const CONTACT_TO = "support@staycoolandstaycool.com";
 const CONTACT_FROM = "Stay Cool site <hello@staycoolandstaycool.com>";
 const MAX_MESSAGE = 5000;
+// Where /cartridge/buy sends people. Points at the product page until the
+// store is live, then becomes the Lemon Squeezy checkout. 302, never 301, so
+// browsers don't cache it past the switchover.
+const BUY_DESTINATION = "https://staycoolandstaycool.com/cartridge/#buy";
 // Topic drives the subject line and the accent colour of the notification.
 const TOPICS = {
   bug:      { name: "Bug",      tint: "#ff5a3c" },
@@ -145,6 +149,13 @@ export default {
         status: 404,
         headers: { "content-type": "text/plain; charset=utf-8" },
       });
+    }
+
+    // The plugin's licence dialog links here, and that string is frozen into
+    // every installed copy. Keep this route forever and re-point it as the
+    // destination changes; never send a build straight at a merchant URL.
+    if (url.pathname === "/cartridge/buy") {
+      return Response.redirect(BUY_DESTINATION, 302);
     }
 
     if (url.pathname === "/api/contact") {

@@ -22,7 +22,12 @@
 
 import { signLicence, buildPayloadV2, verifyLicence } from "./sign.js";
 
-const SEAT_LIMIT = 3;
+const SEAT_LIMIT = 3;         // retail: three machines per order
+const SEAT_LIMIT_BETA = 1;    // beta: one machine, so a leaked key unlocks one seat
+// Beta keys are wildcard-machine, so a leaked one works anywhere until it
+// expires. Capping the window server-side means a leaked BETA_ADMIN_TOKEN
+// can only mint short-lived keys, not effectively-perpetual ones.
+const BETA_MAX_DAYS = 180;
 const CORS_ORIGIN = "https://staycoolandstaycool.com"; // future web activation page
 
 // Product catalog: LS product names (matched case-insensitively against
@@ -165,9 +170,10 @@ async function handleActivate(request, env) {
     return json(400, { error: "invalid_key", message: "That licence key wasn't recognised." });
 
   const f = parsed.fields;
-  if (f.type !== "full" || f.machine !== "")
+  if (f.machine !== "")
     return json(400, { error: "not_activatable", message: "This key doesn't need online activation." });
 
+  const limit = f.type === "beta" ? SEAT_LIMIT_BETA : SEAT_LIMIT;
   const seatsKey = `seats:${f.product}:${f.order}`;
   const seats = (await env.LEDGER.get(seatsKey, "json")) ?? { machines: [] };
 
@@ -180,10 +186,12 @@ async function handleActivate(request, env) {
   if (seats.machines.some((m) => m.m === machine))
     return json(200, { licence: bound, seatsUsed: seats.machines.length }); // idempotent re-activate
 
-  if (seats.machines.length >= SEAT_LIMIT)
+  if (seats.machines.length >= limit)
     return json(409, {
       error: "seat_limit",
-      message: `All ${SEAT_LIMIT} machines for this licence are activated. Deactivate one first, or email support@staycoolandstaycool.com.`,
+      message: limit === 1
+        ? "This licence is already active on a machine. Deactivate it there first, or email support@staycoolandstaycool.com."
+        : `All ${limit} machines for this licence are activated. Deactivate one first, or email support@staycoolandstaycool.com.`,
     });
 
   seats.machines.push({ m: machine, at: new Date().toISOString() });
@@ -238,15 +246,28 @@ async function handleMintBeta(request, env) {
   if (!product) return json(400, { error: "bad_request", message: `Unknown product "${slug}".` });
 
   const expiry = String(body.expiry ?? "");
-  if (!/^[0-9]{8}$/.test(expiry) || +expiry < 20000101 || +expiry > 21001231)
+  if (!/^[0-9]{8}$/.test(expiry))
     return json(400, { error: "bad_request", message: "expiry must be YYYYMMDD — beta keys always expire." });
+
+  const now = new Date();
+  const today = now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate();
+  const max = new Date(now.getTime() + BETA_MAX_DAYS * 86400000);
+  const maxYmd = max.getUTCFullYear() * 10000 + (max.getUTCMonth() + 1) * 100 + max.getUTCDate();
+  if (+expiry < today)
+    return json(400, { error: "bad_request", message: "expiry is in the past." });
+  if (+expiry > maxYmd)
+    return json(400, { error: "bad_request",
+      message: `expiry may be at most ${BETA_MAX_DAYS} days out (${maxYmd}).` });
 
   let payload;
   try {
     payload = buildPayloadV2({
       product: product.slug, type: "beta",
       name: body.name, email: body.email, order: body.order,
-      expiry, machine: "*",
+      // Unbound by default: the tester activates once and the key binds to
+      // that machine. wildcard:true issues an any-machine key for the rare
+      // offline case, and gives up the anti-sharing property.
+      expiry, machine: body.wildcard === true ? "*" : "",
     });
   } catch (e) {
     return json(400, { error: "bad_request", message: String(e.message ?? e) });
@@ -285,8 +306,9 @@ async function sendBetaEmail(env, to, name, licence, display, expiry, download) 
     (download ? `Download:\n${download}\n\n` : "") +
     `Licence key:\n${licence}\n\n` +
     `To activate: install and open ${display}, click the DEMO badge in the top ` +
-    `bar, paste the key in, and hit Activate. Beta keys work on any of your ` +
-    `machines and validate offline — no server involved.\n\n` +
+    `bar, paste the key in, and hit Activate. That binds the key to this one ` +
+    `machine; afterwards it validates offline. Moving to another machine? ` +
+    `Deactivate from the licence badge first.\n\n` +
     `This beta key expires on ${nice}; the plugin returns to demo mode after ` +
     `that. You'll get a fresh key (or a release build) before then.\n\n` +
     `Thanks for testing!\n\n— Stay Cool and Stay Cool`;
