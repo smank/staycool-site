@@ -217,6 +217,9 @@
   .hiform textarea{min-height:120px;resize:vertical}
   .hiform button{justify-self:start;margin-top:.2rem;font-family:var(--mono);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--paper);border:2.5px solid var(--ink);border-radius:40px;padding:.8rem 1.35rem;box-shadow:4px 4px 0 rgba(23,18,31,.22);cursor:pointer;transition:transform .12s,box-shadow .12s}
   .hiform button:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 rgba(23,18,31,.22)}
+  .hiform .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+  .hiform .formerr{margin-top:.7rem;font-family:var(--mono);font-size:.78rem;color:#8c1d0b}
+  .hiform .cf-turnstile{margin-top:.2rem}
   .hiform .formnote{font-family:var(--mono);font-size:.9rem;color:var(--ink);line-height:1.5}
   .contact-art{position:relative;display:flex;justify-content:center;align-items:center;min-height:170px}
   .contact-art .shades-lg{width:100%;max-width:340px;height:auto;transform:rotate(-6deg)}
@@ -388,8 +391,9 @@
           <p class="clause">§ 006 / Say hi</p>
           <h2>Bug, question, or just saying hi?</h2>
           <p class="note">It comes straight to me. I read all of it, and reply to most.</p>
-          <!-- live site: POST to a Cloudflare Pages Function -> Resend (or a form service). Preview shows the success state only. -->
-          <form class="hiform" action="#" method="post">
+          <!-- POSTs to /api/contact in _worker.js: Turnstile verify -> Resend. -->
+          <form class="hiform" action="/api/contact" method="post">
+              <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
             <div class="fields">
               <fieldset class="seg">
                 <legend>What’s this about?</legend>
@@ -399,7 +403,9 @@
               </fieldset>
               <label class="field">Your email<input type="email" name="email" required placeholder="you@example.com"></label>
               <label class="field">Message<textarea name="message" required placeholder="What’s up?"></textarea></label>
+              <div class="cf-turnstile" data-sitekey="TURNSTILE_SITE_KEY" data-appearance="interaction-only" data-theme="light"></div>
               <button type="submit">Send it →</button>
+              <p class="formerr" role="alert" hidden></p>
             </div>
             <p class="formnote" hidden>Got it. This lands in my inbox and I’ll get back to you.</p>
           </form>
@@ -422,8 +428,41 @@
 
 
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
-(function(){var f=document.querySelector('.hiform');if(!f)return;f.addEventListener('submit',function(e){e.preventDefault();var fld=f.querySelector('.fields'),n=f.querySelector('.formnote');if(fld)fld.hidden=true;if(n)n.hidden=false;});})();
+(function () {
+  var f = document.querySelector('.hiform');
+  if (!f) return;
+  var fields = f.querySelector('.fields');
+  var note   = f.querySelector('.formnote');
+  var err    = f.querySelector('.formerr');
+  var btn    = f.querySelector('button[type=submit]');
+
+  function fail(msg) {
+    if (!err) return;
+    err.textContent = msg;
+    err.hidden = false;
+    if (btn) { btn.disabled = false; btn.textContent = 'Send it \u2192'; }
+    if (window.turnstile) try { window.turnstile.reset(); } catch (e) {}
+  }
+
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (err) err.hidden = true;
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending\u2026'; }
+
+    fetch(f.action, { method: 'POST', body: new FormData(f) })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) return fail(res.d && res.d.error ? res.d.error : 'Something went wrong.');
+        if (fields) fields.hidden = true;
+        if (note) note.hidden = false;
+      })
+      .catch(function () {
+        fail('Network trouble. Email support@staycoolandstaycool.com instead.');
+      });
+  });
+})();
 </script>
 
 
