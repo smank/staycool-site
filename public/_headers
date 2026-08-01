@@ -1,0 +1,22 @@
+# Cloudflare Pages response headers.
+#
+# Our CSS/JS/HTML are referenced without version strings, and Pages' default
+# is a 4-hour browser cache — so a deploy stays invisible to anyone who
+# visited in the last 4 hours until they hard-refresh. max-age=0 +
+# must-revalidate makes the browser check the ETag on every load (cheap 304s
+# from the edge) and pick up new deploys right away.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Big binaries change rarely and are heavy to re-validate every load; let them
+# sit for an hour. (Still fresh within an hour of any deploy.)
+/*.png
+  Cache-Control: public, max-age=3600
+/*.jpg
+  Cache-Control: public, max-age=3600
+/*.mp3
+  Cache-Control: public, max-age=3600
+/*.pdf
+  Cache-Control: public, max-age=3600
+/*.svg
+  Cache-Control: public, max-age=3600
