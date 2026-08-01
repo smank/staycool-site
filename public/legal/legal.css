@@ -1,42 +1,86 @@
-/* Legal pages — readable prose column, inherits the label palette from style.css */
+/* Legal pages — readable prose column on the shared label palette, dressed
+   with the Cartridge accent so they read as part of the site rather than a
+   bare document. Mono headings + red rule to echo the product pages; sans
+   body for legibility. */
+
 .legal-wrap {
   max-width: 46rem;
   margin: 0 auto;
-  padding: 3.5rem 1.25rem 5rem;
+  padding: 3rem 1.25rem 5rem;
 }
+
+/* Back link — a mono nav cue, not a default-blue underline. */
+.legal-wrap a.legal-back {
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-family: var(--sc-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sc-cartridge);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.legal-wrap a.legal-back:hover { color: var(--sc-fg); }
+
 .legal-wrap h1 {
-  font-size: 1.9rem;
-  margin: 0 0 0.35rem;
+  font-family: var(--sc-mono);
+  font-size: clamp(1.6rem, 3.4vw, 2.1rem);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin: 0 0 0.9rem;
 }
+.legal-wrap h1::after {
+  content: "";
+  display: block;
+  width: 2.75rem;
+  height: 2px;
+  background: var(--sc-cartridge);
+  margin-top: 0.9rem;
+}
+
 .legal-meta {
-  opacity: 0.6;
-  font-size: 0.85rem;
-  margin: 0 0 2rem;
+  font-family: var(--sc-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sc-dim);
+  margin: 0 0 2.5rem;
 }
+
 .legal-wrap h2 {
   font-size: 1.15rem;
-  margin: 2.25rem 0 0.6rem;
+  font-weight: 700;
+  color: var(--sc-fg);
+  margin: 2.5rem 0 0.7rem;
 }
+
 .legal-wrap p,
 .legal-wrap li {
-  line-height: 1.65;
+  line-height: 1.7;
   font-size: 0.98rem;
+  color: var(--sc-fg);
 }
-.legal-wrap ul {
-  padding-left: 1.2rem;
-}
+.legal-wrap ul { padding-left: 1.2rem; }
+.legal-wrap li { margin-bottom: 0.4rem; }
+.legal-wrap strong { color: var(--sc-fg); font-weight: 700; }
+
+/* Body links carry the accent instead of browser blue. */
 .legal-wrap a {
+  color: var(--sc-cartridge);
   text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: color 0.15s ease;
 }
-.legal-back {
-  display: inline-block;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
+.legal-wrap a:hover { color: var(--sc-fg); }
+
 .legal-wrap .note {
-  border-left: 3px solid currentColor;
-  padding: 0.4rem 0 0.4rem 1rem;
-  opacity: 0.85;
+  border-left: 2px solid var(--sc-cartridge);
+  background: var(--sc-faint);
+  padding: 0.8rem 1rem;
+  margin: 1.4rem 0;
   font-size: 0.92rem;
+  color: var(--sc-dim);
+  border-radius: 0 4px 4px 0;
 }
