@@ -1,7 +1,7 @@
-/* Legal pages — readable prose column on the shared label palette, dressed
-   with the Cartridge accent so they read as part of the site rather than a
-   bare document. Mono headings + red rule to echo the product pages; sans
-   body for legibility. */
+/* Legal pages — readable prose column on the Stay Cool & Stay Cool label
+   frame. They belong to the label, not the Cartridge product, so they carry
+   the label's restrained steel-ice accent (never the Cartridge hot red).
+   Mono headings echo the label wordmark; sans body for legibility. */
 
 .legal-wrap {
   max-width: 46rem;
@@ -17,7 +17,7 @@
   font-size: 0.74rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--sc-cartridge);
+  color: var(--sc-accent);
   text-decoration: none;
   transition: color 0.15s ease;
 }
@@ -35,7 +35,7 @@
   display: block;
   width: 2.75rem;
   height: 2px;
-  background: var(--sc-cartridge);
+  background: var(--sc-accent);
   margin-top: 0.9rem;
 }
 
@@ -67,7 +67,7 @@
 
 /* Body links carry the accent instead of browser blue. */
 .legal-wrap a {
-  color: var(--sc-cartridge);
+  color: var(--sc-accent);
   text-decoration: underline;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
@@ -76,7 +76,7 @@
 .legal-wrap a:hover { color: var(--sc-fg); }
 
 .legal-wrap .note {
-  border-left: 2px solid var(--sc-cartridge);
+  border-left: 2px solid var(--sc-accent);
   background: var(--sc-faint);
   padding: 0.8rem 1rem;
   margin: 1.4rem 0;
