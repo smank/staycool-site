@@ -84,3 +84,5 @@
   color: var(--sc-dim);
   border-radius: 0 4px 4px 0;
 }
+
+/* cache-policy: revalidate (see /_headers) */
