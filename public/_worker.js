@@ -133,6 +133,13 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // www serves nothing of its own; send it to the canonical bare domain so
+    // the two hostnames never split traffic or search ranking.
+    if (url.hostname === "www.staycoolandstaycool.com") {
+      url.hostname = "staycoolandstaycool.com";
+      return Response.redirect(url.toString(), 301);
+    }
+
     if (url.hostname.endsWith(".pages.dev")) {
       return new Response("Not found", {
         status: 404,
