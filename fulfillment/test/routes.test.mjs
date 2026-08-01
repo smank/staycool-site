@@ -8,6 +8,9 @@ import {
 } from "./fixtures.mjs";
 
 const BASE = "https://fulfillment.test";
+// Beta expiry is capped server-side, so tests mint inside that window.
+const d = new Date(Date.now() + 30 * 86400000);
+const SOON = `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, "0")}${String(d.getUTCDate()).padStart(2, "0")}`;
 
 let env;
 let sentEmails;
@@ -138,10 +141,33 @@ test("activate rejects garbage, invalid keys, bound keys, beta keys", async () =
   assert.equal(r1.status, 400);
   assert.equal((await r1.json()).error, "not_activatable");
 
-  const beta = await signLicence(TEST_PRIVATE_KEY,
+  const wild = await signLicence(TEST_PRIVATE_KEY,
     buildPayloadV2({ product: "cartridge", type: "beta", name: "A", email: "", order: "b", expiry: 20991231, machine: "*" }));
-  const r2 = await post("/activate", { key: beta, machine: MACHINE_B });
-  assert.equal(r2.status, 400);
+  const r2 = await post("/activate", { key: wild, machine: MACHINE_B });
+  assert.equal(r2.status, 400);   // wildcard keys need no activation
+});
+
+test("beta keys activate, but only on one machine", async () => {
+  const key = await signLicence(TEST_PRIVATE_KEY, buildPayloadV2({
+    product: "cartridge", type: "beta", name: "Jo", email: "jo@example.com",
+    order: "beta-jo", expiry: 20991231, machine: "" }));
+
+  const r1 = await post("/activate", { key, machine: MACHINE_A });
+  assert.equal(r1.status, 200);
+  const { licence } = await r1.json();
+  const parsed = await verifyLicence(TEST_PUBLIC_KEY, licence);
+  assert.equal(parsed.fields.type, "beta");
+  assert.equal(parsed.fields.machine, MACHINE_A);
+
+  // Same machine again is idempotent; a second machine is refused.
+  assert.equal((await post("/activate", { key, machine: MACHINE_A })).status, 200);
+  const r3 = await post("/activate", { key, machine: MACHINE_B });
+  assert.equal(r3.status, 409);
+  assert.equal((await r3.json()).error, "seat_limit");
+
+  // Deactivating frees the single seat.
+  assert.equal((await post("/deactivate", { licence })).status, 200);
+  assert.equal((await post("/activate", { key, machine: MACHINE_B })).status, 200);
 });
 
 // ---------------------------------------------------------------- deactivate
@@ -195,24 +221,24 @@ test("LEDGER never persists name, email, or licence keys", async () => {
 // ---------------------------------------------------------------- mint-beta
 
 test("mint-beta requires the admin token", async () => {
-  const body = { name: "Jo", email: "jo@x.com", order: "beta-jo", expiry: "20991231" };
+  const body = { name: "Jo", email: "jo@x.com", order: "beta-jo", expiry: SOON };
   assert.equal((await post("/mint-beta", body)).status, 401);
   assert.equal((await post("/mint-beta", body, { Authorization: "Bearer wrong" })).status, 401);
 });
 
-test("mint-beta mints a valid wildcard beta key and stores no PII", async () => {
+test("mint-beta mints an unbound beta key and stores no PII", async () => {
   const r = await post("/mint-beta",
-    { name: "Jo Tester", email: "jo@example.com", order: "beta-jo", expiry: "20991231" },
+    { name: "Jo Tester", email: "jo@example.com", order: "beta-jo", expiry: SOON },
     { Authorization: "Bearer test-admin-token" });
   assert.equal(r.status, 200);
   const { licence, order, expiry } = await r.json();
   assert.equal(order, "beta-jo");
-  assert.equal(expiry, "20991231");
+  assert.equal(expiry, SOON);
   const parsed = await verifyLicence(TEST_PUBLIC_KEY, licence);
   assert.ok(parsed);
   assert.equal(parsed.fields.type, "beta");
-  assert.equal(parsed.fields.machine, "*");
-  assert.equal(parsed.fields.expiry, 20991231);
+  assert.equal(parsed.fields.machine, "");   // unbound: binds on activation
+  assert.equal(parsed.fields.expiry, +SOON);
   assert.equal(sentEmails.length, 0); // no send unless asked
 
   const stored = [...env.LEDGER.store.values()].join(" ");
@@ -220,9 +246,21 @@ test("mint-beta mints a valid wildcard beta key and stores no PII", async () => 
   assert.ok(!stored.includes(licence));
 });
 
+test("mint-beta rejects expiry beyond the cap and in the past", async () => {
+  const auth = { Authorization: "Bearer test-admin-token" };
+  const far = await post("/mint-beta",
+    { name: "A", email: "a@b.c", order: "o", expiry: "20991231" }, auth);
+  assert.equal(far.status, 400);
+  assert.match((await far.json()).message, /at most 180 days/);
+
+  const past = await post("/mint-beta",
+    { name: "A", email: "a@b.c", order: "o", expiry: "20200101" }, auth);
+  assert.equal(past.status, 400);
+});
+
 test("mint-beta email carries the download link when given", async () => {
   const r = await post("/mint-beta",
-    { name: "Jo", email: "jo@example.com", order: "beta-dl", expiry: "20991231",
+    { name: "Jo", email: "jo@example.com", order: "beta-dl", expiry: SOON,
       send: true, download: "https://staycoolandstaycool.com/beta/Cartridge.zip" },
     { Authorization: "Bearer test-admin-token" });
   assert.equal(r.status, 200);
@@ -233,7 +271,7 @@ test("mint-beta email carries the download link when given", async () => {
 
 test("mint-beta rejects a non-https download link", async () => {
   const r = await post("/mint-beta",
-    { name: "Jo", email: "jo@example.com", order: "beta-dl2", expiry: "20991231",
+    { name: "Jo", email: "jo@example.com", order: "beta-dl2", expiry: SOON,
       download: "javascript:alert(1)" },
     { Authorization: "Bearer test-admin-token" });
   assert.equal(r.status, 400);
@@ -243,12 +281,13 @@ test("mint-beta rejects missing/perpetual expiry and unknown product; send=true 
   const auth = { Authorization: "Bearer test-admin-token" };
   assert.equal((await post("/mint-beta", { name: "A", email: "a@b.c", order: "o" }, auth)).status, 400);
   assert.equal((await post("/mint-beta", { name: "A", email: "a@b.c", order: "o", expiry: "0" }, auth)).status, 400);
-  assert.equal((await post("/mint-beta", { name: "A", email: "a@b.c", order: "o", expiry: "20991231", product: "nope" }, auth)).status, 400);
+  assert.equal((await post("/mint-beta", { name: "A", email: "a@b.c", order: "o", expiry: SOON, product: "nope" }, auth)).status, 400);
 
   const r = await post("/mint-beta",
-    { name: "Jo", email: "jo@example.com", order: "beta-jo2", expiry: "20991231", send: true }, auth);
+    { name: "Jo", email: "jo@example.com", order: "beta-jo2", expiry: SOON, send: true }, auth);
   assert.equal(r.status, 200);
   assert.equal(sentEmails.length, 1);
   assert.match(sentEmails[0].subject, /beta licence key/);
-  assert.match(sentEmails[0].text, /2099-12-31/);
+  const nice = `${SOON.slice(0, 4)}-${SOON.slice(4, 6)}-${SOON.slice(6, 8)}`;
+  assert.ok(sentEmails[0].text.includes(nice), "email states the expiry date");
 });
