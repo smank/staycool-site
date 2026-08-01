@@ -258,6 +258,14 @@
     font-size:.78rem;line-height:1.4;max-width:34ch;color:rgba(23,18,31,.78)}
   .newsform-consent input{margin-top:.15rem;flex:0 0 auto}
   .newsform-consent a{color:inherit}
+  /* The grid already centres each column, but the consent line hangs below
+     the field, so the input+button — the part that reads as "the form" —
+     sits above the midline. Nudge the block down by roughly half that line
+     so the field itself is optically centred. Only applies to the 3-column
+     desktop row; below that the form is stacked under the copy. */
+  @media(min-width:921px){
+    .newsform{position:relative;top:1.4rem}
+  }
   @media(max-width:920px){
     .news-in{grid-template-columns:1fr auto;gap:1.2rem 1.6rem}
     .news-art{grid-row:1/3;align-self:center}
