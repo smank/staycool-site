@@ -259,6 +259,11 @@
     <form class="notify-form"
           action="https://buttondown.com/api/emails/embed-subscribe/staycool"
           method="post" target="_blank">
+      <!-- Required by Buttondown for embedded forms; without it submissions
+           may not process. Tag records which product drew them in, so one
+           list can be segmented per product instead of splitting it. -->
+      <input type="hidden" name="embed" value="1">
+      <input type="hidden" name="tag" value="cartridge">
       <input type="email" name="email" class="notify-email"
              placeholder="you@email.com" required autocomplete="email"
              aria-label="Email address">
