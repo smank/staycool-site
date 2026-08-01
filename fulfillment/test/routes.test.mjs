@@ -220,6 +220,25 @@ test("mint-beta mints a valid wildcard beta key and stores no PII", async () => 
   assert.ok(!stored.includes(licence));
 });
 
+test("mint-beta email carries the download link when given", async () => {
+  const r = await post("/mint-beta",
+    { name: "Jo", email: "jo@example.com", order: "beta-dl", expiry: "20991231",
+      send: true, download: "https://staycoolandstaycool.com/beta/Cartridge.zip" },
+    { Authorization: "Bearer test-admin-token" });
+  assert.equal(r.status, 200);
+  assert.equal(sentEmails.length, 1);
+  assert.match(sentEmails[0].text, /staycoolandstaycool\.com\/beta\/Cartridge\.zip/);
+  assert.match(sentEmails[0].text, /Licence key:/);
+});
+
+test("mint-beta rejects a non-https download link", async () => {
+  const r = await post("/mint-beta",
+    { name: "Jo", email: "jo@example.com", order: "beta-dl2", expiry: "20991231",
+      download: "javascript:alert(1)" },
+    { Authorization: "Bearer test-admin-token" });
+  assert.equal(r.status, 400);
+});
+
 test("mint-beta rejects missing/perpetual expiry and unknown product; send=true emails", async () => {
   const auth = { Authorization: "Bearer test-admin-token" };
   assert.equal((await post("/mint-beta", { name: "A", email: "a@b.c", order: "o" }, auth)).status, 400);

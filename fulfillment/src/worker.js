@@ -261,23 +261,32 @@ async function handleMintBeta(request, env) {
       JSON.stringify({ licHash: await sha256Hex(licence), at: new Date().toISOString() })
     );
 
+  // Optional download URL: a beta key is useless without a build to use it
+  // on, so the email carries both when one is supplied.
+  const download = String(body.download ?? "").trim();
+  if (download && !/^https:\/\/[^\s]+$/.test(download))
+    return json(400, { error: "bad_request", message: "download must be an https URL." });
+
   if (body.send === true) {
     const email = String(body.email ?? "").trim();
     if (!email) return json(400, { error: "bad_request", message: "send:true needs an email." });
-    await sendBetaEmail(env, email, String(body.name ?? "tester").trim(), licence, product.display, expiry);
+    await sendBetaEmail(env, email, String(body.name ?? "tester").trim(), licence,
+                        product.display, expiry, download);
   }
 
   return json(200, { licence, order, expiry, product: product.slug });
 }
 
-async function sendBetaEmail(env, to, name, licence, display, expiry) {
+async function sendBetaEmail(env, to, name, licence, display, expiry, download) {
   const nice = `${expiry.slice(0, 4)}-${expiry.slice(4, 6)}-${expiry.slice(6, 8)}`;
   const text =
     `Hi ${name},\n\n` +
-    `Here's your ${display} beta licence key:\n\n${licence}\n\n` +
-    `To activate: open ${display}, click the DEMO badge in the top bar, paste ` +
-    `the key in, and hit Activate. Beta keys work on any of your machines and ` +
-    `validate offline — no server involved.\n\n` +
+    `Thanks for testing ${display}. Here's everything you need.\n\n` +
+    (download ? `Download:\n${download}\n\n` : "") +
+    `Licence key:\n${licence}\n\n` +
+    `To activate: install and open ${display}, click the DEMO badge in the top ` +
+    `bar, paste the key in, and hit Activate. Beta keys work on any of your ` +
+    `machines and validate offline — no server involved.\n\n` +
     `This beta key expires on ${nice}; the plugin returns to demo mode after ` +
     `that. You'll get a fresh key (or a release build) before then.\n\n` +
     `Thanks for testing!\n\n— Stay Cool and Stay Cool`;
