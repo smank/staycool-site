@@ -242,12 +242,14 @@
 
   .news{background:var(--coral);color:var(--ink);border-top:2.5px solid var(--ink)}
   .news .clause{color:var(--ink);opacity:.8}
+  /* Copy stacks above the form in a 2/3 column; the plane owns the remaining
+     third and is sized off the combined height of the two. */
   .news-in{max-width:1200px;margin:0 auto;padding:2.8rem 1.4rem;display:grid;
-    grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) auto;
+    grid-template-columns:minmax(0,2fr) minmax(0,1fr);
     gap:1.5rem clamp(1.6rem,4vw,3.4rem);align-items:center}
   .news-copy{min-width:0}
   .news-copy h3{margin-top:.35rem;max-width:17ch}
-  .news-art{display:flex;justify-content:flex-end;align-items:center}
+  .news-art{grid-column:2;grid-row:1/3;display:flex;justify-content:center;align-items:center}
   .bd-sink{position:absolute;width:0;height:0;border:0;visibility:hidden}
   .news-done{font-size:1.02rem;font-weight:600;line-height:1.45;max-width:30ch}
   .news-done small{display:block;font-weight:400;font-size:.84rem;opacity:.75;margin-top:.35rem}
@@ -264,15 +266,13 @@
      so the field itself is optically centred. Only applies to the 3-column
      desktop row; below that the form is stacked under the copy. */
   @media(min-width:921px){
-    .newsform{position:relative;top:1.4rem}
-    /* Size the plane off the row height so it spans the copy and the form
-       rather than floating as a small spot illustration. */
+    /* Height-driven: the plane spans the copy and the form as one block. */
     .news-art{align-self:stretch;align-items:stretch}
-    .news-art .mailplane{width:auto;height:100%;max-width:none}
+    .news-art .mailplane{width:auto;height:100%;max-width:100%}
   }
   @media(max-width:920px){
-    .news-in{grid-template-columns:1fr auto;gap:1.2rem 1.6rem}
-    .news-art{grid-row:1/3;align-self:center}
+    .news-in{grid-template-columns:minmax(0,1.4fr) auto;gap:1.2rem 1.6rem}
+    .news-art{align-self:center}
   }
   /* Phone: one vertical stack — graphic, copy, form, button. The plane is
      centred with real presence instead of tucked beside the text. Row gap
@@ -280,7 +280,7 @@
      should read as one compact unit. */
   @media(max-width:640px){
     .news-in{grid-template-columns:1fr}
-    .news-art{order:-1;grid-row:auto;justify-content:center}
+    .news-art{order:-1;grid-column:auto;grid-row:auto;justify-content:center}
     .news-art .mailplane{width:min(58vw,240px)}
     .newsform-row{flex-direction:column;align-items:stretch;gap:.7rem}
     .newsform-row input[type=email]{flex:1 1 auto;width:100%}
