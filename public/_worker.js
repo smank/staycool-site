@@ -38,7 +38,11 @@ async function handleContact(request, env) {
   if (!env.TURNSTILE_SECRET || !env.RESEND_API_KEY) {
     // Fail loudly rather than pretending to send. Better an honest error than
     // the old markup, which showed a success message and dropped the message.
-    return json({ error: "Contact form is not configured yet." }, 503);
+    // The message is visitor-facing, so it names the fallback.
+    return json(
+      { error: `This form is not working yet. Email ${CONTACT_TO} and it will reach me.` },
+      503
+    );
   }
 
   let form;
