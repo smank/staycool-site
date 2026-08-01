@@ -566,8 +566,11 @@ footer {
 
 /* ───────────── Responsive ───────────── */
 @media (max-width: 900px) {
+  /* Hero keeps its copy-then-screenshot order; the 1.8rem gap is the same
+     image/text spacing used by every stacked block below it. */
   .hero {
     grid-template-columns: 1fr;
+    gap: 1.8rem;
     padding: 3rem 1.5rem 2rem;
   }
   .buy {
@@ -814,7 +817,6 @@ img { max-width: 100%; }
   .hero-inner > * { max-width: 100%; }
   .hero h1 { font-size: clamp(1.7rem, 8vw, 2.6rem); line-height: 1.12; overflow-wrap: anywhere; }
   .hero .lede { font-size: 0.98rem; }
-  .hero-art { margin-top: 1.5rem; }
   .screenshot-frame, .screenshot-frame img { max-width: 100%; min-width: 0; }
 
   .cta-row { flex-direction: column; align-items: stretch; }
@@ -903,7 +905,8 @@ section[id] { scroll-margin-top: 84px; }
 .features .card p { color: var(--text-2); font-size: 0.9rem; line-height: 1.55; margin: 0; }
 
 @media (max-width: 900px) {
-  .showcase { grid-template-columns: 1fr; padding: 1.8rem; }
+  .showcase { grid-template-columns: 1fr; gap: 1.8rem; padding: 1.8rem; }
+  .showcase-shot { order: -1; }
   .features .grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 620px) {
