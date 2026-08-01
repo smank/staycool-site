@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stay Cool and Stay Cool — audio plugins</title>
+  <meta name="description" content="Audio plugins by Stay Cool and Stay Cool LLC. Cartridge, Little Freaks, and other irreverent tools for producers.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Stay Cool and Stay Cool">
+  <meta property="og:url" content="https://staycoolandstaycool.com/">
+  <meta property="og:title" content="Stay Cool and Stay Cool">
+  <meta property="og:description" content="An audio-plugin label by Sam Mank.">
+  <meta property="og:image" content="https://staycoolandstaycool.com/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Stay Cool and Stay Cool">
+  <meta name="twitter:description" content="An audio-plugin label by Sam Mank.">
+  <meta name="twitter:image" content="https://staycoolandstaycool.com/social-card.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32">
+  <link rel="icon" href="/favicon-16.png" sizes="16x16">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="canonical" href="https://staycoolandstaycool.com/">
+</head>
+<body>
+
+<div class="aurora" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="label-bar">
+  <a class="wordmark" href="/">STAY COOL <span class="ampersand">&amp;</span> STAY COOL</a>
+  <nav>
+    <a href="/cartridge/">Cartridge</a>
+    <a href="#products">Products</a>
+    <a href="#about">About</a>
+    <a href="mailto:support@staycoolandstaycool.com">Contact</a>
+  </nav>
+</header>
+
+<main class="label-home">
+  <section class="hero">
+    <div class="hero-watermark" aria-hidden="true">STAY&nbsp;COOL</div>
+    <div class="hero-inner">
+      <span class="hero-eyebrow">Audio plugins · no adult supervision</span>
+      <h1>Cool name.<br><span class="hero-accent">Unruly plugins.</span></h1>
+      <p class="tagline">A one-person plugin label making synths and effects with opinions. No beige. No presets-for-the-sake-of-presets. Just sound tools with teeth — and a little too much personality.</p>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>CARTRIDGE</span><span class="dot">✦</span>
+      <span>LITTLE FREAKS</span><span class="dot">✦</span>
+      <span>STAY COOL AND STAY COOL</span><span class="dot">✦</span>
+      <span>MADE FOR PRODUCERS</span><span class="dot">✦</span>
+      <span>CARTRIDGE</span><span class="dot">✦</span>
+      <span>LITTLE FREAKS</span><span class="dot">✦</span>
+      <span>STAY COOL AND STAY COOL</span><span class="dot">✦</span>
+      <span>MADE FOR PRODUCERS</span><span class="dot">✦</span>
+    </div>
+  </div>
+
+  <section id="products" class="products">
+    <h2><span class="sec-num">01</span> Products</h2>
+    <div class="product-grid">
+      <a class="product-card" href="/cartridge/" data-accent="cartridge">
+        <div class="product-thumb">CARTRIDGE</div>
+        <h3>Cartridge</h3>
+        <p>An 8-bit synth that nails the chip-era sound, then hands you a per-channel step sequencer and a modern polyphonic engine to drag it somewhere new.</p>
+        <span class="product-status">Coming soon · $29 →</span>
+      </a>
+      <div class="product-card coming-soon" data-accent="freaks">
+        <div class="product-thumb">LITTLE FREAKS</div>
+        <h3>Little Freaks</h3>
+        <p>A suite of effects, each one its own little freak. Built to mangle, smear, and misbehave.</p>
+        <span class="product-status">Coming soon</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <h2><span class="sec-num">02</span> About</h2>
+    <p>Stay Cool and Stay Cool is a plugin label run by one person, Sam Mank. The name repeats itself because it thought that was funny. The plugins are the serious part — each one a small bet that music software can have a personality without getting in your way.</p>
+  </section>
+</main>
+
+<footer class="label-footer">
+  <span>© 2026 Stay Cool and Stay Cool LLC</span>
+  <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a>
+  <nav class="legal-links">
+    <a href="/legal/privacy.html">Privacy</a>
+    <a href="/legal/eula.html">Licence</a>
+  </nav>
+</footer>
+
+</body>
+</html>
