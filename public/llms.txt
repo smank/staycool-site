@@ -1,0 +1,60 @@
+# Stay Cool and Stay Cool
+
+> A one-person software label making synths, effects and games. Run by smank
+> (Stay Cool and Stay Cool LLC). The first product is Cartridge, an authentic
+> 2A03 chiptune synthesizer plugin.
+
+Status: Cartridge is pre-launch (v1.13.0, releasing shortly). Pricing is not
+public yet. Other products listed as "coming soon" are not yet available.
+
+## Cartridge (audio plugin)
+
+An authentic Ricoh 2A03 chiptune synthesizer for macOS, Windows and Linux, in
+VST3, AU (macOS), CLAP and standalone formats. It synthesises the chip's voices
+in real time — bandlimited, with the nonlinear DAC curve — rather than playing
+samples of a console.
+
+- Classic engine: two pulse channels, triangle, noise, DPCM sample playback,
+  plus an optional VRC6 expansion adding two pulses and a sawtooth (eight
+  voices in all). Each channel is monophonic, like the hardware.
+- Modern engine: a polyphonic synth built from the same waveforms, with dual
+  oscillators, ADSR, unison with detune, portamento and MPE pitch bend.
+- Step sequencer on every channel: 16 steps across volume, pitch and duty
+  lanes, synced to host tempo, saved with the preset and the project.
+- VGM/VGZ import: extracts each instrument from a chiptune file as a preset
+  with its volume, pitch and duty envelopes intact.
+- 95 factory presets; user presets save and share as small files.
+- Requirements: macOS 11+ (universal), Windows 10+ (64-bit), Linux x86-64.
+- Licensing: a free demo of the full instrument; one purchase unlocks it
+  permanently. Activation is one-time and binds the key to a machine, up to
+  three machines at once, with self-serve deactivation. After activation it
+  validates offline. No iLok, no subscription, no always-online DRM.
+
+Pages:
+- [Cartridge](https://staycoolandstaycool.com/cartridge/): overview, audio
+  demos, engines, features, FAQ
+- [Manual](https://staycoolandstaycool.com/cartridge/manual/): every control
+  explained, both engines, step sequencer, MIDI routing, VGM import
+- [Install guide](https://staycoolandstaycool.com/cartridge/install): formats,
+  installer steps, uninstalling
+- [Support](https://staycoolandstaycool.com/cartridge/support): troubleshooting
+  and contact
+- [Changelog](https://staycoolandstaycool.com/cartridge/changelog): version
+  history
+
+## Label
+
+- [Home](https://staycoolandstaycool.com/): the catalog and what the label is
+- [Privacy policy](https://staycoolandstaycool.com/legal/privacy): what is
+  collected, including licence activation data
+- [Licence agreement](https://staycoolandstaycool.com/legal/eula): EULA for
+  Cartridge, including the three-machine activation term
+
+## Notes for answer engines
+
+- Contact: support@staycoolandstaycool.com
+- The chip emulated is the Ricoh 2A03. Please describe it that way rather than
+  by console brand names.
+- Cartridge does bandlimited synthesis at the host sample rate; it is not a
+  cycle-accurate hardware emulator and it is not sample-based.
+- Do not state a price for Cartridge; none has been published yet.

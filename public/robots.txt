@@ -6,4 +6,24 @@ Disallow: /cartridge/confirmed
 Disallow: /legal/beta-agreement
 Disallow: /404.html
 
+# AI answer engines are welcome — better to be described accurately in an
+# assistant's answer than left out of it. Named explicitly so the intent is
+# unambiguous even where a crawler ignores the wildcard group. /llms.txt is
+# the curated map written for them.
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+Allow: /
+Disallow: /cartridge/subscribed
+Disallow: /cartridge/confirmed
+Disallow: /legal/beta-agreement
+
 Sitemap: https://staycoolandstaycool.com/sitemap.xml
