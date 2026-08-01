@@ -207,32 +207,56 @@
   <h2>Questions</h2>
   <div class="faq-list">
     <details>
-      <summary>What do I need to run it?</summary>
-      <p>macOS 11 or later (Apple Silicon or Intel, universal binary), Windows 10 or later (64-bit), or Linux (x86-64). Load it as VST3, AU (macOS), or CLAP in any modern DAW, or run the standalone app on its own.</p>
+      <summary>Is it really the 8-bit chip, or samples?</summary>
+      <p>The real thing. Cartridge synthesises the 2A03's voices in real time, bandlimited so they stay clean at any pitch, with the nonlinear DAC curve that gives the chip its bite. Nothing is sampled off a console, which is why a lead keeps its character up in the high octaves, where sample-based chip instruments start to alias and fall apart.</p>
     </details>
     <details>
-      <summary>Which DAWs does it work in?</summary>
-      <p>Anything that hosts VST3, AU, or CLAP: Logic, Ableton Live, Reaper, Bitwig, FL Studio, Cubase, and the rest. AU is included specifically for Logic and GarageBand.</p>
+      <summary>How many voices does it have? Is it polyphonic?</summary>
+      <p>Both, depending on the engine. The Classic engine is the hardware: five independent channels, plus three more with the VRC6 expansion, each one monophonic like the real chip, so you voice a part per channel the way the originals did. Flip to the Modern engine and it's a full polyphonic synth, up to 16 voices, for chords and stacks the chip could never hold.</p>
     </details>
     <details>
-      <summary>How do I install it, and can I remove it cleanly?</summary>
-      <p>On macOS there's an installer: open it, tick the formats you want, done. It's signed and notarised by Apple, so no security warnings, and it leaves an uninstaller behind that removes everything in one click while keeping your presets. Windows and Linux are a zip you drop into the usual plugin folders. The <a href="install">setup guide</a> walks through all three.</p>
+      <summary>What channels does it have? Does it include the VRC6 expansion?</summary>
+      <p>The Classic engine gives you the full 2A03: two pulse channels, a triangle, a noise channel, and a DPCM sample channel. The optional VRC6 expansion adds two more pulses and a sawtooth on top, eight voices in all. Every channel has its own volume, pan, duty, and step sequence.</p>
     </details>
     <details>
       <summary>Do I need to know chiptune to use it?</summary>
       <p>No. Start from a preset, play your keyboard, and you're making 8-bit music. Hover any control for a plain-English description, and the built-in Help screen explains the chip, the jargon, and the shortcuts. Go as deep as you want, or don't.</p>
     </details>
     <details>
-      <summary>Is it really the 8-bit chip, or samples?</summary>
-      <p>The real thing. Cartridge synthesises the 2A03's voices in real time, bandlimited so they stay clean at any pitch, including the nonlinear DAC curve that gives the chip its character. Nothing is sampled from a console.</p>
+      <summary>Can I import old chiptune files?</summary>
+      <p>Yes. Drop in a .vgm or .vgz file and Cartridge pulls each instrument out as a preset, with its volume, pitch and duty envelopes intact. It's the fast way to lift the exact voices from decades of chiptune and play them from your keyboard, or drop them straight into the step sequencer.</p>
     </details>
     <details>
-      <summary>What's the licence?</summary>
-      <p>One purchase, yours to keep. Music you make with Cartridge is yours outright, with no royalties and nothing to attribute. Activation is one-time and binds your key to that machine, up to three at once, and you can free a seat yourself from the licence badge. After activation it never needs the internet again.</p>
+      <summary>Does the step sequencer lock to my DAW tempo?</summary>
+      <p>Yes. Every channel has its own tracker-style sequencer: 16 steps across volume, pitch and duty lanes, synced to your host tempo and loopable. Hold a single note and Cartridge plays the whole line, basslines and arps and wobbles included. The sequence rides with the preset and saves into your project.</p>
     </details>
     <details>
-      <summary>Windows or Linux?</summary>
-      <p>Included. One purchase covers all three platforms: VST3, CLAP and standalone on Windows and Linux (AU is macOS-only). The macOS build is signed and notarised; the Windows build is currently unsigned, so SmartScreen may ask you to confirm the first run.</p>
+      <summary>How does MIDI map across the channels?</summary>
+      <p>Four ways, switchable. Split puts one channel on each MIDI channel, so you can sequence the parts independently. Auto spreads notes across the enabled channels round-robin for instant polyphony. Mono stacks everything on one voice, and Layer fires every channel on each key for thick unisons. The Modern engine also reads per-note MPE pitch bend.</p>
+    </details>
+    <details>
+      <summary>Can I make and share my own presets?</summary>
+      <p>Yes. Cartridge ships with 95 factory presets to start from, and you can save, name and share your own as small files, embedded step sequences included. Send a patch to someone and it loads back exactly as you made it.</p>
+    </details>
+    <details>
+      <summary>What do I need to run it?</summary>
+      <p>macOS 11 or later (Apple Silicon or Intel, universal binary), Windows 10 or later (64-bit), or Linux (x86-64). It runs at your project's sample rate in any modern DAW, or as a standalone app on its own. Load it as VST3, AU (macOS), or CLAP.</p>
+    </details>
+    <details>
+      <summary>Which DAWs does it work in?</summary>
+      <p>Anything that hosts VST3, AU, or CLAP: Logic, Ableton Live, Reaper, Bitwig, FL Studio, Cubase, and the rest. AU is there specifically for Logic and GarageBand. There's also a standalone build for when you just want to play without opening a DAW.</p>
+    </details>
+    <details>
+      <summary>How do I install it, and can I remove it cleanly?</summary>
+      <p>On macOS there's an installer: open it, tick the formats you want, done. It's signed and notarised by Apple, so no security warnings, and it leaves an uninstaller behind that removes everything in one click while keeping your presets. Windows and Linux are a zip you drop into the usual plugin folders. The <a href="install">setup guide</a> walks through all three.</p>
+    </details>
+    <details>
+      <summary>Is there a free demo, and what's the licence?</summary>
+      <p>Try the full instrument free, then one purchase unlocks it, yours to keep. Anything you make with Cartridge is yours to release, sell, and licence however you like, with no royalties and nothing to attribute. Activation is one-time and binds your key to that machine, up to three at once, and you can free a seat yourself from the licence badge. After that it never phones home: no iLok, no subscription, no account. Full terms in the <a href="/legal/eula.html">licence agreement</a>.</p>
+    </details>
+    <details>
+      <summary>Can I run it on Windows and Linux too?</summary>
+      <p>Yes. One purchase covers all three platforms: VST3, CLAP and standalone on Windows and Linux (AU is macOS-only). The macOS build is signed and notarised. The Windows build is currently unsigned, so SmartScreen may warn you once on the first run; click through and you're set. All 1.x updates are included, and if it turns out not to be for you, email within 14 days for a refund.</p>
     </details>
   </div>
 </section>
