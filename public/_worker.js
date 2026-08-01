@@ -14,6 +14,12 @@
 const CONTACT_TO = "support@staycoolandstaycool.com";
 const CONTACT_FROM = "Stay Cool site <hello@staycoolandstaycool.com>";
 const MAX_MESSAGE = 5000;
+// Topic drives the subject line and the accent colour of the notification.
+const TOPICS = {
+  bug:      { name: "Bug",      tint: "#ff5a3c" },
+  question: { name: "Question", tint: "#3a37f0" },
+  hi:       { name: "Saying hi", tint: "#c3a300" },
+};
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -76,6 +82,11 @@ async function handleContact(request, env) {
   }
 
   const country = request.headers.get("CF-IPCountry") || "unknown";
+  const label = TOPICS[topic] || { name: topic, tint: "#6b7280" };
+  const when = new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC";
+  const safe = (t) =>
+    t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
   const sent = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -86,12 +97,29 @@ async function handleContact(request, env) {
       from: CONTACT_FROM,
       to: [CONTACT_TO],
       reply_to: email,
-      subject: `[${topic}] message from the site`,
+      subject: `${label.name}: ${email}`,
       text:
-        `Topic:   ${topic}\n` +
-        `From:    ${email}\n` +
-        `Country: ${country}\n` +
-        `\n${message}\n`,
+        `${label.name} from ${email}\n` +
+        `${when} · ${country}\n` +
+        `${"-".repeat(48)}\n\n` +
+        `${message}\n\n` +
+        `${"-".repeat(48)}\n` +
+        `Reply to this email and it goes straight back to them.\n`,
+      html:
+        `<div style="font:15px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#17121f;max-width:640px">` +
+          `<div style="border-left:4px solid ${label.tint};padding:2px 0 2px 14px;margin-bottom:20px">` +
+            `<div style="font:600 13px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.12em;` +
+              `text-transform:uppercase;color:${label.tint}">${label.name}</div>` +
+            `<div style="font-size:17px;font-weight:600;margin-top:3px">` +
+              `<a href="mailto:${safe(email)}" style="color:#17121f;text-decoration:none">${safe(email)}</a>` +
+            `</div>` +
+          `</div>` +
+          `<div style="white-space:pre-wrap;background:#faf9f5;border:1px solid #e6e3dc;` +
+            `border-radius:8px;padding:16px 18px">${safe(message)}</div>` +
+          `<p style="font:12px/1.5 ui-monospace,Menlo,monospace;color:#8b8794;margin-top:18px">` +
+            `${when} &middot; ${country}<br>Reply to this email and it goes straight back to them.` +
+          `</p>` +
+        `</div>`,
     }),
   });
 
