@@ -355,7 +355,16 @@ footer.colophon a { color: var(--text-2); }
 /* ── responsive ─────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .frame { grid-template-columns: 1fr; }
-  nav.toc { display: none; }
+  /* Was hidden on mobile, leaving phones with no way to jump around. Show it
+     as a static block above the content instead of the sticky sidebar. */
+  nav.toc {
+    position: static;
+    height: auto;
+    overflow: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--outline-dim);
+    padding: 1.5rem 1.4rem 1.75rem;
+  }
   main { padding: 0 1.4rem 4rem; }
   .cover { min-height: auto; padding: 3.5rem 1rem 2.5rem; }
   .cover .cover-shot { margin-top: 2rem; }
@@ -424,4 +433,7 @@ footer.colophon a { color: var(--text-2); }
     padding: 0;
   }
   .toc-print .n { color: var(--primary); margin-right: 1em; }
+  /* Entries are anchor links so the PDF TOC jumps to each chapter; keep them
+     looking like plain text, not web links. */
+  .toc-print a { color: inherit; text-decoration: none; }
 }
