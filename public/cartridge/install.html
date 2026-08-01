@@ -45,11 +45,11 @@
   <section id="install">
     <h2>Install</h2>
     <div class="rule"></div>
-    <p class="lede">macOS has an installer. Windows and Linux are a zip you copy into place. Either way, restart your DAW afterwards so it rescans plugins. When in doubt, install VST3 and the standalone app.</p>
+    <p class="lede">macOS and Windows both have installers. Linux is a zip you copy into place. Either way, restart your DAW afterwards so it rescans plugins. When in doubt, install VST3 and the standalone app.</p>
 
     <h3 class="sub-head">macOS</h3>
     <ol class="steps">
-      <li>Open <strong>Cartridge-1.13.0-macOS.dmg</strong>, then open the installer inside it.</li>
+      <li>Open <strong>Cartridge-1.13.1-macOS.dmg</strong>, then open the installer inside it.</li>
       <li>Tick the formats you want. Standalone, AU, VST3, and CLAP are all selected by default; unused ones do no harm.</li>
       <li>Enter your password when macOS asks, and you're done.</li>
     </ol>
@@ -58,20 +58,23 @@
       <p>The installer is signed and notarised by Apple, so it opens without security warnings. To remove Cartridge later, run <strong>Applications &rsaquo; Stay Cool and Stay Cool &rsaquo; Uninstall Cartridge</strong>. It keeps your presets and licence unless you tell it otherwise.</p>
     </div>
 
-    <h3 class="sub-head">Windows &amp; Linux</h3>
+    <h3 class="sub-head">Windows</h3>
+    <ol class="steps">
+      <li>Run <strong>Cartridge-1.13.1-Windows-Installer.exe</strong>.</li>
+      <li>SmartScreen may say &ldquo;Windows protected your PC&rdquo; because the build isn't signed yet. Click <strong>More info &rsaquo; Run anyway</strong>.</li>
+      <li>Tick the formats you want (VST3, CLAP, and the standalone app) and finish. The installer puts each in the right folder for you.</li>
+    </ol>
+    <div class="note">
+      <span class="tag">Unsigned</span>
+      <p>The Windows build isn't code-signed yet, so SmartScreen warns once on the first run. It's safe to continue. Remove Cartridge later from <strong>Settings &rsaquo; Apps</strong>; that leaves your presets and licence in place.</p>
+    </div>
+
+    <h3 class="sub-head">Linux</h3>
     <p>Unzip the download and copy each format into place:</p>
 
     <div class="os-grid">
       <div class="os-card">
-        <h3>Windows</h3>
-        <ul>
-          <li><span class="fmt">Cartridge.vst3</span><span class="path">C:\Program Files\Common Files\VST3</span></li>
-          <li><span class="fmt">Cartridge.clap</span><span class="path">C:\Program Files\Common Files\CLAP</span></li>
-          <li><span class="fmt">Cartridge.exe</span><span class="path">anywhere you like</span></li>
-        </ul>
-      </div>
-      <div class="os-card">
-        <h3>Linux</h3>
+        <h3>Plugin folders</h3>
         <ul>
           <li><span class="fmt">Cartridge.vst3</span><span class="path">~/.vst3</span></li>
           <li><span class="fmt">Cartridge.clap</span><span class="path">~/.clap</span></li>
