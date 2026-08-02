@@ -41,7 +41,7 @@
   <section>
     <h2>Find your licence key</h2>
     <div class="rule"></div>
-    <p class="lede">Key email never arrived, or long gone? Your key isn't stored anywhere &mdash; it's derived from your order itself, so it can always be recovered. Enter the order number and email from your receipt.</p>
+    <p class="lede">Key email never arrived, or long gone? Your key isn't stored anywhere &mdash; it's derived from your order itself, so it can always be re-sent. Enter the order number and email from your receipt and we'll email the key to the address on the order.</p>
 
     <form id="rk-form" autocomplete="off">
       <p>
@@ -56,13 +56,17 @@
     </form>
 
     <div id="rk-result" hidden>
-      <h3>Your licence key</h3>
-      <p>This is the same key you were originally sent. Paste it into the DEMO badge dialog in Cartridge.</p>
-      <textarea id="rk-key" rows="6" readonly style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>
-      <p><button class="contact-btn" type="button" id="rk-copy">Copy key</button></p>
+      <h3>Check your email</h3>
+      <p id="rk-message"></p>
+      <p>It's the same key you were originally sent, so if you find the old email later, either one works.</p>
     </div>
 
     <p id="rk-error" class="lede" hidden style="color:#b3261e"></p>
+
+    <div class="note">
+      <span class="tag">Why we email it</span>
+      <p>The key goes to the address on the order, never to whatever this form says. That way nobody can pull your key out of this page by guessing at order numbers.</p>
+    </div>
 
     <div class="note">
       <span class="tag">No luck?</span>
@@ -98,19 +102,12 @@
           err.hidden = false;
           return;
         }
-        document.getElementById("rk-key").value = r.d.key;
+        document.getElementById("rk-message").textContent = r.d.message;
         box.hidden = false;
       }).catch(function () {
         err.textContent = "Couldn't reach the server. Try again, or email us.";
         err.hidden = false;
       });
-  });
-  document.getElementById("rk-copy").addEventListener("click", function () {
-    var t = document.getElementById("rk-key");
-    t.select();
-    navigator.clipboard.writeText(t.value).then(function () {
-      document.getElementById("rk-copy").textContent = "Copied";
-    });
   });
 })();
 </script>

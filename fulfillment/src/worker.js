@@ -239,18 +239,35 @@ function timingSafeEqualStr(a, b) {
 // only shows keys IT generates, and orders are read-only via API), so the
 // buyer's LS account can never hold our key. Delivery is secured the other
 // way round: signing is deterministic, so the key is a pure function of the
-// order and can be RE-DERIVED on demand instead of stored. This endpoint
-// verifies an order-number + email pair against the LS API and re-mints the
-// byte-identical key the webhook sent.
+// order and can be RE-DERIVED on demand instead of stored.
 //
-// Enumeration posture: a caller must present the exact pair printed on the
-// buyer's receipt; every failure returns the same not_found; and the key is
-// only usable via seat-limited activation anyway.
-async function handleRecoverKey(request, env) {
-  if (!env.LS_API_KEY)
-    return json(503, { error: "not_configured",
-      message: "Key recovery isn't available right now. Email support@staycoolandstaycool.com." });
+// SECURITY: the key is NEVER returned to the caller. It is emailed to the
+// address on the order. That is the whole design. Order numbers are small
+// sequential integers, so an attacker who knows a customer's email address --
+// and musicians publish theirs -- could otherwise walk order numbers until
+// one hit and walk away with a working licence. Emailing the owner means a
+// successful guess delivers the key to its rightful owner's inbox and gives
+// the attacker nothing.
+//
+// Consequently the response is identical whether or not the order exists: no
+// existence oracle, nothing to enumerate. Rate limits below cap inbox
+// spamming, which is the only remaining abuse.
+const RECOVER_IP_LIMIT = 10;      // per IP per hour
+const RECOVER_EMAIL_LIMIT = 3;    // per address per hour
+const RECOVER_WINDOW_S = 3600;
 
+// Fixed-window counter in KV. Coarse and occasionally lenient at a window
+// edge, which is fine: this throttles nuisance, it is not the security
+// boundary -- emailing the owner is.
+async function bumpLimit(env, key, limit) {
+  if (!env.LEDGER) return true;
+  const k = `rl:${key}:${Math.floor(Date.now() / 1000 / RECOVER_WINDOW_S)}`;
+  const n = Number((await env.LEDGER.get(k)) ?? 0) + 1;
+  await env.LEDGER.put(k, String(n), { expirationTtl: RECOVER_WINDOW_S * 2 });
+  return n <= limit;
+}
+
+async function handleRecoverKey(request, env) {
   const body = await readJson(request);
   if (!body) return json(400, { error: "bad_request", message: "Body must be JSON." });
 
@@ -259,8 +276,22 @@ async function handleRecoverKey(request, env) {
   if (!orderNo || !email.includes("@"))
     return json(400, { error: "bad_request", message: "Enter your order number and the email you bought with." });
 
-  const notFound = () => json(404, { error: "not_found",
-    message: "No paid order matches that number and email. Check both against your receipt, or email support@staycoolandstaycool.com." });
+  // The one honest response. Never varies on whether the order was found.
+  const accepted = () => json(200, { ok: true,
+    message: "If that order matches, your key is on its way to the email address on the order. Check your spam folder too." });
+
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  if (!(await bumpLimit(env, `ip:${ip}`, RECOVER_IP_LIMIT)) ||
+      !(await bumpLimit(env, `em:${email.toLowerCase()}`, RECOVER_EMAIL_LIMIT)))
+    return json(429, { error: "rate_limited",
+      message: "Too many attempts. Wait an hour, or email support@staycoolandstaycool.com." });
+
+  if (!env.LS_API_KEY) {
+    // Cannot verify the order, so cannot send anything. Say so plainly: this
+    // is a vendor misconfiguration, not a hint about the caller's order.
+    return json(503, { error: "not_configured",
+      message: "Key recovery isn't available right now. Email support@staycoolandstaycool.com." });
+  }
 
   let orders;
   try {
@@ -275,28 +306,28 @@ async function handleRecoverKey(request, env) {
   }
 
   const match = orders.find((o) => String(o?.attributes?.order_number) === orderNo);
-  if (!match) return notFound();
+  if (!match) return accepted();
 
   const a = match.attributes;
-  if (a.user_email?.trim().toLowerCase() !== email.toLowerCase()) return notFound();
-  if (a.status && a.status !== "paid") return notFound();
+  if (a.user_email?.trim().toLowerCase() !== email.toLowerCase()) return accepted();
+  if (a.status && a.status !== "paid") return accepted();
 
   const product = productForOrder(a);
-  if (!product) return notFound();
+  if (!product) return accepted();
 
   // EXACTLY the webhook's payload, field for field, so determinism yields the
   // identical key the buyer was originally sent.
+  const name = (a.user_name || "Music maker").trim();
+  const to = (a.user_email || "").trim();
   const key = await signLicence(
     env.LICENSE_PRIVATE_KEY,
-    buildPayloadV2({
-      product: product.slug, type: "full",
-      name: (a.user_name || "Music maker").trim(),
-      email: (a.user_email || "").trim(),
-      order: "ls-" + String(a.order_number),
-      expiry: 0, machine: "",
-    })
+    buildPayloadV2({ product: product.slug, type: "full", name, email: to,
+                     order: "ls-" + String(a.order_number), expiry: 0, machine: "" })
   );
-  return json(200, { key, product: product.display });
+
+  // Sent to the order's address, never to whatever the form said.
+  await sendLicenceEmail(env, to, name, key, product.display);
+  return accepted();
 }
 
 async function handleMintBeta(request, env) {

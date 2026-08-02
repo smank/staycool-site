@@ -17,7 +17,7 @@ export function mockKV() {
       if (v === undefined) return null;
       return type === "json" ? JSON.parse(v) : v;
     },
-    async put(key, value) {
+    async put(key, value, _options) {
       store.set(key, String(value));
     },
   };

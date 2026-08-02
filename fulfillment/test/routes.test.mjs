@@ -317,42 +317,79 @@ function stubLs(orders) {
   });
 }
 
-test("recover-key re-mints the byte-identical key the webhook sent", async () => {
+test("recovery emails the byte-identical key to the address ON THE ORDER", async () => {
   env.LS_API_KEY = "test-ls-key";
 
-  // Original delivery via webhook. orderCreatedEvent() returns the raw JSON
-  // string (it is the wire body); parse a copy for attribute access.
   const raw = orderCreatedEvent();
   const a = JSON.parse(raw).data.attributes;
   const sig = await lsSign(raw, env.LS_WEBHOOK_SECRET);
   assert.equal((await post("/webhook", raw, { "X-Signature": sig })).status, 200);
   const originalKey = sentEmails[0].text.match(/[A-Za-z0-9+/]+=*\.[0-9a-f]+/)[0];
+  sentEmails.length = 0;
 
-  // Recovery with the pair from the receipt.
   stubLs([lsOrder({ order_number: a.order_number, user_email: a.user_email,
                     user_name: a.user_name, first_order_item: a.first_order_item })]);
-  const res = await post("/recover-key", { order: "#" + a.order_number,
-                                           email: a.user_email });
+  const res = await post("/recover-key", { order: "#" + a.order_number, email: a.user_email });
+
   assert.equal(res.status, 200);
-  const { key } = await res.json();
-  assert.equal(key, originalKey);
-  assert.ok(await verifyLicence(TEST_PUBLIC_KEY, key));
+  const bodyOut = await res.json();
+  // The response must NOT carry the key.
+  assert.ok(!JSON.stringify(bodyOut).includes(originalKey), "key must never be returned to the caller");
+  // It goes to the order's address, byte-identical.
+  assert.equal(sentEmails.length, 1);
+  assert.equal(sentEmails[0].to[0], a.user_email);
+  assert.ok(sentEmails[0].text.includes(originalKey));
+  assert.ok(await verifyLicence(TEST_PUBLIC_KEY, originalKey));
 });
 
-test("recover-key: wrong email, unpaid, and unknown product all fail identically", async () => {
+test("a guessed order number for someone else's email leaks nothing and mails nobody", async () => {
   env.LS_API_KEY = "test-ls-key";
-  const cases = [
-    [[lsOrder()], { order: "1042", email: "wrong@example.com" }],
-    [[lsOrder({ status: "refunded" })], { order: "1042", email: "jo@example.com" }],
-    [[lsOrder({ first_order_item: { product_name: "Mystery Box" } })], { order: "1042", email: "jo@example.com" }],
-    [[], { order: "1042", email: "jo@example.com" }],
-  ];
-  for (const [orders, body] of cases) {
-    stubLs(orders);
-    const res = await post("/recover-key", body);
-    assert.equal(res.status, orders.length && body.email === "wrong@example.com" ? 404 : 404);
-    assert.equal((await res.json()).error, "not_found");
+  // Attacker knows the victim's email, walks order numbers. The real order is
+  // 1042; they try 1041. Response must be indistinguishable from a hit.
+  stubLs([lsOrder()]);
+  const hit = await post("/recover-key", { order: "1042", email: "jo@example.com" });
+  sentEmails.length = 0;
+  stubLs([lsOrder()]);
+  const miss = await post("/recover-key", { order: "1041", email: "jo@example.com" });
+
+  assert.equal(hit.status, miss.status);
+  assert.deepEqual(await hit.json(), await miss.json());
+  assert.equal(sentEmails.length, 0, "a miss must send no email");
+});
+
+test("recovery never sends to an address other than the order's", async () => {
+  env.LS_API_KEY = "test-ls-key";
+  stubLs([lsOrder()]);   // order 1042 belongs to jo@example.com
+  const res = await post("/recover-key", { order: "1042", email: "attacker@evil.test" });
+  assert.equal(res.status, 200);                 // uniform
+  assert.equal(sentEmails.length, 0);            // and nothing sent
+});
+
+test("refunded orders and unknown products recover nothing", async () => {
+  env.LS_API_KEY = "test-ls-key";
+  for (const o of [lsOrder({ status: "refunded" }),
+                   lsOrder({ first_order_item: { product_name: "Mystery Box" } })]) {
+    sentEmails.length = 0;
+    stubLs([o]);
+    const res = await post("/recover-key", { order: "1042", email: "jo@example.com" });
+    assert.equal(res.status, 200);
+    assert.equal(sentEmails.length, 0);
   }
+});
+
+test("rate limits cap per-email attempts, then per-IP", async () => {
+  env.LS_API_KEY = "test-ls-key";
+  stubLs([]);
+  // 3 per address per hour.
+  for (let i = 0; i < 3; i++)
+    assert.equal((await post("/recover-key", { order: "1", email: "a@example.com" })).status, 200);
+  assert.equal((await post("/recover-key", { order: "1", email: "a@example.com" })).status, 429);
+
+  // Rotating the address still hits the IP ceiling (10/hour).
+  let sawLimit = false;
+  for (let i = 0; i < 12 && !sawLimit; i++)
+    sawLimit = (await post("/recover-key", { order: "1", email: `b${i}@example.com` })).status === 429;
+  assert.ok(sawLimit, "per-IP limit must engage when addresses rotate");
 });
 
 test("recover-key without LS_API_KEY is a clean 503, and preflight carries CORS", async () => {
@@ -362,4 +399,3 @@ test("recover-key without LS_API_KEY is a clean 503, and preflight carries CORS"
   assert.equal(opt.status, 204);
   assert.equal(opt.headers.get("Access-Control-Allow-Origin"), "https://staycoolandstaycool.com");
 });
-
