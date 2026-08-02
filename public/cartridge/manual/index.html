@@ -397,6 +397,10 @@
 
   <h3>VGM import</h3>
   <p>This one is special. Feed the Import dialog a <code>.vgm</code> or <code>.vgz</code> chip log and Cartridge studies how the music drove the 2A03: every write to the volume, pitch, and duty registers, frame by frame. Each distinct instrument it finds becomes a user preset, with the original's per-frame behaviour rebuilt as a 60 Hz step sequence on the right channel. Load one, hold a key, and you are playing the instrument from the original soundtrack, macros and all. Imports land in the browser as one category per file, named after the source.</p>
+
+  <h3>Where VGM files come from</h3>
+  <p>Tracker software exports them, so your own compositions are the first and best source. The homebrew and demoscene communities release them freely, netlabels and chiptune archives distribute them with permission, and hardware loggers can capture the register stream from a running board. If you dump music from a cartridge you own, the law on personal-use copies varies by country, and weighing it is up to you.</p>
+  <p>Worth knowing what the import actually takes: register configurations and per-note envelopes &mdash; the <em>instruments</em>, never the melodies. Extraction ends at each note boundary by design, so a tune cannot pass through it. The music in any file you import belongs to whoever wrote it, and what you release built on these sounds is, as always, yours and your responsibility.</p>
   <div class="callout">
     <span class="tag">Note</span>
     <p>Instruments are only extracted where the log shows the sound moving (volume, pitch, or duty changing during notes). A file that arrives with "no instruments found" is not broken; it just never modulated the chip.</p>
