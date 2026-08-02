@@ -133,6 +133,44 @@ async function handleContact(request, env) {
   return json({ ok: true });
 }
 
+// Security headers on every response we serve. Pages provides nosniff and
+// referrer-policy; the rest is ours. Applied in one place so the guarantees
+// hold for HTML, assets, and API responses alike.
+//
+// The CSP allows exactly what the site uses and nothing else: Turnstile
+// (script + its iframe + its verification XHR), the Buttondown subscribe
+// form (posts there; response lands in the hidden iframe sink), and our own
+// origin for everything else. script-src carries 'unsafe-inline' because the
+// pages use small inline <script> blocks (audio players, form handlers);
+// with no user-generated content anywhere, source restriction is the part of
+// CSP doing real work here.
+const SECURITY_HEADERS = {
+  "strict-transport-security": "max-age=31536000; includeSubDomains",
+  "content-security-policy": [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data:",
+    "media-src 'self'",
+    "font-src 'self' data:",
+    "connect-src 'self' https://challenges.cloudflare.com",
+    "frame-src https://challenges.cloudflare.com https://buttondown.com",
+    "form-action 'self' https://buttondown.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "frame-ancestors 'self'",
+  ].join("; "),
+  "x-frame-options": "SAMEORIGIN",
+  "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+};
+
+function withSecurityHeaders(response) {
+  const r = new Response(response.body, response);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS))
+    r.headers.set(k, v);
+  return r;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -160,21 +198,21 @@ export default {
 
     if (url.pathname === "/api/contact") {
       if (request.method !== "POST") {
-        return json({ error: "Method not allowed." }, 405);
+        return withSecurityHeaders(json({ error: "Method not allowed." }, 405));
       }
-      return handleContact(request, env);
+      return withSecurityHeaders(await handleContact(request, env));
     }
 
     const response = await env.ASSETS.fetch(request);
-    if (response.status !== 404) return response;
+    if (response.status !== 404) return withSecurityHeaders(response);
 
     const notFound = await env.ASSETS.fetch(new URL("/404.html", url));
-    return new Response(notFound.body, {
+    return withSecurityHeaders(new Response(notFound.body, {
       status: 404,
       headers: {
         "content-type": "text/html; charset=utf-8",
         "cache-control": "no-store",
       },
-    });
+    }));
   },
 };
