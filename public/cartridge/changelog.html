@@ -3,16 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartridge · Changelog</title>
+  <title>Cartridge — Changelog</title>
   <meta name="description" content="Release history for Cartridge, the 2A03 chiptune synthesizer.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="guide.css">
-  <link rel="icon" href="/cartridge/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/cartridge/favicon-32.png" sizes="32x32">
-  <link rel="icon" href="/cartridge/favicon-16.png" sizes="16x16">
-  <link rel="apple-touch-icon" href="/cartridge/apple-touch-icon.png">
-  <link rel="canonical" href="https://staycoolandstaycool.com/cartridge/changelog">
 </head>
 <body>
 
@@ -28,7 +24,7 @@
 
 <header class="topbar">
   <div class="brand">
-    <svg class="cart-logo" viewBox="0 0 100 56" aria-hidden="true"><path d="M6 44 H28 V12 H50 V44 H72 V12 H94" fill="none" stroke="currentColor" stroke-width="12"/></svg>
+    <span class="cart-logo">●</span>
     <span class="brand-name">CARTRIDGE</span>
     <span class="brand-tag">CHANGELOG</span>
   </div>
@@ -41,10 +37,65 @@
 
 <div class="guide">
   <section>
+    <h2>Version 1.14.0</h2>
+    <div class="rule"></div>
+    <p class="rel-date">2026-08-02</p>
+    <h3 class="sub-head">Added</h3>
+    <ul class="changes">
+      <li>Preset browser (the Browse button, or &quot;Browse Library...&quot; at the foot of the preset menu): folders, search, envelope previews, a detail form for renaming and moving, drag and drop including folder nesting, New Folder, Duplicate, folder export as a bank, and one-click backup of all your presets.</li>
+      <li>Importing from a VGM/VGZ file now shows a review first: every instrument it found, with its envelope drawn, so you choose what to keep before anything is written. Imports land in their own folder per game.</li>
+      <li>Step sequences can now run up to 64 steps (previously 16). The editor still shows the familiar 16-step page and widens only when a lane needs more.</li>
+    </ul>
+    <h3 class="sub-head">Changed</h3>
+    <ul class="changes">
+      <li>The preset menu is a compact list of categories with fly-out submenus instead of a wall of columns.</li>
+      <li>VGM import keeps plain sustained tones (previously discarded) and folds near-duplicate captures of the same instrument into one preset, keeping the longest take. Re-import your files to get full envelope tails and the cleaned-up instrument lists.</li>
+      <li>Saving a preset now offers the current preset&#x27;s name (or &quot;&lt;name&gt; copy&quot; for factory presets) and saves into the folder you are working in.</li>
+    </ul>
+    <h3 class="sub-head">Fixed</h3>
+    <ul class="changes">
+      <li>Saving a tweaked preset that lives in a folder no longer creates a duplicate at the top level instead of overwriting.</li>
+      <li>Importing a preset or bank now selects what was imported instead of an unrelated preset.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Version 1.13.2</h2>
+    <div class="rule"></div>
+    <p class="rel-date">2026-08-01</p>
+    <h3 class="sub-head">Fixed</h3>
+    <ul class="changes">
+      <li>The bit crusher&#x27;s RATE control now affects both channels. It previously applied sample-rate reduction to the left channel only, so any patch with RATE turned up sounded lopsided: gritty on one side, smooth on the other.</li>
+    </ul>
+    <h3 class="sub-head">Changed</h3>
+    <ul class="changes">
+      <li>The Cartridge mark now appears in the top bar next to the version.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Version 1.13.1</h2>
+    <div class="rule"></div>
+    <p class="rel-date">2026-08-01</p>
+    <h3 class="sub-head">Added</h3>
+    <ul class="changes">
+      <li>Windows installer covering the VST3, CLAP and standalone builds, so the plugin formats no longer have to be copied into place by hand. It is not code signed yet, so Windows shows a warning the first time you run it; choose More info, then Run anyway.</li>
+      <li>A &quot;Buy a licence&quot; link in the licence dialog, shown only when the plugin is unlicensed.</li>
+    </ul>
+    <h3 class="sub-head">Changed</h3>
+    <ul class="changes">
+      <li>Instruments imported from a VGM file now land in their own folder per game instead of being mixed in with your own presets, and the preset list shows each import as its own section.</li>
+      <li>Beta licence keys now activate online and bind to a single machine, so a key that gets passed around no longer unlocks the plugin everywhere.</li>
+    </ul>
+    <h3 class="sub-head">Fixed</h3>
+    <ul class="changes">
+      <li>macOS builds are now a universal binary (Apple Silicon + Intel). 1.13.0 shipped arm64-only and would not launch on Intel Macs; the build now compiles both slices (<code>CMAKE_OSX_ARCHITECTURES</code>).</li>
+      <li>Deleting a user preset now removes the file it was loaded from. Two presets whose names reduced to the same filename could previously delete each other&#x27;s file.</li>
+    </ul>
+  </section>
+  <section>
     <h2>Version 1.13.0</h2>
     <div class="rule"></div>
     <p class="rel-date">2026-07-31</p>
-    <p class="lede">First public release of the licensing line, 1.12.0 existed only as a private beta (proprietary relicence, purchase watermarking, distribution hardening).</p>
+    <p>First public release of the licensing line — 1.12.0 existed only as a private beta (proprietary relicence, purchase watermarking, distribution hardening).</p>
     <h3 class="sub-head">Added</h3>
     <ul class="changes">
       <li>Demo mode: unlicensed instances overlay a short noise burst every ~45s of audio; everything else works, so the full plugin is the demo.</li>

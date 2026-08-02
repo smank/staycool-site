@@ -1,0 +1,6 @@
+# Security contact for staycoolandstaycool.com and Stay Cool and Stay Cool
+# software (Cartridge). Please report vulnerabilities privately.
+Contact: mailto:support@staycoolandstaycool.com
+Expires: 2027-08-31T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://staycoolandstaycool.com/.well-known/security.txt
