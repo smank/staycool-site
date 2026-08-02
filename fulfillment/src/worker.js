@@ -47,7 +47,7 @@ export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
 
-    if (request.method === "OPTIONS" && (pathname === "/activate" || pathname === "/deactivate"))
+    if (request.method === "OPTIONS" && (pathname === "/activate" || pathname === "/deactivate" || pathname === "/recover-key"))
       return withCors(new Response(null, { status: 204 }));
 
     if (request.method !== "POST")
@@ -58,6 +58,7 @@ export default {
       case "/activate":   return withCors(await handleActivate(request, env));
       case "/deactivate": return withCors(await handleDeactivate(request, env));
       case "/mint-beta":  return handleMintBeta(request, env);
+      case "/recover-key": return withCors(await handleRecoverKey(request, env));
       default:            return new Response("Not found", { status: 404 });
     }
   },
@@ -232,6 +233,72 @@ function timingSafeEqualStr(a, b) {
 // private key ever leaving the Worker. Auth: Bearer BETA_ADMIN_TOKEN secret.
 // Body: { name, email, order, expiry, product?, send? } — expiry YYYYMMDD
 // required (betas always expire). send:true emails the key via Resend.
+// ---------------------------------------------------------------- key recovery
+//
+// Lemon Squeezy cannot record externally-minted keys (its licence-key system
+// only shows keys IT generates, and orders are read-only via API), so the
+// buyer's LS account can never hold our key. Delivery is secured the other
+// way round: signing is deterministic, so the key is a pure function of the
+// order and can be RE-DERIVED on demand instead of stored. This endpoint
+// verifies an order-number + email pair against the LS API and re-mints the
+// byte-identical key the webhook sent.
+//
+// Enumeration posture: a caller must present the exact pair printed on the
+// buyer's receipt; every failure returns the same not_found; and the key is
+// only usable via seat-limited activation anyway.
+async function handleRecoverKey(request, env) {
+  if (!env.LS_API_KEY)
+    return json(503, { error: "not_configured",
+      message: "Key recovery isn't available right now. Email support@staycoolandstaycool.com." });
+
+  const body = await readJson(request);
+  if (!body) return json(400, { error: "bad_request", message: "Body must be JSON." });
+
+  const orderNo = String(body.order ?? "").replace(/[^0-9]/g, "");
+  const email = String(body.email ?? "").trim();
+  if (!orderNo || !email.includes("@"))
+    return json(400, { error: "bad_request", message: "Enter your order number and the email you bought with." });
+
+  const notFound = () => json(404, { error: "not_found",
+    message: "No paid order matches that number and email. Check both against your receipt, or email support@staycoolandstaycool.com." });
+
+  let orders;
+  try {
+    const r = await fetch(
+      "https://api.lemonsqueezy.com/v1/orders?filter[user_email]=" + encodeURIComponent(email) + "&page[size]=100",
+      { headers: { Accept: "application/vnd.api+json", Authorization: `Bearer ${env.LS_API_KEY}` } });
+    if (!r.ok) throw new Error("ls " + r.status);
+    orders = (await r.json())?.data ?? [];
+  } catch {
+    return json(502, { error: "upstream",
+      message: "Couldn't reach the store right now. Try again in a minute, or email support@staycoolandstaycool.com." });
+  }
+
+  const match = orders.find((o) => String(o?.attributes?.order_number) === orderNo);
+  if (!match) return notFound();
+
+  const a = match.attributes;
+  if (a.user_email?.trim().toLowerCase() !== email.toLowerCase()) return notFound();
+  if (a.status && a.status !== "paid") return notFound();
+
+  const product = productForOrder(a);
+  if (!product) return notFound();
+
+  // EXACTLY the webhook's payload, field for field, so determinism yields the
+  // identical key the buyer was originally sent.
+  const key = await signLicence(
+    env.LICENSE_PRIVATE_KEY,
+    buildPayloadV2({
+      product: product.slug, type: "full",
+      name: (a.user_name || "Music maker").trim(),
+      email: (a.user_email || "").trim(),
+      order: "ls-" + String(a.order_number),
+      expiry: 0, machine: "",
+    })
+  );
+  return json(200, { key, product: product.display });
+}
+
 async function handleMintBeta(request, env) {
   const auth = request.headers.get("Authorization") || "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";

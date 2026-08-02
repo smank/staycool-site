@@ -291,3 +291,75 @@ test("mint-beta rejects missing/perpetual expiry and unknown product; send=true 
   const nice = `${SOON.slice(0, 4)}-${SOON.slice(4, 6)}-${SOON.slice(6, 8)}`;
   assert.ok(sentEmails[0].text.includes(nice), "email states the expiry date");
 });
+
+// ---------------------------------------------------------------- key recovery
+
+function lsOrder(overrides = {}) {
+  return {
+    attributes: {
+      order_number: 1042, status: "paid",
+      user_name: "Jo Tester", user_email: "jo@example.com",
+      first_order_item: { product_name: "Cartridge" },
+      ...overrides,
+    },
+  };
+}
+
+function stubLs(orders) {
+  mock.method(globalThis, "fetch", async (url, init) => {
+    if (String(url).includes("api.lemonsqueezy.com/v1/orders"))
+      return new Response(JSON.stringify({ data: orders }), { status: 200 });
+    if (String(url).includes("api.resend.com")) {
+      sentEmails.push(JSON.parse(init.body));
+      return new Response("{}", { status: 200 });
+    }
+    throw new Error("unexpected fetch: " + url);
+  });
+}
+
+test("recover-key re-mints the byte-identical key the webhook sent", async () => {
+  env.LS_API_KEY = "test-ls-key";
+
+  // Original delivery via webhook. orderCreatedEvent() returns the raw JSON
+  // string (it is the wire body); parse a copy for attribute access.
+  const raw = orderCreatedEvent();
+  const a = JSON.parse(raw).data.attributes;
+  const sig = await lsSign(raw, env.LS_WEBHOOK_SECRET);
+  assert.equal((await post("/webhook", raw, { "X-Signature": sig })).status, 200);
+  const originalKey = sentEmails[0].text.match(/[A-Za-z0-9+/]+=*\.[0-9a-f]+/)[0];
+
+  // Recovery with the pair from the receipt.
+  stubLs([lsOrder({ order_number: a.order_number, user_email: a.user_email,
+                    user_name: a.user_name, first_order_item: a.first_order_item })]);
+  const res = await post("/recover-key", { order: "#" + a.order_number,
+                                           email: a.user_email });
+  assert.equal(res.status, 200);
+  const { key } = await res.json();
+  assert.equal(key, originalKey);
+  assert.ok(await verifyLicence(TEST_PUBLIC_KEY, key));
+});
+
+test("recover-key: wrong email, unpaid, and unknown product all fail identically", async () => {
+  env.LS_API_KEY = "test-ls-key";
+  const cases = [
+    [[lsOrder()], { order: "1042", email: "wrong@example.com" }],
+    [[lsOrder({ status: "refunded" })], { order: "1042", email: "jo@example.com" }],
+    [[lsOrder({ first_order_item: { product_name: "Mystery Box" } })], { order: "1042", email: "jo@example.com" }],
+    [[], { order: "1042", email: "jo@example.com" }],
+  ];
+  for (const [orders, body] of cases) {
+    stubLs(orders);
+    const res = await post("/recover-key", body);
+    assert.equal(res.status, orders.length && body.email === "wrong@example.com" ? 404 : 404);
+    assert.equal((await res.json()).error, "not_found");
+  }
+});
+
+test("recover-key without LS_API_KEY is a clean 503, and preflight carries CORS", async () => {
+  const res = await post("/recover-key", { order: "1042", email: "jo@example.com" });
+  assert.equal(res.status, 503);
+  const opt = await worker.fetch(new Request(BASE + "/recover-key", { method: "OPTIONS" }), env);
+  assert.equal(opt.status, 204);
+  assert.equal(opt.headers.get("Access-Control-Allow-Origin"), "https://staycoolandstaycool.com");
+});
+

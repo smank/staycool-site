@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartridge · Find Your Licence Key</title>
+  <meta name="description" content="Lost your Cartridge licence key, or the email never arrived? Recover it here with your order number and email.">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="guide.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="canonical" href="https://staycoolandstaycool.com/cartridge/key">
+</head>
+<body>
+
+<header class="label-bar">
+  <a class="wordmark" href="/">STAY COOL <span class="ampersand">&amp;</span> STAY COOL</a>
+  <nav>
+    <a href="/cartridge/">Cartridge</a>
+    <a href="/#products">Products</a>
+    <a href="/#about">About</a>
+    <a href="mailto:support@staycoolandstaycool.com">Contact</a>
+  </nav>
+</header>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="cart-logo" viewBox="0 0 100 56" aria-hidden="true"><path d="M6 44 H28 V12 H50 V44 H72 V12 H94" fill="none" stroke="currentColor" stroke-width="12"/></svg>
+    <span class="brand-name">CARTRIDGE</span>
+    <span class="brand-tag">FIND YOUR KEY</span>
+  </div>
+  <nav>
+    <a href="activate">Offline activation</a>
+    <a href="support">Support</a>
+  </nav>
+</header>
+
+<div class="guide">
+  <section>
+    <h2>Find your licence key</h2>
+    <div class="rule"></div>
+    <p class="lede">Key email never arrived, or long gone? Your key isn't stored anywhere &mdash; it's derived from your order itself, so it can always be recovered. Enter the order number and email from your receipt.</p>
+
+    <form id="rk-form" autocomplete="off">
+      <p>
+        <label for="rk-order"><strong>Order number</strong> (on your receipt, e.g. 1042)</label><br>
+        <input id="rk-order" type="text" inputmode="numeric" style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:13px" required>
+      </p>
+      <p>
+        <label for="rk-email"><strong>Email</strong> you bought with</label><br>
+        <input id="rk-email" type="email" style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:13px" required>
+      </p>
+      <p><button class="contact-btn" type="submit">Recover my key</button></p>
+    </form>
+
+    <div id="rk-result" hidden>
+      <h3>Your licence key</h3>
+      <p>This is the same key you were originally sent. Paste it into the DEMO badge dialog in Cartridge.</p>
+      <textarea id="rk-key" rows="6" readonly style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>
+      <p><button class="contact-btn" type="button" id="rk-copy">Copy key</button></p>
+    </div>
+
+    <p id="rk-error" class="lede" hidden style="color:#b3261e"></p>
+
+    <div class="note">
+      <span class="tag">No luck?</span>
+      <p>Email <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a> with whatever you have &mdash; name, rough purchase date &mdash; and a human will find the order.</p>
+    </div>
+  </section>
+</div>
+
+<footer class="guide-foot">
+  CARTRIDGE · FIND YOUR KEY<br>
+  STAY COOL &amp; STAY COOL · <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a>
+</footer>
+
+<script>
+(function () {
+  var API = "https://cartridge-fulfillment.stuart-mank.workers.dev";
+  document.getElementById("rk-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var err = document.getElementById("rk-error");
+    var box = document.getElementById("rk-result");
+    err.hidden = true; box.hidden = true;
+    fetch(API + "/recover-key", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order: document.getElementById("rk-order").value.trim(),
+        email: document.getElementById("rk-email").value.trim(),
+      }),
+    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (r) {
+        if (!r.ok) {
+          err.textContent = r.d && r.d.message ? r.d.message : "Something went wrong. Please email us.";
+          err.hidden = false;
+          return;
+        }
+        document.getElementById("rk-key").value = r.d.key;
+        box.hidden = false;
+      }).catch(function () {
+        err.textContent = "Couldn't reach the server. Try again, or email us.";
+        err.hidden = false;
+      });
+  });
+  document.getElementById("rk-copy").addEventListener("click", function () {
+    var t = document.getElementById("rk-key");
+    t.select();
+    navigator.clipboard.writeText(t.value).then(function () {
+      document.getElementById("rk-copy").textContent = "Copied";
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
