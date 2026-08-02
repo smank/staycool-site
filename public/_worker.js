@@ -153,7 +153,7 @@ const SECURITY_HEADERS = {
     "img-src 'self' data:",
     "media-src 'self'",
     "font-src 'self' data:",
-    "connect-src 'self' https://challenges.cloudflare.com",
+    "connect-src 'self' https://challenges.cloudflare.com https://cartridge-fulfillment.stuart-mank.workers.dev",
     "frame-src https://challenges.cloudflare.com https://buttondown.com",
     "form-action 'self' https://buttondown.com",
     "object-src 'none'",

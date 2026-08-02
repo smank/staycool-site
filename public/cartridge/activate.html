@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartridge · Offline Activation</title>
+  <meta name="description" content="Activate Cartridge on a machine with no internet: paste your licence key and machine code here from any online device, and get back a licence that activates offline.">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="guide.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="canonical" href="https://staycoolandstaycool.com/cartridge/activate">
+</head>
+<body>
+
+<header class="label-bar">
+  <a class="wordmark" href="/">STAY COOL <span class="ampersand">&amp;</span> STAY COOL</a>
+  <nav>
+    <a href="/cartridge/">Cartridge</a>
+    <a href="/#products">Products</a>
+    <a href="/#about">About</a>
+    <a href="mailto:support@staycoolandstaycool.com">Contact</a>
+  </nav>
+</header>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="cart-logo" viewBox="0 0 100 56" aria-hidden="true"><path d="M6 44 H28 V12 H50 V44 H72 V12 H94" fill="none" stroke="currentColor" stroke-width="12"/></svg>
+    <span class="brand-name">CARTRIDGE</span>
+    <span class="brand-tag">OFFLINE ACTIVATION</span>
+  </div>
+  <nav>
+    <a href="#activate">Activate</a>
+    <a href="#release">Release a seat</a>
+    <a href="support">Support</a>
+  </nav>
+</header>
+
+<div class="guide">
+
+  <section id="activate">
+    <h2>Activate a machine that has no internet</h2>
+    <div class="rule"></div>
+    <p class="lede">The studio machine never needs to connect. You need this page open on any online device, even a phone, and two things from the offline machine.</p>
+
+    <ol>
+      <li>On the offline machine, open Cartridge and click the <strong>DEMO</strong> badge. Copy the <strong>machine code</strong> shown in the dialog.</li>
+      <li>Enter your licence key and that machine code below.</li>
+      <li>Take the activated licence this page gives you back to the offline machine, paste it into the same dialog's key field, and click <strong>Activate</strong>. Done, permanently: it never checks again.</li>
+    </ol>
+
+    <form id="act-form" autocomplete="off">
+      <p>
+        <label for="act-key"><strong>Licence key</strong> (from your purchase email)</label><br>
+        <textarea id="act-key" rows="4" style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:12px" required></textarea>
+      </p>
+      <p>
+        <label for="act-machine"><strong>Machine code</strong> (from the dialog on the offline machine)</label><br>
+        <input id="act-machine" type="text" pattern="[0-9a-fA-F]{16,64}" style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:13px" required>
+      </p>
+      <p><button class="contact-btn" type="submit">Activate this machine</button></p>
+    </form>
+
+    <div id="act-result" hidden>
+      <h3>Your activated licence</h3>
+      <p>Paste this whole block into the key field on the offline machine. It only works on that machine, and it counts as one of your seats (<span id="act-seats"></span> in use).</p>
+      <textarea id="act-licence" rows="6" readonly style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>
+      <p><button class="contact-btn" type="button" id="act-copy">Copy licence</button></p>
+    </div>
+
+    <p id="act-error" class="lede" hidden style="color:#b3261e"></p>
+
+    <div class="note">
+      <span class="tag">If this page can't help</span>
+      <p>Email <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a> with your licence key and the machine code, and a human will do exactly what this page does.</p>
+    </div>
+  </section>
+
+  <section id="release">
+    <h2>Release a seat from an offline machine</h2>
+    <div class="rule"></div>
+    <p class="lede">Retiring an offline machine? Normally you'd click <strong>Deactivate this machine</strong> inside Cartridge, but that needs a connection. Instead, paste that machine's <em>activated</em> licence here (the long block from activation, also saved as <code>license.key</code> in Cartridge's settings folder).</p>
+
+    <form id="rel-form" autocomplete="off">
+      <p>
+        <label for="rel-licence"><strong>Activated licence</strong> from the machine being retired</label><br>
+        <textarea id="rel-licence" rows="6" style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:12px" required></textarea>
+      </p>
+      <p><button class="contact-btn" type="submit">Release this seat</button></p>
+    </form>
+    <p id="rel-result" class="lede" hidden></p>
+
+    <div class="note">
+      <span class="tag">Machine dead or wiped?</span>
+      <p>If you can't get the licence file off it, email us and we'll release the seat manually.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer class="guide-foot">
+  CARTRIDGE OFFLINE ACTIVATION<br>
+  STAY COOL &amp; STAY COOL · <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a>
+</footer>
+
+<script>
+(function () {
+  var API = "https://cartridge-fulfillment.stuart-mank.workers.dev";
+
+  function post(path, body) {
+    return fetch(API + path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); });
+  }
+
+  var actForm = document.getElementById("act-form");
+  actForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var err = document.getElementById("act-error");
+    var box = document.getElementById("act-result");
+    err.hidden = true; box.hidden = true;
+    post("/activate", {
+      key: document.getElementById("act-key").value.trim(),
+      machine: document.getElementById("act-machine").value.trim().toLowerCase(),
+    }).then(function (r) {
+      if (!r.ok) {
+        err.textContent = r.d && r.d.message ? r.d.message : "Something went wrong. Please email us.";
+        err.hidden = false;
+        return;
+      }
+      document.getElementById("act-licence").value = r.d.licence;
+      document.getElementById("act-seats").textContent = r.d.seatsUsed;
+      box.hidden = false;
+    }).catch(function () {
+      err.textContent = "Couldn't reach the activation server. Check your connection, or email us.";
+      err.hidden = false;
+    });
+  });
+
+  document.getElementById("act-copy").addEventListener("click", function () {
+    var t = document.getElementById("act-licence");
+    t.select();
+    navigator.clipboard.writeText(t.value).then(function () {
+      document.getElementById("act-copy").textContent = "Copied";
+    });
+  });
+
+  document.getElementById("rel-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var out = document.getElementById("rel-result");
+    out.hidden = true;
+    post("/deactivate", {
+      licence: document.getElementById("rel-licence").value.trim(),
+    }).then(function (r) {
+      out.textContent = r.ok
+        ? "Seat released. " + r.d.seatsUsed + " machine(s) still active on this licence."
+        : (r.d && r.d.message ? r.d.message : "Something went wrong. Please email us.");
+      out.style.color = r.ok ? "" : "#b3261e";
+      out.hidden = false;
+    }).catch(function () {
+      out.textContent = "Couldn't reach the server. Check your connection, or email us.";
+      out.style.color = "#b3261e";
+      out.hidden = false;
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
