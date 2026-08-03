@@ -105,3 +105,43 @@ persists…") enforces this. Lost keys are re-sent from the LS dashboard
   `https://staycoolandstaycool.com` for the future web activation page
   (offline machines: paste key + machine code in the browser, get a bound
   licence back). The plugin itself ignores CORS.
+
+## Email
+
+All outbound mail lives in `src/email.js`. Builders return
+`{ subject, text, html }` and send nothing; `send()` does the Resend call. That
+split means templates are tested without stubbing the network — see
+`test/email.test.mjs`.
+
+**Every message ships both parts, and the html is not decoration.** A licence
+key is ~600 characters. In plain text, mail clients hard-wrap it, so the pasted
+key arrives with newlines embedded — which the plugin rejected outright before
+v1.14.1. CSS soft-wrapping (`word-break:break-all`) renders the key across
+lines while copying as one unbroken string, because no newline is ever put into
+the text. Plain text remains the fallback.
+
+Messages:
+
+| Builder | Trigger | From |
+|---|---|---|
+| `licenceEmail` | LS `order_created`, and `/recover-key` | `licences@` |
+| `betaEmail` | `/mint-beta` with `send: true` | `licences@` |
+
+The contact form is a **different worker** (`public/_worker.js`) and sends from
+`hello@`. It is deliberately not shared: separate deploys, separate concerns.
+
+### Deliverability
+
+Mail leaves via the `send.` subdomain, which has its own SPF
+(`include:amazonses.com`) and MX for bounces. The root domain's SPF authorises
+Google only, which is correct — that path is for mail typed by hand in Gmail.
+Root `resend._domainkey` signs outbound, so DMARC passes on DKIM alignment.
+
+### Debugging a missing key
+
+1. Resend dashboard → Emails, filter by recipient. A send that never happened
+   means the webhook never fired or `productForOrder` returned null.
+2. Worker logs (`npx wrangler tail cartridge-fulfillment`) show the webhook
+   arriving and any signature rejection.
+3. Signing is deterministic, so re-sending the webhook from Lemon Squeezy mints
+   the identical key. `/recover-key` does the same thing self-serve.

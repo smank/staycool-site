@@ -21,6 +21,7 @@
 // acceptable. If it ever matters, move seat state to a Durable Object per order.
 
 import { signLicence, buildPayloadV2, verifyLicence } from "./sign.js";
+import { licenceEmail, betaEmail, send, licencesFrom } from "./email.js";
 
 const SEAT_LIMIT = 3;         // retail: three machines per order
 const SEAT_LIMIT_BETA = 1;    // beta: one machine, so a leaked key unlocks one seat
@@ -122,7 +123,8 @@ async function handleWebhook(request, env) {
     await env.LEDGER.put(ledgerKey, JSON.stringify({ licHash, at: new Date().toISOString() }));
   }
 
-  await sendLicenceEmail(env, email, name, licence, product.display);
+  await send(env, { to: email, from: licencesFrom(product.display),
+                    ...licenceEmail({ name, display: product.display, licence }) });
   return new Response("ok", { status: 200 });
 }
 
@@ -326,7 +328,8 @@ async function handleRecoverKey(request, env) {
   );
 
   // Sent to the order's address, never to whatever the form said.
-  await sendLicenceEmail(env, to, name, key, product.display);
+  await send(env, { to, from: licencesFrom(product.display),
+                    ...licenceEmail({ name, display: product.display, licence: key }) });
   return accepted();
 }
 
@@ -389,56 +392,13 @@ async function handleMintBeta(request, env) {
   if (body.send === true) {
     const email = String(body.email ?? "").trim();
     if (!email) return json(400, { error: "bad_request", message: "send:true needs an email." });
-    await sendBetaEmail(env, email, String(body.name ?? "tester").trim(), licence,
-                        product.display, expiry, download);
+    await send(env, { to: email, from: licencesFrom(product.display),
+                      ...betaEmail({ name: String(body.name ?? "tester").trim(), display: product.display, licence: licence, expiry: expiry, download: download }) });
   }
 
   return json(200, { licence, order, expiry, product: product.slug });
 }
 
-async function sendBetaEmail(env, to, name, licence, display, expiry, download) {
-  const nice = `${expiry.slice(0, 4)}-${expiry.slice(4, 6)}-${expiry.slice(6, 8)}`;
-  const text =
-    `Hi ${name},\n\n` +
-    `Thanks for testing ${display}. Here's everything you need.\n\n` +
-    (download ? `Download:\n${download}\n\n` : "") +
-    `Licence key:\n${licence}\n\n` +
-    `To activate: install and open ${display}, click the DEMO badge in the top ` +
-    `bar, paste the key in, and hit Activate. That binds the key to this one ` +
-    `machine; afterwards it validates offline. Moving to another machine? ` +
-    `Deactivate from the licence badge first.\n\n` +
-    `This beta key expires on ${nice}; the plugin returns to demo mode after ` +
-    `that. You'll get a fresh key (or a release build) before then.\n\n` +
-    `Thanks for testing!\n\n— Stay Cool and Stay Cool`;
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: `${display} <licences@staycoolandstaycool.com>`,
-      to: [to], subject: `Your ${display} beta licence key`, text,
-    }),
-  });
-  if (!res.ok) throw new Error("email send failed: " + (await res.text()));
-}
 
 // ---------------------------------------------------------------- email
 
-async function sendLicenceEmail(env, to, name, licence, display) {
-  const text =
-    `Hi ${name},\n\n` +
-    `Thanks for buying ${display}. Here's your licence key:\n\n${licence}\n\n` +
-    `To activate: open ${display}, click the DEMO badge in the top bar, paste the ` +
-    `key in, and hit Activate. A one-time online activation binds it to that ` +
-    `machine — you can activate up to 3 machines, and free one up any time from ` +
-    `the licence badge. After activation ${display} runs fully offline.\n\n` +
-    `Keep this email; it's your proof of licence.\n\n— Stay Cool and Stay Cool`;
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: `${display} <licences@staycoolandstaycool.com>`,
-      to: [to], subject: `Your ${display} licence key`, text,
-    }),
-  });
-  if (!res.ok) throw new Error("email send failed: " + (await res.text()));
-}

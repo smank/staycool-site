@@ -399,3 +399,23 @@ test("recover-key without LS_API_KEY is a clean 503, and preflight carries CORS"
   assert.equal(opt.status, 204);
   assert.equal(opt.headers.get("Access-Control-Allow-Origin"), "https://staycoolandstaycool.com");
 });
+
+test("licence emails carry an HTML part so the key survives copy-paste", async () => {
+  // Plain text gets hard-wrapped by mail clients at ~76 columns, and a wrapped
+  // paste was rejected outright. CSS soft-wrapping in HTML renders across
+  // lines but copies as one unbroken string.
+  const raw = orderCreatedEvent();
+  const sig = await lsSign(raw, env.LS_WEBHOOK_SECRET);
+  assert.equal((await post("/webhook", raw, { "X-Signature": sig })).status, 200);
+
+  assert.equal(sentEmails.length, 1);
+  const mail = sentEmails[0];
+  assert.ok(mail.html, "must send an html part, not text alone");
+
+  const key = mail.text.match(/[A-Za-z0-9+/]+=*\.[0-9a-f]+/)[0];
+  // The key must appear intact and unbroken inside the HTML.
+  assert.ok(mail.html.includes(key), "html must contain the key verbatim");
+  // And be laid out so the browser wraps it visually rather than literally.
+  assert.match(mail.html, /word-break:\s*break-all/);
+});
+
