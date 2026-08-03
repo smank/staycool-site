@@ -90,14 +90,26 @@ export function licenceEmail({ name, display, licence }) {
   return { subject: `Your ${display} licence key`, text, html };
 }
 
-/** Beta tester: expiring key, one machine, optional download link. */
-export function betaEmail({ name, display, licence, expiry, download }) {
+/**
+ * Beta tester: expiring key, one machine, and a download per platform.
+ *
+ * `downloads` is [{ label, url }, ...]. Testers often have more than one
+ * machine, and we do not always know which they will install on, so every
+ * platform is offered rather than guessing. A bare `download` string is still
+ * accepted and shown as a single unlabelled button.
+ */
+export function betaEmail({ name, display, licence, expiry, downloads, download }) {
   const nice = `${expiry.slice(0, 4)}-${expiry.slice(4, 6)}-${expiry.slice(6, 8)}`;
+  const links = Array.isArray(downloads) && downloads.length
+    ? downloads.filter((d) => d && d.url)
+    : (download ? [{ label: "", url: download }] : []);
 
   const text =
     `Hi ${name},\n\n` +
     `Thanks for testing ${display}. Here's everything you need.\n\n` +
-    (download ? `Download:\n${download}\n\n` : "") +
+    (links.length
+      ? "Downloads:\n" + links.map((d) => `${d.label ? d.label + ": " : ""}${d.url}`).join("\n\n") + "\n\n"
+      : "") +
     `Licence key:\n${licence}\n\n` +
     `To activate: install and open ${display}, click the DEMO badge in the top ` +
     `bar, paste the key in, and hit Activate. That binds the key to this one ` +
@@ -110,10 +122,18 @@ export function betaEmail({ name, display, licence, expiry, download }) {
   const html = layout(
     `<p>Hi ${esc(name)},</p>` +
       `<p>Thanks for testing ${esc(display)}. Here is everything you need.</p>` +
-      (download
-        ? `<p><a href="${esc(download)}" style="display:inline-block;background:${ACCENT};` +
-          `color:#fff;text-decoration:none;padding:11px 20px;border-radius:6px;` +
-          `font-weight:600">Download ${esc(display)}</a></p>`
+      (links.length
+        ? `<p style="margin-bottom:6px"><strong>Download</strong></p>` +
+          `<p style="margin:0 0 20px">` +
+          links
+            .map(
+              (d) =>
+                `<a href="${esc(d.url)}" style="display:inline-block;background:${ACCENT};` +
+                `color:#fff;text-decoration:none;padding:10px 18px;border-radius:6px;` +
+                `font-weight:600;margin:0 8px 8px 0">${esc(d.label || display)}</a>`
+            )
+            .join("") +
+          `</p>`
         : "") +
       `<p style="margin-bottom:6px"><strong>Licence key</strong></p>` +
       keyBlock(licence) +

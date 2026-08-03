@@ -386,14 +386,24 @@ async function handleMintBeta(request, env) {
   // Optional download URL: a beta key is useless without a build to use it
   // on, so the email carries both when one is supplied.
   const download = String(body.download ?? "").trim();
-  if (download && !/^https:\/\/[^\s]+$/.test(download))
+  // Accept either a single download or one per platform. Each url is checked,
+  // because these go straight into an email we send on the vendor's behalf.
+  const downloads = Array.isArray(body.downloads)
+    ? body.downloads
+        .filter((d) => d && typeof d.url === "string")
+        .map((d) => ({ label: String(d.label ?? "").slice(0, 40), url: String(d.url) }))
+    : [];
+  const badUrl = (u) => !/^https:\/\/[^\s]+$/.test(u);
+  if (download && badUrl(download))
     return json(400, { error: "bad_request", message: "download must be an https URL." });
+  if (downloads.some((d) => badUrl(d.url)))
+    return json(400, { error: "bad_request", message: "download urls must be https." });
 
   if (body.send === true) {
     const email = String(body.email ?? "").trim();
     if (!email) return json(400, { error: "bad_request", message: "send:true needs an email." });
     await send(env, { to: email, from: licencesFrom(product.display),
-                      ...betaEmail({ name: String(body.name ?? "tester").trim(), display: product.display, licence: licence, expiry: expiry, download: download }) });
+                      ...betaEmail({ name: String(body.name ?? "tester").trim(), display: product.display, licence: licence, expiry: expiry, download: download, downloads }) });
   }
 
   return json(200, { licence, order, expiry, product: product.slug });

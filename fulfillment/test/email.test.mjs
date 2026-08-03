@@ -40,9 +40,31 @@ test("beta mail shows the expiry as a date and links the download", () => {
   assert.ok(m.html.includes("https://example.test/build.dmg"));
 });
 
+test("beta mail renders one button per platform", () => {
+  const m = betaEmail({
+    name: "Jo", display: "Cartridge", licence: KEY, expiry: "20261031",
+    downloads: [
+      { label: "macOS", url: "https://x.test/a.dmg" },
+      { label: "Windows", url: "https://x.test/b.exe" },
+      { label: "Linux", url: "https://x.test/c.zip" },
+    ],
+  });
+  for (const l of ["macOS", "Windows", "Linux"]) {
+    assert.ok(m.html.includes(`>${l}</a>`), `html must have a ${l} button`);
+    assert.ok(m.text.includes(`${l}: https://`), `text must label the ${l} link`);
+  }
+});
+
+test("a bare download string still works", () => {
+  const m = betaEmail({ name: "Jo", display: "Cartridge", licence: KEY,
+                        expiry: "20261031", download: "https://x.test/only.dmg" });
+  assert.ok(m.html.includes("https://x.test/only.dmg"));
+  assert.ok(m.text.includes("https://x.test/only.dmg"));
+});
+
 test("beta mail omits the download block when there is no link", () => {
   const m = betaEmail({ name: "Jo", display: "Cartridge", licence: KEY, expiry: "20261031", download: "" });
-  assert.ok(!m.html.includes("Download Cartridge</a>"));
+  assert.ok(!m.html.includes("<strong>Download</strong>"));
 });
 
 test("retail mail points at offline activation and key recovery", () => {
