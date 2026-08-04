@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { licenceEmail, betaEmail, licencesFrom } from "../src/email.js";
+import { licenceEmail, betaEmail, buildUpdateEmail, licencesFrom } from "../src/email.js";
 
 const KEY = "MnxjYXJ0cmlkZ2V8ZnVsbHxKbyBUZXN0ZXI=." + "a1b2c3".repeat(80);
 
@@ -78,3 +78,29 @@ test("retail mail points at offline activation and key recovery", () => {
 test("from line is the licences address", () => {
   assert.equal(licencesFrom("Cartridge"), "Cartridge <licences@staycoolandstaycool.com>");
 });
+
+test("a build-update email carries no licence key", () => {
+  // Their key still works. Re-sending one would imply the old one had stopped,
+  // which is the first thing anyone would ask.
+  const m = buildUpdateEmail({
+    name: "Jo", display: "Cartridge", version: "v1.14.1",
+    downloads: [{ label: "macOS", url: "https://x.test/a.dmg" }],
+    notes: "Fixed a thing\nChanged another",
+  });
+  assert.ok(!m.text.includes(KEY));
+  assert.ok(!m.html.includes(KEY));
+  assert.ok(m.text.includes("existing licence key still works"));
+  assert.ok(m.subject.includes("v1.14.1"));
+});
+
+test("build-update notes render as bullets in both parts", () => {
+  const m = buildUpdateEmail({
+    name: "Jo", display: "Cartridge", version: "v1.14.1",
+    downloads: [{ label: "macOS", url: "https://x.test/a.dmg" }],
+    notes: "First thing\nSecond thing",
+  });
+  assert.ok(m.html.includes("<li>First thing</li>"));
+  assert.ok(m.html.includes("<li>Second thing</li>"));
+  assert.ok(m.text.includes("  - First thing"));
+});
+

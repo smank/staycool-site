@@ -21,7 +21,7 @@
 // acceptable. If it ever matters, move seat state to a Durable Object per order.
 
 import { signLicence, buildPayloadV2, verifyLicence } from "./sign.js";
-import { licenceEmail, betaEmail, send, licencesFrom } from "./email.js";
+import { licenceEmail, betaEmail, buildUpdateEmail, send, licencesFrom } from "./email.js";
 
 const SEAT_LIMIT = 3;         // retail: three machines per order
 const SEAT_LIMIT_BETA = 1;    // beta: one machine, so a leaked key unlocks one seat
@@ -61,6 +61,7 @@ export default {
       case "/mint-beta":  return handleMintBeta(request, env);
       case "/recover-key": return withCors(await handleRecoverKey(request, env));
       case "/seats":      return handleSeats(request, env);
+      case "/notify-build": return handleNotifyBuild(request, env);
       default:            return new Response("Not found", { status: 404 });
     }
   },
@@ -362,6 +363,48 @@ async function handleSeats(request, env) {
     });
   }
   return json(200, { seats: out });
+}
+
+// Tell existing testers a new build is out. Sends no licence key: theirs is
+// still valid, and re-issuing one would imply the old one had stopped working.
+async function handleNotifyBuild(request, env) {
+  const auth = request.headers.get("Authorization") || "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!env.BETA_ADMIN_TOKEN || !token || !timingSafeEqualStr(token, env.BETA_ADMIN_TOKEN))
+    return json(401, { error: "unauthorized" });
+
+  const body = await readJson(request);
+  if (!body) return json(400, { error: "bad_request", message: "Body must be JSON." });
+
+  const slug = String(body.product ?? "cartridge");
+  const product = PRODUCTS.find((p) => p.slug === slug);
+  if (!product) return json(400, { error: "bad_request", message: `Unknown product "${slug}".` });
+
+  const version = String(body.version ?? "").trim();
+  if (!version) return json(400, { error: "bad_request", message: "version is required." });
+
+  const downloads = Array.isArray(body.downloads)
+    ? body.downloads
+        .filter((d) => d && typeof d.url === "string")
+        .map((d) => ({ label: String(d.label ?? "").slice(0, 40), url: String(d.url) }))
+    : [];
+  if (!downloads.length)
+    return json(400, { error: "bad_request", message: "at least one download is required." });
+  if (downloads.some((d) => !/^https:\/\/[^\s]+$/.test(d.url)))
+    return json(400, { error: "bad_request", message: "download urls must be https." });
+
+  const name = String(body.name ?? "there").trim();
+  const email = String(body.email ?? "").trim();
+  if (!email.includes("@"))
+    return json(400, { error: "bad_request", message: "a valid email is required." });
+
+  await send(env, {
+    to: email,
+    from: licencesFrom(product.display),
+    ...buildUpdateEmail({ name, display: product.display, version,
+                          downloads, notes: String(body.notes ?? "") }),
+  });
+  return json(200, { ok: true });
 }
 
 async function handleMintBeta(request, env) {

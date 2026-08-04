@@ -150,6 +150,59 @@ export function betaEmail({ name, display, licence, expiry, downloads, download 
   return { subject: `Your ${display} beta licence key`, text, html };
 }
 
+
+/**
+ * A new build for testers who already hold a key.
+ *
+ * Deliberately carries no licence key: theirs still works, and re-sending one
+ * invites the question of whether the old one has stopped. Says so explicitly
+ * instead, because "do I need a new key?" is the first thing anyone will ask.
+ */
+export function buildUpdateEmail({ name, display, version, downloads, notes }) {
+  const links = (downloads || []).filter((d) => d && d.url);
+  const noteLines = (notes || "").split("\n").map((l) => l.trim()).filter(Boolean);
+
+  const text =
+    `Hi ${name},\n\n` +
+    `${display} ${version} is ready.\n\n` +
+    (noteLines.length ? "What changed:\n" + noteLines.map((l) => `  - ${l}`).join("\n") + "\n\n" : "") +
+    (links.length
+      ? "Downloads:\n" + links.map((d) => `${d.label ? d.label + ": " : ""}${d.url}`).join("\n\n") + "\n\n"
+      : "") +
+    `Your existing licence key still works — nothing to re-enter. Install over ` +
+    `the top; your presets stay where they are.\n\n` +
+    `Thanks for testing!\n\n— Stay Cool and Stay Cool`;
+
+  const html = layout(
+    `<p>Hi ${esc(name)},</p>` +
+      `<p><strong>${esc(display)} ${esc(version)}</strong> is ready.</p>` +
+      (noteLines.length
+        ? `<p style="margin-bottom:6px"><strong>What changed</strong></p>` +
+          `<ul style="margin:0 0 20px;padding-left:20px">` +
+          noteLines.map((l) => `<li>${esc(l)}</li>`).join("") +
+          `</ul>`
+        : "") +
+      (links.length
+        ? `<p style="margin:0 0 20px">` +
+          links
+            .map(
+              (d) =>
+                `<a href="${esc(d.url)}" style="display:inline-block;background:${ACCENT};` +
+                `color:#fff;text-decoration:none;padding:10px 18px;border-radius:6px;` +
+                `font-weight:600;margin:0 8px 8px 0">${esc(d.label || display)}</a>`
+            )
+            .join("") +
+          `</p>`
+        : "") +
+      `<p>Your existing licence key still works, so there is nothing to re-enter. ` +
+      `Install over the top; your presets stay where they are.</p>` +
+      `<p>Thanks for testing!</p>` +
+      `<p>&mdash; Stay Cool and Stay Cool</p>`
+  );
+
+  return { subject: `${display} ${version} is ready`, text, html };
+}
+
 /** Post to Resend. Throws with the API's own message so failures are debuggable. */
 export async function send(env, { to, from, subject, text, html }) {
   const res = await fetch("https://api.resend.com/emails", {
