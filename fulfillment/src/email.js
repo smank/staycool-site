@@ -160,7 +160,18 @@ export function betaEmail({ name, display, licence, expiry, downloads, download 
  */
 export function buildUpdateEmail({ name, display, version, downloads, notes }) {
   const links = (downloads || []).filter((d) => d && d.url);
-  const noteLines = (notes || "").split("\n").map((l) => l.trim()).filter(Boolean);
+
+  // Highlights, not the changelog. Full entries run to a paragraph each, and
+  // three paragraphs in an announcement email is a wall nobody reads. Keep the
+  // first sentence of each, cap the list, and link the rest.
+  const MAX_NOTES = 4;
+  const all = (notes || "").split("\n").map((l) => l.trim()).filter(Boolean);
+  const noteLines = all.slice(0, MAX_NOTES).map((l) => {
+    const cut = l.search(/\.\s/);
+    return cut > 0 ? l.slice(0, cut + 1) : l;
+  });
+  const more = all.length - noteLines.length;
+  const changelog = `${SITE}/cartridge/changelog#v${String(version).replace(/^v/, "").replace(/\./g, "-")}`;
 
   const text =
     `Hi ${name},\n\n` +
@@ -169,6 +180,7 @@ export function buildUpdateEmail({ name, display, version, downloads, notes }) {
     (links.length
       ? "Downloads:\n" + links.map((d) => `${d.label ? d.label + ": " : ""}${d.url}`).join("\n\n") + "\n\n"
       : "") +
+    `Full changelog: ${changelog}\n\n` +
     `Your existing licence key still works — nothing to re-enter. Install over ` +
     `the top; your presets stay where they are.\n\n` +
     `Thanks for testing!\n\n— Stay Cool and Stay Cool`;
@@ -180,8 +192,10 @@ export function buildUpdateEmail({ name, display, version, downloads, notes }) {
         ? `<p style="margin-bottom:6px"><strong>What changed</strong></p>` +
           `<ul style="margin:0 0 20px;padding-left:20px">` +
           noteLines.map((l) => `<li>${esc(l)}</li>`).join("") +
-          `</ul>`
-        : "") +
+          `</ul>` +
+          `<p style="margin:-12px 0 20px;font-size:14px">` +
+          `<a href="${changelog}">${more > 0 ? `Full changelog (${more} more)` : "Full changelog"}</a></p>`
+        : `<p style="margin:0 0 20px;font-size:14px"><a href="${changelog}">See what changed</a></p>`) +
       (links.length
         ? `<p style="margin:0 0 20px">` +
           links
