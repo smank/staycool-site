@@ -60,6 +60,7 @@ export default {
       case "/deactivate": return withCors(await handleDeactivate(request, env));
       case "/mint-beta":  return handleMintBeta(request, env);
       case "/recover-key": return withCors(await handleRecoverKey(request, env));
+      case "/seats":      return handleSeats(request, env);
       default:            return new Response("Not found", { status: 404 });
     }
   },
@@ -331,6 +332,36 @@ async function handleRecoverKey(request, env) {
   await send(env, { to, from: licencesFrom(product.display),
                     ...licenceEmail({ name, display: product.display, licence: key }) });
   return accepted();
+}
+
+// Read-only view of seat state, so the vendor can answer "did they actually
+// install it?". Seats were only ever written; nothing could read them back,
+// which made a beta impossible to follow without asking each tester.
+// Admin-token gated: it exposes machine hashes and activation times.
+async function handleSeats(request, env) {
+  const auth = request.headers.get("Authorization") || "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!env.BETA_ADMIN_TOKEN || !token || !timingSafeEqualStr(token, env.BETA_ADMIN_TOKEN))
+    return json(401, { error: "unauthorized" });
+
+  const body = await readJson(request);
+  if (!body) return json(400, { error: "bad_request", message: "Body must be JSON." });
+
+  const slug = String(body.product ?? "cartridge");
+  const orders = Array.isArray(body.orders) ? body.orders.map(String) : [];
+  if (!orders.length)
+    return json(400, { error: "bad_request", message: "orders must be a non-empty array." });
+
+  const out = [];
+  for (const order of orders.slice(0, 200)) {
+    const seats = (await env.LEDGER?.get(`seats:${slug}:${order}`, "json")) ?? null;
+    out.push({
+      order,
+      activated: !!seats && seats.machines.length > 0,
+      machines: (seats?.machines ?? []).map((m) => ({ machine: m.m, at: m.at })),
+    });
+  }
+  return json(200, { seats: out });
 }
 
 async function handleMintBeta(request, env) {

@@ -419,3 +419,42 @@ test("licence emails carry an HTML part so the key survives copy-paste", async (
   assert.match(mail.html, /word-break:\s*break-all/);
 });
 
+// ---------------------------------------------------------------- seats
+
+test("seats reports activation state, and refuses without the admin token", async () => {
+  // Unauthorised first: this exposes machine hashes.
+  assert.equal((await post("/seats", { orders: ["beta-jo"] })).status, 401);
+
+  const admin = { Authorization: `Bearer ${env.BETA_ADMIN_TOKEN}` };
+
+  // An order nobody has activated reads as not activated, not as an error.
+  let res = await post("/seats", { orders: ["beta-jo"] }, admin);
+  assert.equal(res.status, 200);
+  let { seats } = await res.json();
+  assert.equal(seats[0].activated, false);
+  assert.deepEqual(seats[0].machines, []);
+
+  // Activate a beta key, then it shows up.
+  const key = await signLicence(
+    TEST_PRIVATE_KEY,
+    buildPayloadV2({ product: "cartridge", type: "beta", name: "Jo Tester",
+                     email: "jo@example.com", order: "beta-jo", expiry: SOON, machine: "" })
+  );
+  assert.equal((await post("/activate", { key, machine: MACHINE_A })).status, 200);
+
+  res = await post("/seats", { orders: ["beta-jo"] }, admin);
+  ({ seats } = await res.json());
+  assert.equal(seats[0].activated, true);
+  assert.equal(seats[0].machines.length, 1);
+  assert.equal(seats[0].machines[0].machine, MACHINE_A);
+  assert.ok(seats[0].machines[0].at, "activation time must be reported");
+});
+
+test("seats takes many orders at once and rejects an empty list", async () => {
+  const admin = { Authorization: `Bearer ${env.BETA_ADMIN_TOKEN}` };
+  assert.equal((await post("/seats", { orders: [] }, admin)).status, 400);
+  const res = await post("/seats", { orders: ["beta-a", "beta-b", "beta-c"] }, admin);
+  const { seats } = await res.json();
+  assert.equal(seats.length, 3);
+});
+
