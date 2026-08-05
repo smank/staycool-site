@@ -20,6 +20,9 @@ export function mockKV() {
     async put(key, value, _options) {
       store.set(key, String(value));
     },
+    async delete(key) {
+      store.delete(key);
+    },
   };
 }
 

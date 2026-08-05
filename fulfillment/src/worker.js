@@ -4,6 +4,9 @@
 //   POST /webhook     LS order_created → mint UNBOUND retail key, email via Resend
 //   POST /activate    { key, machine } → bind key to machine (3 seats/order, KV)
 //   POST /deactivate  { licence }      → release that machine's seat
+//   POST /revoke-key  vendor-only: kill a key ({ key } or { order }) — enforced
+//                     at /activate; already-activated installs verify offline
+//                     and keep working until the key's own expiry
 //
 // Required secrets (wrangler secret put ...):
 //   LS_WEBHOOK_SECRET     Lemon Squeezy webhook signing secret
@@ -59,6 +62,7 @@ export default {
       case "/activate":   return withCors(await handleActivate(request, env));
       case "/deactivate": return withCors(await handleDeactivate(request, env));
       case "/mint-beta":  return handleMintBeta(request, env);
+      case "/revoke-key": return handleRevokeKey(request, env);
       case "/recover-key": return withCors(await handleRecoverKey(request, env));
       case "/seats":      return handleSeats(request, env);
       case "/notify-build": return handleNotifyBuild(request, env);
@@ -152,6 +156,13 @@ async function sha256Hex(str) {
   return bytesToHexStr(new Uint8Array(digest));
 }
 
+// Keys are hashed for the revocation set exactly as minted — no whitespace.
+// Pasted keys arrive wrapped/padded (mail clients), so strip before hashing
+// or the same key would hash differently at mint and at activate.
+async function canonicalKeyHash(key) {
+  return sha256Hex(String(key ?? "").replace(/\s+/g, ""));
+}
+
 // ---------------------------------------------------------------- activation
 
 async function readJson(request) {
@@ -177,6 +188,17 @@ async function handleActivate(request, env) {
   const f = parsed.fields;
   if (f.machine !== "")
     return json(400, { error: "not_activatable", message: "This key doesn't need online activation." });
+
+  // Revocation is enforced here — the one chokepoint every unbound key must
+  // pass. (Already-activated installs verify offline and can't be reached;
+  // they run until the key's own expiry.)
+  if (env.LEDGER && await env.LEDGER.get(`revoked:${f.product}:${await canonicalKeyHash(body.key)}`))
+    return json(403, {
+      error: "revoked",
+      message: "This licence key has been revoked or replaced by a newer one. "
+             + "Use the key from your most recent licence email, or contact "
+             + "support@staycoolandstaycool.com.",
+    });
 
   const limit = f.type === "beta" ? SEAT_LIMIT_BETA : SEAT_LIMIT;
   const seatsKey = `seats:${f.product}:${f.order}`;
@@ -451,11 +473,27 @@ async function handleMintBeta(request, env) {
   const licence = await signLicence(env.LICENSE_PRIVATE_KEY, payload);
   const order = payload.split("|")[5];
 
-  if (env.LEDGER)
+  if (env.LEDGER) {
+    const licHash = await sha256Hex(licence);
     await env.LEDGER.put(
       `beta:${product.slug}:${order}:${expiry}`,
-      JSON.stringify({ licHash: await sha256Hex(licence), at: new Date().toISOString() })
+      JSON.stringify({ licHash, at: new Date().toISOString() })
     );
+
+    // Re-issuing replaces: every OTHER key ever minted for this order is
+    // revoked, so a tester holds exactly one working key. A deterministic
+    // resend (same tester, same expiry → byte-identical key) matches its own
+    // hash, revokes nothing, and un-revokes itself — resending is always safe.
+    const keysKey = `keys:${product.slug}:${order}`;
+    const idx = (await env.LEDGER.get(keysKey, "json")) ?? { hashes: [] };
+    for (const old of idx.hashes.filter((x) => x.h !== licHash))
+      await env.LEDGER.put(`revoked:${product.slug}:${old.h}`,
+                           JSON.stringify({ at: new Date().toISOString(), reason: "reissued" }));
+    await env.LEDGER.delete(`revoked:${product.slug}:${licHash}`);
+    idx.hashes = [...idx.hashes.filter((x) => x.h !== licHash),
+                  { h: licHash, at: new Date().toISOString(), expiry }];
+    await env.LEDGER.put(keysKey, JSON.stringify(idx));
+  }
 
   // Optional download URL: a beta key is useless without a build to use it
   // on, so the email carries both when one is supplied.
@@ -483,6 +521,57 @@ async function handleMintBeta(request, env) {
   return json(200, { licence, order, expiry, product: product.slug });
 }
 
+
+// Vendor-only: revoke keys so they can never activate again. Body is either
+// { key } — revoke that exact key (works for beta and retail alike) — or
+// { order, product?, keep_latest? } — revoke every key ever minted for the
+// order (keep_latest:true spares the newest). Revocation bites at /activate;
+// an already-activated install verifies offline and runs out its own expiry.
+async function handleRevokeKey(request, env) {
+  const auth = request.headers.get("Authorization") || "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!env.BETA_ADMIN_TOKEN || !token || !timingSafeEqualStr(token, env.BETA_ADMIN_TOKEN))
+    return json(401, { error: "unauthorized" });
+  if (!env.LEDGER)
+    return json(500, { error: "no_ledger", message: "LEDGER binding is required for revocation." });
+
+  const body = await readJson(request);
+  if (!body) return json(400, { error: "bad_request", message: "Body must be JSON." });
+
+  const at = new Date().toISOString();
+
+  if (body.key) {
+    // Verify before revoking: garbage should error, not pollute the set, and
+    // parsing tells us the product so the KV key is namespaced correctly.
+    const parsed = await verifyLicence(env.LICENSE_PUBLIC_KEY, String(body.key));
+    if (!parsed)
+      return json(400, { error: "invalid_key", message: "That licence key wasn't recognised." });
+    await env.LEDGER.put(`revoked:${parsed.fields.product}:${await canonicalKeyHash(body.key)}`,
+                         JSON.stringify({ at, reason: "revoked" }));
+    return json(200, { revoked: 1, order: parsed.fields.order });
+  }
+
+  if (body.order) {
+    const slug = String(body.product ?? "cartridge");
+    const order = String(body.order);
+    const idx = (await env.LEDGER.get(`keys:${slug}:${order}`, "json")) ?? { hashes: [] };
+    if (idx.hashes.length === 0)
+      return json(404, { error: "unknown_order",
+        message: "No keys recorded for that order (keys minted before revocation "
+               + "support are not indexed — revoke those by { key } instead)." });
+
+    const keep = body.keep_latest === true ? idx.hashes[idx.hashes.length - 1].h : null;
+    let revoked = 0;
+    for (const rec of idx.hashes) {
+      if (rec.h === keep) continue;
+      await env.LEDGER.put(`revoked:${slug}:${rec.h}`, JSON.stringify({ at, reason: "revoked" }));
+      revoked++;
+    }
+    return json(200, { revoked, kept: keep ? 1 : 0 });
+  }
+
+  return json(400, { error: "bad_request", message: "Provide { key } or { order }." });
+}
 
 // ---------------------------------------------------------------- email
 

@@ -458,3 +458,81 @@ test("seats takes many orders at once and rejects an empty list", async () => {
   assert.equal(seats.length, 3);
 });
 
+
+// ---------------------------------------------------------------- revoke-key
+
+const REVOKE_AUTH = { Authorization: "Bearer test-admin-token" };
+
+async function mintBetaKey(order, email, expiry = SOON, name = "Rev Tester") {
+  const r = await post("/mint-beta", { name, email, order, expiry }, REVOKE_AUTH);
+  assert.equal(r.status, 200);
+  return (await r.json()).licence;
+}
+
+test("revoke-key requires the admin token", async () => {
+  assert.equal((await post("/revoke-key", { order: "beta-x" })).status, 401);
+  assert.equal((await post("/revoke-key", { order: "beta-x" },
+    { Authorization: "Bearer wrong" })).status, 401);
+});
+
+test("a revoked key can no longer activate", async () => {
+  const key = await mintBetaKey("beta-rev1", "rev1@example.com");
+  const r = await post("/revoke-key", { key }, REVOKE_AUTH);
+  assert.equal(r.status, 200);
+  assert.equal((await r.json()).revoked, 1);
+
+  const act = await post("/activate", { key, machine: MACHINE_A });
+  assert.equal(act.status, 403);
+  const body = await act.json();
+  assert.equal(body.error, "revoked");
+  assert.match(body.message, /revoked or replaced/);
+});
+
+test("a wrapped paste of a revoked key is still refused", async () => {
+  // Mail clients wrap keys; the revocation hash must be whitespace-blind or
+  // a wrapped paste of a dead key would sail through.
+  const key = await mintBetaKey("beta-rev2", "rev2@example.com");
+  await post("/revoke-key", { key }, REVOKE_AUTH);
+  const wrapped = key.slice(0, 40) + "\n " + key.slice(40);
+  const act = await post("/activate", { key: wrapped, machine: MACHINE_A });
+  assert.equal(act.status, 403);
+});
+
+test("re-minting for the same order revokes the previous key", async () => {
+  const oldKey = await mintBetaKey("beta-reissue", "old@example.com");
+  const newKey = await mintBetaKey("beta-reissue", "new@example.com");
+  assert.notEqual(oldKey, newKey);
+
+  assert.equal((await post("/activate", { key: oldKey, machine: MACHINE_A })).status, 403);
+  assert.equal((await post("/activate", { key: newKey, machine: MACHINE_A })).status, 200);
+});
+
+test("a deterministic resend does not revoke itself", async () => {
+  const first  = await mintBetaKey("beta-resend", "same@example.com");
+  const second = await mintBetaKey("beta-resend", "same@example.com");
+  assert.equal(first, second); // byte-identical by design
+  assert.equal((await post("/activate", { key: first, machine: MACHINE_A })).status, 200);
+});
+
+test("revoke by order kills every key unless keep_latest", async () => {
+  const k1 = await mintBetaKey("beta-order", "one@example.com");
+  const k2 = await mintBetaKey("beta-order", "two@example.com");
+
+  // keep_latest spares only the newest
+  let r = await post("/revoke-key", { order: "beta-order", keep_latest: true }, REVOKE_AUTH);
+  assert.equal(r.status, 200);
+  assert.equal((await post("/activate", { key: k1, machine: MACHINE_A })).status, 403);
+  assert.equal((await post("/activate", { key: k2, machine: MACHINE_A })).status, 200);
+
+  // without keep_latest, everything dies
+  r = await post("/revoke-key", { order: "beta-order" }, REVOKE_AUTH);
+  assert.equal(r.status, 200);
+  const act = await post("/activate", { key: k2, machine: MACHINE_B });
+  assert.equal(act.status, 403);
+});
+
+test("revoke by unknown order is a 404, not a silent success", async () => {
+  const r = await post("/revoke-key", { order: "beta-never-minted" }, REVOKE_AUTH);
+  assert.equal(r.status, 404);
+  assert.match((await r.json()).message, /not indexed|No keys recorded/);
+});
