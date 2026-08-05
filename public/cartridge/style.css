@@ -250,18 +250,14 @@ nav a:hover::after { right: 0; }
   position: relative;
 }
 
+/* Edge-to-edge: no padding or forced aspect, the image fills the frame exactly */
 .screenshot-frame {
-  background: var(--surface);
   border: 1px solid var(--outline);
   border-radius: 8px;
-  padding: 1rem;
+  overflow: hidden;
   box-shadow:
     0 0 0 1px rgba(216,48,64,0.15),
     0 30px 60px -20px rgba(0,0,0,0.7);
-  aspect-ratio: 940 / 720;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .screenshot-placeholder {
@@ -295,10 +291,9 @@ nav a:hover::after { right: 0; }
 /* Replace placeholder content with <img> for actual screenshots */
 .screenshot-frame img,
 .screenshot-placeholder img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 4px;
+  height: auto;
 }
 
 /* ───────────── Features ───────────── */
@@ -719,7 +714,7 @@ footer {
   overflow: hidden;
 }
 .engine-shot { border-bottom: 1px solid var(--outline-dim); background: var(--bg); }
-.engine-shot img { width: 100%; display: block; aspect-ratio: 16 / 11; object-fit: cover; }
+.engine-shot img { width: 100%; height: auto; display: block; }
 .engine-card h3 { font-family: var(--mono); font-size: 1.3rem; margin: 1.4rem 1.6rem 0.7rem; text-align: center; }
 .engine-card p { color: var(--text-2); font-size: 0.95rem; line-height: 1.6; margin: 0 1.6rem 1.6rem; }
 
@@ -872,7 +867,11 @@ section[id] { scroll-margin-top: 84px; }
   overflow: hidden;
   box-shadow: 0 24px 50px -24px rgba(0,0,0,0.7), 0 0 0 1px rgba(216,48,64,0.12);
 }
-.showcase-shot img { display: block; width: 100%; }
+.showcase-shot img { display: block; width: 100%; height: auto; }
+
+/* ── Stacked showcase (FX rack): copy above a full-width strip ── */
+.showcase-stacked { grid-template-columns: 1fr; }
+.showcase-stacked .showcase-copy { max-width: 720px; }
 
 /* ── Balanced feature grid ── */
 .features .grid {
@@ -907,6 +906,7 @@ section[id] { scroll-margin-top: 84px; }
 @media (max-width: 900px) {
   .showcase { grid-template-columns: 1fr; gap: 1.8rem; padding: 1.8rem; }
   .showcase-shot { order: -1; }
+  .showcase-stacked .showcase-shot { order: 0; }
   .features .grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 620px) {

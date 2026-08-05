@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartridge: 8-bit Chiptune Synth Plugin (VST3, AU, CLAP, Standalone)</title>
-  <meta name="description" content="Cartridge is an authentic 2A03 chiptune synth plugin with real 8-bit voices, a polyphonic Modern engine, a per-channel step sequencer, VGM import, and 95 presets. macOS · Windows · Linux · VST3 · AU · CLAP.">
+  <title>Cartridge: 8-bit Chiptune Synth Plugin for Any Genre (VST3, AU, CLAP)</title>
+  <meta name="description" content="Cartridge is an 8-bit synth plugin with authentic 2A03 voices, a 16-voice modern engine, per-channel step sequencers, a built-in FX rack, VGM import and 95 presets. For pop, electronic, hip-hop, chiptune and game scores. macOS · Windows · Linux.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Stay Cool and Stay Cool">
   <meta property="og:url" content="https://staycoolandstaycool.com/cartridge/">
-  <meta property="og:title" content="Cartridge: 8-bit Chiptune Synth Plugin">
-  <meta property="og:description" content="Authentic 2A03 chiptune synthesis with a modern polyphonic engine and a per-channel step sequencer. Hear it.">
+  <meta property="og:title" content="Cartridge: the 8-bit Synth for Any Genre">
+  <meta property="og:description" content="Authentic 2A03 voices, a 16-voice modern engine, step sequencing and a built-in FX rack. The sound that shaped modern music, now an instrument. Hear it.">
   <!-- Absolute URL and 1.91:1 — relative paths and near-square images do not unfurl -->
   <meta property="og:image" content="https://staycoolandstaycool.com/cartridge/social-card.png">
   <meta property="og:image:width" content="1200">
@@ -54,11 +54,13 @@
       "publisher": {
         "@id": "https://staycoolandstaycool.com/#org"
       },
-      "description": "An authentic Ricoh 2A03 chiptune synthesizer plugin: real bandlimited 8-bit voices with the chip's nonlinear DAC curve, an optional VRC6 expansion, a polyphonic Modern engine, a per-channel step sequencer, VGM/VGZ import and 95 factory presets.",
+      "description": "An 8-bit synthesizer plugin for any genre, from pop and electronic to chiptune and game scores, built on authentic Ricoh 2A03 synthesis: real bandlimited voices with the chip's nonlinear DAC curve, an optional VRC6 expansion, a 16-voice polyphonic Modern engine, per-channel step sequencers, a built-in FX rack, VGM/VGZ import and 95 factory presets.",
       "featureList": [
         "Classic engine: two pulse channels, triangle, noise and DPCM sample playback",
         "Optional VRC6 expansion adding two pulses and a sawtooth (eight voices total)",
         "Modern engine: polyphonic synth with dual oscillators, ADSR, unison and portamento",
+        "Built-in FX rack: BitCrush, multimode filter (LP/BP/HP), chorus, tempo-synced delay and reverb",
+        "Per-channel LFO for vibrato and tremolo, host-synced arpeggiator, portamento",
         "Tracker-style step sequencer on every channel, 16 steps across volume, pitch and duty lanes",
         "VGM and VGZ import that extracts each instrument as a preset with its envelopes",
         "95 factory presets plus save, name and share for your own",
@@ -77,6 +79,14 @@
       "@type": "FAQPage",
       "@id": "https://staycoolandstaycool.com/cartridge/#faq",
       "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is Cartridge only for chiptune and game music?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, and that's the point. The 2A03's pulses, triangle and noise have been turning up in pop, electronic, hip-hop and indie records for decades; Cartridge makes the chip a normal instrument, so you can write with it anywhere you'd reach for a synth. Bass that cuts, leads with real character, 16-voice pads from the Modern engine, and a built-in FX rack to finish the sound in place. And if you're a chiptune artist or a game designer scoring to hardware limits, the Classic engine is the real chip, channel for channel."
+          }
+        },
         {
           "@type": "Question",
           "name": "Is it really the 8-bit chip, or samples?",
@@ -99,6 +109,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "The Classic engine gives you the full 2A03: two pulse channels, a triangle, a noise channel, and a DPCM sample channel. The optional VRC6 expansion adds two more pulses and a sawtooth on top, eight voices in all. Every channel has its own volume, pan, duty, and step sequence."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Cartridge have built-in effects?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. A full FX rack lives one click below the channels: BitCrush, a multimode filter (low-pass, band-pass or high-pass), chorus, a delay that locks to your host tempo, and a reverb. There's also a per-channel LFO for vibrato and tremolo, plus a host-synced arpeggiator and portamento. You can take a part from raw chip tone to mixed and finished without loading another plugin, and the whole chain saves with your preset."
           }
         },
         {
@@ -218,8 +236,8 @@
 <!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
   <div class="hero-inner">
-    <h1>Make the soundtrack to the <span class="accent">game in your head</span>.</h1>
-    <p class="lede">Cartridge is an authentic 2A03 chiptune synth. The real 8-bit voice, plus a polyphonic modern engine, a per-channel step sequencer, and 95 presets. Built to live in your DAW, not fight it.</p>
+    <h1>The chip that shaped modern music finally gets to be <span class="accent">an instrument</span>.</h1>
+    <p class="lede">For forty years the 2A03's sound has been borrowed by pop, electronic, hip-hop, and every chiptune artist since. Cartridge makes it a first-class synth: authentic 8-bit voices, a 16-voice modern engine, step sequencing on every channel, and a built-in FX rack. In your DAW, on any record, or in your game.</p>
 
     <!-- Full-band demo, made entirely in Cartridge -->
     <div class="hero-player player big" data-src="audio/demo-track.mp3" role="button" tabindex="0" aria-label="Play demo track">
@@ -322,6 +340,21 @@
     <div class="showcase-shot"><img src="screenshots/sequencer.png" alt="Cartridge step sequencer"></div>
   </div>
 
+  <div class="showcase showcase-stacked">
+    <div class="showcase-copy">
+      <span class="showcase-kicker">Built-in FX rack</span>
+      <h3>Finish the sound without leaving the plugin</h3>
+      <p>A full effects chain sits one click below the channels: BitCrush for extra grit, a multimode filter, chorus, a tempo-synced delay, and reverb. Sound design and mix polish in the same box, so a Cartridge part drops into a produced track without a rack of third-party plugins behind it.</p>
+      <ul class="showcase-points">
+        <li>BitCrush &amp; LP/BP/HP filter</li>
+        <li>Chorus, delay &amp; reverb</li>
+        <li>Delay locks to host tempo</li>
+        <li>Saved with every preset</li>
+      </ul>
+    </div>
+    <div class="showcase-shot fx-shot"><img src="screenshots/fx.png" alt="Cartridge built-in FX rack: BitCrush, filter, chorus, delay and reverb"></div>
+  </div>
+
   <!-- ═══ Feature cards — balanced 3×2 ═══ -->
   <div class="grid">
     <article class="card">
@@ -332,8 +365,8 @@
 
     <article class="card">
       <span class="card-badge">≋</span>
-      <h3>Finish it in the box</h3>
-      <p>A built-in chain of BitCrush, filter (LP/BP/HP), chorus, tempo-synced delay and reverb, always visible and one knob away. Dirty it up or polish it without leaving the plugin.</p>
+      <h3>Set it in motion</h3>
+      <p>A per-channel LFO for vibrato and tremolo, an arpeggiator that locks to your host tempo, and portamento for slides. The movement that makes a chip line feel alive, no automation lanes required.</p>
     </article>
 
     <article class="card">
@@ -367,6 +400,10 @@
   <h2>Questions</h2>
   <div class="faq-list">
     <details>
+      <summary>Is Cartridge only for chiptune and game music?</summary>
+      <p>No, and that's the point. The 2A03's pulses, triangle and noise have been turning up in pop, electronic, hip-hop and indie records for decades; Cartridge makes the chip a normal instrument, so you can write with it anywhere you'd reach for a synth. Bass that cuts, leads with real character, 16-voice pads from the Modern engine, and a built-in FX rack to finish the sound in place. And if you're a chiptune artist or a game designer scoring to hardware limits, the Classic engine is the real chip, channel for channel.</p>
+    </details>
+    <details>
       <summary>Is it really the 8-bit chip, or samples?</summary>
       <p>The real thing. Cartridge synthesises the 2A03's voices in real time, bandlimited so they stay clean at any pitch, with the nonlinear DAC curve that gives the chip its bite. Nothing is sampled off a console, which is why a lead keeps its character up in the high octaves, where sample-based chip instruments start to alias and fall apart.</p>
     </details>
@@ -377,6 +414,10 @@
     <details>
       <summary>What channels does it have? Does it include the VRC6 expansion?</summary>
       <p>The Classic engine gives you the full 2A03: two pulse channels, a triangle, a noise channel, and a DPCM sample channel. The optional VRC6 expansion adds two more pulses and a sawtooth on top, eight voices in all. Every channel has its own volume, pan, duty, and step sequence.</p>
+    </details>
+    <details>
+      <summary>Does Cartridge have built-in effects?</summary>
+      <p>Yes. A full FX rack lives one click below the channels: BitCrush, a multimode filter (low-pass, band-pass or high-pass), chorus, a delay that locks to your host tempo, and a reverb. There's also a per-channel LFO for vibrato and tremolo, plus a host-synced arpeggiator and portamento. You can take a part from raw chip tone to mixed and finished without loading another plugin, and the whole chain saves with your preset.</p>
     </details>
     <details>
       <summary>Do I need to know chiptune to use it?</summary>

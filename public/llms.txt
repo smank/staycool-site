@@ -1,18 +1,22 @@
 # Stay Cool and Stay Cool
 
 > A one-person software label making synths, effects and games. Run by smank
-> (Stay Cool and Stay Cool LLC). The first product is Cartridge, an authentic
-> 2A03 chiptune synthesizer plugin.
+> (Stay Cool and Stay Cool LLC). The first product is Cartridge, an 8-bit
+> synthesizer plugin built on authentic 2A03 emulation, made for any genre:
+> pop, electronic, hip-hop, chiptune and game scores.
 
-Status: Cartridge is pre-launch (v1.13.0, releasing shortly). Pricing is not
+Status: Cartridge is pre-launch (v1.14.2, releasing shortly). Pricing is not
 public yet. Other products listed as "coming soon" are not yet available.
 
 ## Cartridge (audio plugin)
 
-An authentic Ricoh 2A03 chiptune synthesizer for macOS, Windows and Linux, in
-VST3, AU (macOS), CLAP and standalone formats. It synthesises the chip's voices
-in real time — bandlimited, with the nonlinear DAC curve — rather than playing
-samples of a console.
+An 8-bit synthesizer for macOS, Windows and Linux, in VST3, AU (macOS), CLAP
+and standalone formats, built on authentic Ricoh 2A03 emulation. It synthesises
+the chip's voices in real time, bandlimited and with the nonlinear DAC curve,
+rather than playing samples of a console. The 2A03's sound has shaped pop,
+electronic and hip-hop records for decades; Cartridge packages it as a normal
+studio instrument for any genre, while staying channel-accurate for chiptune
+artists and game designers.
 
 - Classic engine: two pulse channels, triangle, noise, DPCM sample playback,
   plus an optional VRC6 expansion adding two pulses and a sawtooth (eight
@@ -21,6 +25,10 @@ samples of a console.
   oscillators, ADSR, unison with detune, portamento and MPE pitch bend.
 - Step sequencer on every channel: 16 steps across volume, pitch and duty
   lanes, synced to host tempo, saved with the preset and the project.
+- Built-in FX rack: BitCrush, multimode filter (LP/BP/HP), chorus, tempo-synced
+  delay and reverb, all saved with the preset.
+- Modulation: per-channel LFO for vibrato and tremolo, a host-syncable
+  arpeggiator, and portamento.
 - VGM/VGZ import: extracts each instrument from a chiptune file as a preset
   with its volume, pitch and duty envelopes intact.
 - 95 factory presets; user presets save and share as small files.
