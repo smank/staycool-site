@@ -9,7 +9,7 @@
   <meta property="og:site_name" content="Stay Cool and Stay Cool">
   <meta property="og:url" content="https://staycoolandstaycool.com/cartridge/">
   <meta property="og:title" content="Cartridge: the 8-bit Synth for Any Genre">
-  <meta property="og:description" content="Authentic 2A03 voices, a 16-voice modern engine, step sequencing and a built-in FX rack. The sound you grew up with, now an instrument. Hear it.">
+  <meta property="og:description" content="Real 2A03 synthesis, a 16-voice modern engine, a step sequencer on every channel, and a built-in FX rack. Hear it.">
   <!-- Absolute URL and 1.91:1 — relative paths and near-square images do not unfurl -->
   <meta property="og:image" content="https://staycoolandstaycool.com/cartridge/social-card.png">
   <meta property="og:image:width" content="1200">
@@ -60,7 +60,7 @@
         "Optional VRC6 expansion adding two pulses and a sawtooth (eight voices total)",
         "Modern engine: polyphonic synth with dual oscillators, ADSR, unison and portamento",
         "Built-in FX rack: BitCrush, multimode filter (LP/BP/HP), chorus, tempo-synced delay and reverb",
-        "Per-channel LFO for vibrato and tremolo, host-synced arpeggiator, portamento",
+        "LFO for vibrato and tremolo, host-synced arpeggiator, portamento",
         "Tracker-style step sequencer on every channel, 16 steps across volume, pitch and duty lanes",
         "VGM and VGZ import that extracts each instrument as a preset with its envelopes",
         "95 factory presets plus save, name and share for your own",
@@ -97,18 +97,10 @@
         },
         {
           "@type": "Question",
-          "name": "How many voices does it have? Is it polyphonic?",
+          "name": "What channels and voices do I get?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Both, depending on the engine. The Classic engine is the hardware: five independent channels, plus three more with the VRC6 expansion, each one monophonic like the real chip, so you voice a part per channel the way the originals did. Flip to the Modern engine and it's a full polyphonic synth, up to 16 voices, for chords and stacks the chip could never hold."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What channels does it have? Does it include the VRC6 expansion?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The Classic engine gives you the full 2A03: two pulse channels, a triangle, a noise channel, and a DPCM sample channel. The optional VRC6 expansion adds two more pulses and a sawtooth on top, eight voices in all. Every channel has its own volume, pan, duty, and step sequence."
+            "text": "The Classic engine is the full 2A03: two pulse channels, a triangle, a noise channel, and DPCM sample playback, plus the optional VRC6 expansion for two more pulses and a sawtooth. Eight channels, each monophonic like the hardware, each with its own volume, pan, duty, and step sequence. The Modern engine is the other half: a polyphonic synth with up to 16 voices, for chords and stacks the chip could never hold."
           }
         },
         {
@@ -116,7 +108,7 @@
           "name": "Does Cartridge have built-in effects?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. A full FX rack lives one click below the channels: BitCrush, a multimode filter (low-pass, band-pass or high-pass), chorus, a delay that locks to your host tempo, and a reverb. There's also a per-channel LFO for vibrato and tremolo, plus a host-synced arpeggiator and portamento. You can take a part from raw chip tone to mixed and finished without loading another plugin, and the whole chain saves with your preset."
+            "text": "Yes: BitCrush, a multimode filter (low-pass, band-pass or high-pass), chorus, a delay that locks to your host tempo, and a reverb, all one click below the channels. Modulation too: an LFO for vibrato and tremolo, a host-synced arpeggiator, and portamento. The whole chain saves with your preset."
           }
         },
         {
@@ -124,7 +116,7 @@
           "name": "Do I need to know chiptune to use it?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. Start from a preset, play your keyboard, and you're making 8-bit music. Hover any control for a plain-English description, and the built-in Help screen explains the chip, the jargon, and the shortcuts. Go as deep as you want, or don't."
+            "text": "No. Start from a preset, play your keyboard, and you're making 8-bit music. Hover any control for a plain-English description, and the built-in Help screen explains the chip, the jargon, and the shortcuts. Go as deep as you want."
           }
         },
         {
@@ -161,26 +153,10 @@
         },
         {
           "@type": "Question",
-          "name": "What do I need to run it?",
+          "name": "What do I need to run it, and which DAWs does it work in?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "macOS 11 or later (Apple Silicon or Intel, universal binary), Windows 10 or later (64-bit), or Linux (x86-64). It runs at your project's sample rate in any modern DAW, or as a standalone app on its own. Load it as VST3, AU (macOS), or CLAP."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Which DAWs does it work in?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Anything that hosts VST3, AU, or CLAP: Logic, Ableton Live, Reaper, Bitwig, FL Studio, Cubase, and the rest. AU is there specifically for Logic and GarageBand. There's also a standalone build for when you just want to play without opening a DAW."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I install it, and can I remove it cleanly?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "macOS and Windows both have installers: open it, tick the formats you want, done. The macOS one is signed and notarised by Apple (no security warnings) and leaves an uninstaller that keeps your presets; the Windows one isn't signed yet, so SmartScreen warns once on the first run. Linux is a zip you drop into the usual plugin folders. The setup guide walks through all three."
+            "text": "macOS 11 or later (Apple Silicon or Intel, universal binary), Windows 10 or later (64-bit), or Linux (x86-64). Load it as VST3, AU, or CLAP in Logic, Ableton Live, Reaper, Bitwig, FL Studio, Cubase, and the rest, or run the standalone app with no DAW at all. macOS and Windows have installers (the macOS one is signed and notarised); the setup guide covers all three platforms, including uninstalling."
           }
         },
         {
@@ -188,15 +164,7 @@
           "name": "Is there a free demo, and what's the licence?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Try the full instrument free, then one purchase unlocks it, yours to keep. Anything you make with Cartridge is yours to release, sell, and licence however you like, with no royalties and nothing to attribute. Activation is one-time and binds your key to that machine, up to three at once, and you can free a seat yourself from the licence badge. After that it never phones home: no iLok, no subscription, no account. Full terms in the licence agreement."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I run it on Windows and Linux too?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. One purchase covers all three platforms: VST3, CLAP and standalone on Windows and Linux (AU is macOS-only). The macOS build is signed and notarised. The Windows build is currently unsigned, so SmartScreen may warn you once on the first run; click through and you're set. All 1.x updates are included, and if it turns out not to be for you, email within 14 days for a refund."
+            "text": "Try the full instrument free, then one purchase unlocks it on all three platforms, yours to keep. Activation is one-time, covers three machines at once, and you can free a seat yourself; after that it validates offline. No iLok, no subscription, no account, and no royalties on anything you make. All 1.x updates are included, and there's a 14-day refund if it's not for you. Full terms in the licence agreement."
           }
         }
       ]
@@ -236,8 +204,8 @@
 <!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
   <div class="hero-inner">
-    <h1>You've heard this chip your whole life. Now you can <span class="accent">play it</span>.</h1>
-    <p class="lede">The 8-bit sound left the console decades ago and turned up in pop, electronic, hip-hop, and a whole chiptune scene. Cartridge makes the chip behind it a first-class synth: authentic voices, a 16-voice modern engine, step sequencing on every channel, and a built-in FX rack. In your DAW, on any record, or in your game.</p>
+    <h1>The 2A03, synthesized. <span class="accent">Not sampled.</span></h1>
+    <p class="lede">The real voices, bandlimited so they stay clean at any pitch: five hardware channels plus the VRC6 expansion, a 16-voice modern engine, a step sequencer on every channel, and a built-in FX rack. Make chiptune with it, or don't.</p>
 
     <!-- Full-band demo, made entirely in Cartridge -->
     <div class="hero-player player big" data-src="audio/demo-track.mp3" role="button" tabindex="0" aria-label="Play demo track">
@@ -355,42 +323,115 @@
     <div class="showcase-shot fx-shot"><img src="screenshots/fx.png" alt="Cartridge built-in FX rack: BitCrush, filter, chorus, delay and reverb"></div>
   </div>
 
-  <!-- ═══ Feature cards — balanced 3×2 ═══ -->
+  <!-- ═══ Feature cards — balanced 3×2, large line-art headers ═══ -->
   <div class="grid">
     <article class="card">
-      <span class="card-badge">↻</span>
-      <h3>Import the classics</h3>
-      <p>Drop in a <code>.vgm</code> or <code>.vgz</code> file and Cartridge pulls each instrument out as a preset, with volume, pitch and duty envelopes intact. The exact voices from decades of chiptune, ready to play.</p>
+      <div class="card-art"><svg viewBox="0 0 300 110" aria-hidden="true">
+        <rect class="ln" x="22" y="22" width="80" height="66" rx="4"/>
+        <rect class="ln2" x="38" y="34" width="48" height="26" rx="2"/>
+        <text class="txt" x="62" y="51" text-anchor="middle">VGM</text>
+        <line class="ln2" x1="38" y1="70" x2="86" y2="70"/>
+        <line class="ln2" x1="38" y1="78" x2="70" y2="78"/>
+        <path class="ln" d="M116 55 h44 m-10 -8 l10 8 l-10 8"/>
+        <polyline class="ln-hot" points="184,40 196,40 196,30 210,30 210,44 224,44 224,36 240,36"/>
+        <polyline class="ln-hot" points="184,66 184,58 198,58 198,62 212,62 212,66 226,66 226,70 240,70"/>
+        <polyline class="ln-hot" points="184,94 184,84 194,84 194,94 208,94 208,84 218,84 218,94 232,94 232,84 240,84"/>
+      </svg></div>
+      <div class="card-body">
+        <h3>Import the classics</h3>
+        <p>Drop in a <code>.vgm</code> or <code>.vgz</code> file and Cartridge pulls each instrument out as a preset, with volume, pitch and duty envelopes intact. The exact voices from decades of chiptune, ready to play.</p>
+      </div>
     </article>
 
     <article class="card">
-      <span class="card-badge">≋</span>
-      <h3>Set it in motion</h3>
-      <p>A per-channel LFO for vibrato and tremolo, an arpeggiator that locks to your host tempo, and portamento for slides. The movement that makes a chip line feel alive, no automation lanes required.</p>
+      <div class="card-art"><svg viewBox="0 0 300 110" aria-hidden="true">
+        <path class="ln-hot" d="M20 38 C 32 20, 48 20, 60 38 S 88 56, 100 38 S 128 20, 140 38 S 168 56, 180 38 S 208 20, 220 38 S 248 56, 260 38 S 274 26, 280 30"/>
+        <polyline class="ln" points="20,90 45,90 45,78 70,78 70,66 95,66 95,78 120,78 120,90 145,90"/>
+        <line class="ln2" x1="175" y1="94" x2="278" y2="66"/>
+        <circle class="dot" cx="175" cy="94" r="3.5"/>
+        <circle class="dot" cx="278" cy="66" r="3.5"/>
+      </svg></div>
+      <div class="card-body">
+        <h3>Set it in motion</h3>
+        <p>An LFO for vibrato and tremolo, an arpeggiator that locks to your host tempo, and portamento for slides. The movement that makes a chip line feel alive, no automation lanes required.</p>
+      </div>
     </article>
 
     <article class="card">
-      <span class="card-badge">⌥</span>
-      <h3>Play it your way</h3>
-      <p>Four MIDI modes: Split for one channel per voice, Auto for round-robin polyphony, Mono, and Layer for thick stacks where every channel fires on each key.</p>
+      <div class="card-art"><svg viewBox="0 0 300 110" aria-hidden="true">
+        <rect class="ln" x="20" y="26" width="260" height="52" rx="3"/>
+        <line class="ln2" x1="85" y1="26" x2="85" y2="78"/>
+        <line class="ln2" x1="150" y1="26" x2="150" y2="78"/>
+        <line class="ln2" x1="215" y1="26" x2="215" y2="78"/>
+        <rect class="key" x="36" y="26" width="9" height="22"/>
+        <rect class="key" x="58" y="26" width="9" height="22"/>
+        <rect class="key" x="101" y="26" width="9" height="22"/>
+        <rect class="key" x="123" y="26" width="9" height="22"/>
+        <rect class="key" x="166" y="26" width="9" height="22"/>
+        <rect class="key" x="188" y="26" width="9" height="22"/>
+        <rect class="key" x="231" y="26" width="9" height="22"/>
+        <rect class="key" x="253" y="26" width="9" height="22"/>
+        <text class="txt" x="52" y="98" text-anchor="middle">PULSE 1</text>
+        <text class="txt" x="117" y="98" text-anchor="middle">PULSE 2</text>
+        <text class="txt" x="182" y="98" text-anchor="middle">TRIANGLE</text>
+        <text class="txt" x="247" y="98" text-anchor="middle">NOISE</text>
+      </svg></div>
+      <div class="card-body">
+        <h3>Play it your way</h3>
+        <p>Four MIDI modes: Split for one channel per voice, Auto for round-robin polyphony, Mono, and Layer for thick stacks where every channel fires on each key.</p>
+      </div>
     </article>
 
     <article class="card">
-      <span class="card-badge">◷</span>
-      <h3>Tune it like hardware</h3>
-      <p>Four temperaments, an NTSC/PAL region switch that shifts the timing like the real consoles, per-channel transpose, and master fine-tune. Authentic down to the clock.</p>
+      <div class="card-art"><svg viewBox="0 0 300 110" aria-hidden="true">
+        <polyline class="ln-hot" points="20,44 20,26 44,26 44,44 68,44 68,26 92,26 92,44 116,44 116,26 140,26 140,44 164,44 164,26 188,26 188,44 212,44"/>
+        <text class="txt" x="228" y="40">NTSC</text>
+        <polyline class="ln" points="20,90 20,72 52,72 52,90 84,90 84,72 116,72 116,90 148,90 148,72 180,72 180,90 212,90"/>
+        <text class="txt" x="228" y="86">PAL</text>
+      </svg></div>
+      <div class="card-body">
+        <h3>Tune it like hardware</h3>
+        <p>Four temperaments, an NTSC/PAL region switch that shifts the timing like the real consoles, transpose on every melodic channel, and master fine-tune. Authentic down to the clock.</p>
+      </div>
     </article>
 
     <article class="card">
-      <span class="card-badge">⏏</span>
-      <h3>Start from 95 presets</h3>
-      <p>Arcade leads, sub bass, a sampled drum kit, step-sequenced grooves, lush modern pads. 95 patches to start from, and full save/share for your own.</p>
+      <div class="card-art"><svg viewBox="0 0 300 110" aria-hidden="true">
+        <rect class="ln2" x="28" y="24" width="54" height="28" rx="3"/>
+        <rect class="tile-hot" x="94" y="24" width="54" height="28" rx="3"/>
+        <polyline class="ln-hot" points="104,42 112,42 112,32 122,32 122,42 130,42 130,32 138,32"/>
+        <rect class="ln2" x="160" y="24" width="54" height="28" rx="3"/>
+        <rect class="ln2" x="226" y="24" width="54" height="28" rx="3"/>
+        <rect class="ln2" x="28" y="62" width="54" height="28" rx="3"/>
+        <rect class="ln2" x="94" y="62" width="54" height="28" rx="3"/>
+        <rect class="ln2" x="160" y="62" width="54" height="28" rx="3"/>
+        <rect class="ln2" x="226" y="62" width="54" height="28" rx="3"/>
+      </svg></div>
+      <div class="card-body">
+        <h3>Start from 95 presets</h3>
+        <p>Arcade leads, sub bass, a sampled drum kit, step-sequenced grooves, lush modern pads. 95 patches to start from, and full save/share for your own.</p>
+      </div>
     </article>
 
     <article class="card">
-      <span class="card-badge">◇</span>
-      <h3>Own it outright</h3>
-      <p>Try the full demo free. One purchase unlocks it. No iLok, no subscription, no account. Activate once online and it's tied to your machine (you get three); from then on it runs fully offline. Covers macOS, Windows and Linux. It's yours.</p>
+      <div class="card-art"><svg viewBox="0 0 300 110" aria-hidden="true">
+        <circle class="ln-hot" cx="52" cy="55" r="17"/>
+        <line class="ln-hot" x1="69" y1="55" x2="120" y2="55"/>
+        <line class="ln-hot" x1="100" y1="55" x2="100" y2="70"/>
+        <line class="ln-hot" x1="114" y1="55" x2="114" y2="66"/>
+        <rect class="ln" x="150" y="34" width="36" height="26" rx="2"/>
+        <line class="ln2" x1="160" y1="70" x2="176" y2="70"/>
+        <polyline class="ln-hot" points="160,46 166,52 176,40"/>
+        <rect class="ln" x="196" y="34" width="36" height="26" rx="2"/>
+        <line class="ln2" x1="206" y1="70" x2="222" y2="70"/>
+        <polyline class="ln-hot" points="206,46 212,52 222,40"/>
+        <rect class="ln2" x="242" y="34" width="36" height="26" rx="2"/>
+        <line class="ln2" x1="252" y1="70" x2="268" y2="70"/>
+      </svg></div>
+      <div class="card-body">
+        <h3>Own it outright</h3>
+        <p>Try the full demo free. One purchase unlocks it. No iLok, no subscription, no account. Activate once online and it's tied to your machine (you get three); from then on it runs fully offline. Covers macOS, Windows and Linux. It's yours.</p>
+      </div>
     </article>
   </div>
 </section>
@@ -399,6 +440,7 @@
 <section id="faq" class="faq">
   <h2>Questions</h2>
   <div class="faq-list">
+    <h3 class="faq-cat">The sound</h3>
     <details>
       <summary>Is Cartridge only for chiptune and game music?</summary>
       <p>No, and that's the point. 8-bit pulses, triangles and noise have been turning up in pop, electronic, hip-hop and indie records for decades; Cartridge makes the chip behind that sound a normal instrument, so you can write with it anywhere you'd reach for a synth. Bass that cuts, leads with real character, 16-voice pads from the Modern engine, and a built-in FX rack to finish the sound in place. And if you're a chiptune artist or a game designer scoring to hardware limits, the Classic engine is the real chip, channel for channel.</p>
@@ -408,20 +450,18 @@
       <p>The real thing. Cartridge synthesises the 2A03's voices in real time, bandlimited so they stay clean at any pitch, with the nonlinear DAC curve that gives the chip its bite. Nothing is sampled off a console, which is why a lead keeps its character up in the high octaves, where sample-based chip instruments start to alias and fall apart.</p>
     </details>
     <details>
-      <summary>How many voices does it have? Is it polyphonic?</summary>
-      <p>Both, depending on the engine. The Classic engine is the hardware: five independent channels, plus three more with the VRC6 expansion, each one monophonic like the real chip, so you voice a part per channel the way the originals did. Flip to the Modern engine and it's a full polyphonic synth, up to 16 voices, for chords and stacks the chip could never hold.</p>
+      <summary>What channels and voices do I get?</summary>
+      <p>The Classic engine is the full 2A03: two pulse channels, a triangle, a noise channel, and DPCM sample playback, plus the optional VRC6 expansion for two more pulses and a sawtooth. Eight channels, each monophonic like the hardware, each with its own volume, pan, duty, and step sequence. The Modern engine is the other half: a polyphonic synth with up to 16 voices, for chords and stacks the chip could never hold.</p>
     </details>
-    <details>
-      <summary>What channels does it have? Does it include the VRC6 expansion?</summary>
-      <p>The Classic engine gives you the full 2A03: two pulse channels, a triangle, a noise channel, and a DPCM sample channel. The optional VRC6 expansion adds two more pulses and a sawtooth on top, eight voices in all. Every channel has its own volume, pan, duty, and step sequence.</p>
-    </details>
+
+    <h3 class="faq-cat">Using it</h3>
     <details>
       <summary>Does Cartridge have built-in effects?</summary>
-      <p>Yes. A full FX rack lives one click below the channels: BitCrush, a multimode filter (low-pass, band-pass or high-pass), chorus, a delay that locks to your host tempo, and a reverb. There's also a per-channel LFO for vibrato and tremolo, plus a host-synced arpeggiator and portamento. You can take a part from raw chip tone to mixed and finished without loading another plugin, and the whole chain saves with your preset.</p>
+      <p>Yes: BitCrush, a multimode filter (low-pass, band-pass or high-pass), chorus, a delay that locks to your host tempo, and a reverb, all one click below the channels. Modulation too: an LFO for vibrato and tremolo, a host-synced arpeggiator, and portamento. The whole chain saves with your preset.</p>
     </details>
     <details>
       <summary>Do I need to know chiptune to use it?</summary>
-      <p>No. Start from a preset, play your keyboard, and you're making 8-bit music. Hover any control for a plain-English description, and the built-in Help screen explains the chip, the jargon, and the shortcuts. Go as deep as you want, or don't.</p>
+      <p>No. Start from a preset, play your keyboard, and you're making 8-bit music. Hover any control for a plain-English description, and the built-in Help screen explains the chip, the jargon, and the shortcuts. Go as deep as you want.</p>
     </details>
     <details>
       <summary>Can I import old chiptune files?</summary>
@@ -439,25 +479,14 @@
       <summary>Can I make and share my own presets?</summary>
       <p>Yes. Cartridge ships with 95 factory presets to start from, and you can save, name and share your own as small files, embedded step sequences included. Send a patch to someone and it loads back exactly as you made it.</p>
     </details>
+    <h3 class="faq-cat">Buying it</h3>
     <details>
-      <summary>What do I need to run it?</summary>
-      <p>macOS 11 or later (Apple Silicon or Intel, universal binary), Windows 10 or later (64-bit), or Linux (x86-64). It runs at your project's sample rate in any modern DAW, or as a standalone app on its own. Load it as VST3, AU (macOS), or CLAP.</p>
-    </details>
-    <details>
-      <summary>Which DAWs does it work in?</summary>
-      <p>Anything that hosts VST3, AU, or CLAP: Logic, Ableton Live, Reaper, Bitwig, FL Studio, Cubase, and the rest. AU is there specifically for Logic and GarageBand. There's also a standalone build for when you just want to play without opening a DAW.</p>
-    </details>
-    <details>
-      <summary>How do I install it, and can I remove it cleanly?</summary>
-      <p>macOS and Windows both have installers: open it, tick the formats you want, done. The macOS one is signed and notarised by Apple (no security warnings) and leaves an uninstaller that keeps your presets; the Windows one isn't signed yet, so SmartScreen warns once on the first run. Linux is a zip you drop into the usual plugin folders. The <a href="install">setup guide</a> walks through all three.</p>
+      <summary>What do I need to run it, and which DAWs does it work in?</summary>
+      <p>macOS 11 or later (Apple Silicon or Intel, universal binary), Windows 10 or later (64-bit), or Linux (x86-64). Load it as VST3, AU, or CLAP in Logic, Ableton Live, Reaper, Bitwig, FL Studio, Cubase, and the rest, or run the standalone app with no DAW at all. macOS and Windows have installers (the macOS one is signed and notarised); the <a href="install">setup guide</a> covers all three platforms, including uninstalling.</p>
     </details>
     <details>
       <summary>Is there a free demo, and what's the licence?</summary>
-      <p>Try the full instrument free, then one purchase unlocks it, yours to keep. Anything you make with Cartridge is yours to release, sell, and licence however you like, with no royalties and nothing to attribute. Activation is one-time and binds your key to that machine, up to three at once, and you can free a seat yourself from the licence badge. After that it never phones home: no iLok, no subscription, no account. Full terms in the <a href="/legal/eula.html">licence agreement</a>.</p>
-    </details>
-    <details>
-      <summary>Can I run it on Windows and Linux too?</summary>
-      <p>Yes. One purchase covers all three platforms: VST3, CLAP and standalone on Windows and Linux (AU is macOS-only). The macOS build is signed and notarised. The Windows build is currently unsigned, so SmartScreen may warn you once on the first run; click through and you're set. All 1.x updates are included, and if it turns out not to be for you, email within 14 days for a refund.</p>
+      <p>Try the full instrument free, then one purchase unlocks it on all three platforms, yours to keep. Activation is one-time, covers three machines at once, and you can free a seat yourself; after that it validates offline. No iLok, no subscription, no account, and no royalties on anything you make. All 1.x updates are included, and there's a 14-day refund if it's not for you. Full terms in the <a href="/legal/eula.html">licence agreement</a>.</p>
     </details>
   </div>
 </section>

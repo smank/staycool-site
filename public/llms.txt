@@ -27,8 +27,8 @@ channel-accurate for chiptune artists and game designers.
   lanes, synced to host tempo, saved with the preset and the project.
 - Built-in FX rack: BitCrush, multimode filter (LP/BP/HP), chorus, tempo-synced
   delay and reverb, all saved with the preset.
-- Modulation: per-channel LFO for vibrato and tremolo, a host-syncable
-  arpeggiator, and portamento.
+- Modulation: an LFO for vibrato and tremolo, a host-syncable arpeggiator,
+  and portamento.
 - VGM/VGZ import: extracts each instrument from a chiptune file as a preset
   with its volume, pitch and duty envelopes intact.
 - 95 factory presets; user presets save and share as small files.

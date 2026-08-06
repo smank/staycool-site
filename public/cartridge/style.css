@@ -735,6 +735,15 @@ footer {
 
 /* ═══════════════ FAQ ═══════════════ */
 .faq { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; border-top: 1px solid var(--outline-dim); }
+.faq-cat {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hot);
+  margin: 2.2rem 0 0.9rem;
+}
+.faq-cat:first-child { margin-top: 0; }
 .faq-list { display: flex; flex-direction: column; gap: 0.6rem; }
 .faq details {
   background: var(--surface);
@@ -881,10 +890,30 @@ section[id] { scroll-margin-top: 84px; }
 .features .card {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   text-align: center;
-  padding: 1.8rem;
+  padding: 0;
+  overflow: hidden;
 }
+.card-art {
+  background: var(--bg);
+  border-bottom: 1px solid var(--outline-dim);
+  padding: 0.9rem 1.1rem;
+}
+.card-art svg { display: block; width: 100%; height: auto; }
+.card-art .ln     { stroke: var(--primary); fill: none; stroke-width: 2; }
+.card-art .ln-hot { stroke: var(--hot); fill: none; stroke-width: 2; }
+.card-art .ln2    { stroke: var(--outline); fill: none; stroke-width: 2; }
+.card-art .dot    { fill: var(--hot); }
+.card-art .key    { fill: var(--outline); }
+.card-art .tile-hot { fill: rgba(216,48,64,0.16); stroke: var(--hot); stroke-width: 2; }
+.card-art .txt {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  fill: var(--text-3);
+}
+.card-body { padding: 1.3rem 1.6rem 1.7rem; }
 .card-badge {
   display: inline-flex;
   align-items: center;
