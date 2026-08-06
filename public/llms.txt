@@ -5,7 +5,7 @@
 > synthesizer plugin built on authentic 2A03 emulation, made for any genre:
 > pop, electronic, hip-hop, chiptune and game scores.
 
-Status: Cartridge is pre-launch (v1.14.2, releasing shortly). Pricing is not
+Status: Cartridge is pre-launch (v1.15.0, releasing shortly). Pricing is not
 public yet. Other products listed as "coming soon" are not yet available.
 
 ## Cartridge (audio plugin)
@@ -31,7 +31,7 @@ channel-accurate for chiptune artists and game designers.
   and portamento.
 - VGM/VGZ import: extracts each instrument from a chiptune file as a preset
   with its volume, pitch and duty envelopes intact.
-- 95 factory presets; user presets save and share as small files.
+- 112 factory presets; user presets save and share as small files.
 - Requirements: macOS 11+ (universal), Windows 10+ (64-bit), Linux x86-64.
 - Licensing: a free demo of the full instrument; one purchase unlocks it
   permanently. Activation is one-time and binds the key to a machine, up to
