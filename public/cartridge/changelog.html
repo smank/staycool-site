@@ -36,6 +36,28 @@
 </header>
 
 <div class="guide">
+  <section id="v1-15-0">
+    <h2>Version 1.15.0</h2>
+    <div class="rule"></div>
+    <p class="rel-date">2026-08-06</p>
+    <h3 class="sub-head">Added</h3>
+    <ul class="changes">
+      <li>The Help button now opens a searchable in-plugin manual — thirteen chapters styled after the web operator&#x27;s manual, with type-to-filter search across everything: both engines, wheels and the CC map, the step sequencer, effects, presets, VGM import, and shortcuts.</li>
+      <li>17 new Modern factory presets, doubling the Modern bank to 34. They lean on what the polyphonic engine does best — dual-oscillator beating, wide unison stacks, portamento leads — and make real use of the effects chain. All level-matched against the existing library.</li>
+      <li>The Modern panel has been redesigned: controls scale with the window, the envelope is now a draggable curve editor (grab the attack, decay, sustain and release nodes directly), and each oscillator shows its waveform in a live display — click it to cycle waveforms, right-click for the list.</li>
+      <li>The oscilloscope plays a full-width launch animation on open, then hands over to the live signal.</li>
+    </ul>
+    <h3 class="sub-head">Changed</h3>
+    <ul class="changes">
+      <li>The mod wheel now works with no setup: push it for classic vibrato, up to ±50 cents, on both engines. This is independent of the LFO section — the LFO remains a sound-design layer, the wheel is performance. CC 1 no longer writes to the LFO vibrato depth parameter; use MIDI Learn on CC 1 if you relied on the old routing.</li>
+      <li>The master Vol / Tune / Vel / Bend sliders are now knobs, clustered in a restyled top bar row with the Cartridge badge.</li>
+    </ul>
+    <h3 class="sub-head">Fixed</h3>
+    <ul class="changes">
+      <li>The pitch wheel bends notes that are already sounding. Previously a bend only landed on the next note played — and landed on it twice. Per-note MPE bend responds live now too.</li>
+      <li>When vibrato ended mid-note — wheel released, or the LFO switched off — the pitch could stick slightly off-centre until the next note. It now returns exactly to base.</li>
+    </ul>
+  </section>
   <section id="v1-14-2">
     <h2>Version 1.14.2</h2>
     <div class="rule"></div>

@@ -34,7 +34,7 @@
   <div class="cart-label">
     <h1>CARTRIDGE<span class="dot">.</span></h1>
     <p class="subtitle">Operator's Manual</p>
-    <p class="meta">v1.14.2 <span>·</span> 2A03 CHIPTUNE SYNTHESIZER <span>·</span> VST3 / AU / CLAP / STANDALONE</p>
+    <p class="meta">v1.15.0 <span>·</span> 2A03 CHIPTUNE SYNTHESIZER <span>·</span> VST3 / AU / CLAP / STANDALONE</p>
   </div>
   <div class="cover-shot"><img src="../screenshots/main.png" alt="Cartridge, Classic engine with VRC6 expansion"></div>
   <p class="meta" style="margin-top:2.5rem">STAY COOL &amp; STAY COOL <span>·</span> AUGUST 2026</p>
@@ -238,9 +238,11 @@
 
   <h3>Oscillators</h3>
   <p><strong>Osc A</strong> carries the note. <strong>Osc B</strong> layers on top with its own waveform, a <strong>Level</strong> control, and <strong>Semi</strong> detune of ±24 semitones in tenths, so it works as an octave or fifth layer, not just a fattener. Fractional detune beats slowly against A for movement.</p>
+  <p>Each oscillator shows its wave shape in a small display beside the menu. The display is a control: <strong>click it to cycle</strong> through the seven waveforms, right-click for the full list.</p>
 
   <h3>Envelope</h3>
   <p>A full ADSR per voice. Attack is linear for that instant chip snap; decay and release are exponential for natural tails. The time knobs are weighted toward the fast end, where chiptune lives: attack defaults to 5 ms.</p>
+  <p>The envelope section draws the curve, and the curve is editable: <strong>drag the nodes directly</strong> &mdash; attack, decay and release move horizontally, sustain vertically. The knobs and the curve are two views of the same envelope; use whichever feels faster.</p>
 
   <h3>Global</h3>
   <table>
@@ -286,7 +288,7 @@
   <h3>Control changes</h3>
   <table>
     <tr><th>CC</th><th>Target</th></tr>
-    <tr><td>1</td><td>Vibrato depth</td></tr>
+    <tr><td>1</td><td>Mod wheel vibrato (performance)</td></tr>
     <tr><td>11</td><td>Master volume</td></tr>
     <tr><td>64</td><td>Sustain pedal</td></tr>
     <tr><td>71</td><td>Filter resonance</td></tr>
@@ -294,6 +296,7 @@
     <tr><td>91</td><td>Reverb mix</td></tr>
     <tr><td>93</td><td>Chorus mix</td></tr>
   </table>
+  <p>The mod wheel needs no setup: push it and both engines add classic vibrato, up to &plusmn;50 cents, independent of the LFO section &mdash; the LFO stays a sound-design layer, the wheel is performance. It no longer writes to the LFO vibrato depth parameter, so riding the wheel cannot change a saved patch; if you preferred the old routing, map CC 1 with a Learn slot.</p>
   <p>The MIDI button in the top bar shows this map plus four <strong>Learn</strong> slots. Click Learn, turn a knob on your controller, and that CC is captured. Targets include channel volumes, filter, effect mixes, and the LFO. A learned CC overrides the built-in map for that number, and your mappings survive preset changes.</p>
 
   <h3>Sustain and Hold</h3>
@@ -516,7 +519,7 @@
 
 <div class="pins dim"></div>
 <footer class="colophon">
-  CARTRIDGE OPERATOR'S MANUAL · v1.14.2 · AUGUST 2026<br>
+  CARTRIDGE OPERATOR'S MANUAL · v1.15.0 · AUGUST 2026<br>
   STAY COOL &amp; STAY COOL · <a href="https://staycoolandstaycool.com/cartridge/">staycoolandstaycool.com/cartridge</a> · <a href="https://staycoolandstaycool.com/cartridge/changelog">changelog</a> · <a href="mailto:support@staycoolandstaycool.com">support@staycoolandstaycool.com</a>
 </footer>
 
