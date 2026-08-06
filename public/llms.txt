@@ -13,10 +13,10 @@ public yet. Other products listed as "coming soon" are not yet available.
 An 8-bit synthesizer for macOS, Windows and Linux, in VST3, AU (macOS), CLAP
 and standalone formats, built on authentic Ricoh 2A03 emulation. It synthesises
 the chip's voices in real time, bandlimited and with the nonlinear DAC curve,
-rather than playing samples of a console. The 2A03's sound has shaped pop,
-electronic and hip-hop records for decades; Cartridge packages it as a normal
-studio instrument for any genre, while staying channel-accurate for chiptune
-artists and game designers.
+rather than playing samples of a console. 8-bit sounds have been turning up in
+pop, electronic and hip-hop records for decades; Cartridge packages the chip
+behind them as a normal studio instrument for any genre, while staying
+channel-accurate for chiptune artists and game designers.
 
 - Classic engine: two pulse channels, triangle, noise, DPCM sample playback,
   plus an optional VRC6 expansion adding two pulses and a sawtooth (eight
