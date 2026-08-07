@@ -168,6 +168,10 @@ nav a:hover::after { right: 0; }
   margin-bottom: 1.4rem;
 }
 
+/* The accent phrase gets its own line so it stacks under the statement
+   instead of breaking mid-phrase wherever the text happens to wrap. */
+.hero h1 .accent { display: block; }
+
 .accent {
   color: var(--hot);
   text-shadow: 0 0 30px rgba(216,48,64,0.35);
