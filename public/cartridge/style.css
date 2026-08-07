@@ -250,14 +250,11 @@ nav a:hover::after { right: 0; }
   position: relative;
 }
 
-/* Edge-to-edge: no padding or forced aspect, the image fills the frame exactly */
+/* Edge-to-edge: no borders, padding or forced aspect — the image IS the frame */
 .screenshot-frame {
-  border: 1px solid var(--outline);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow:
-    0 0 0 1px rgba(216,48,64,0.15),
-    0 30px 60px -20px rgba(0,0,0,0.7);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7);
 }
 
 .screenshot-placeholder {
@@ -871,10 +868,9 @@ section[id] { scroll-margin-top: 84px; }
 }
 .showcase-points li::before { content: "▸"; position: absolute; left: 0; color: var(--hot); }
 .showcase-shot {
-  border: 1px solid var(--outline);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 24px 50px -24px rgba(0,0,0,0.7), 0 0 0 1px rgba(216,48,64,0.12);
+  box-shadow: 0 24px 50px -24px rgba(0,0,0,0.7);
 }
 .showcase-shot img { display: block; width: 100%; height: auto; }
 
