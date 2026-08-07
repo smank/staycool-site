@@ -33,10 +33,9 @@ channel-accurate for chiptune artists and game designers.
   with its volume, pitch and duty envelopes intact.
 - 112 factory presets; user presets save and share as small files.
 - Requirements: macOS 11+ (universal), Windows 10+ (64-bit), Linux x86-64.
-- Licensing: a free demo of the full instrument; one purchase unlocks it
-  permanently. Activation is one-time and binds the key to a machine, up to
-  three machines at once, with self-serve deactivation. After activation it
-  validates offline. No iLok, no subscription, no always-online DRM.
+- Licensing: a free demo of the full instrument; one purchase unlocks it on
+  all three platforms. One-time purchase, all 1.x updates included. The licence
+  covers three machines at once, with self-serve deactivation. 14-day refund.
 
 Pages:
 - [Cartridge](https://staycoolandstaycool.com/cartridge/): overview, audio
